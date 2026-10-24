@@ -7,508 +7,117 @@
 <style>
   :root {
     --bg-sun: #FFF9C4;
-    --ocean-blue: #00BCD4;
-    --deep-ocean: #00838F;
-    --sponge-yellow: #FFEE58;
-    --coral-pink: #FF7043;
+    --ocean-blue: #00838F;
+    --deep-ocean: #004D40;
+    --sponge-yellow: #FBC02D;
+    --coral-pink: #E64A19;
     --card-white: #FFFFFF;
-    --text-dark: #37474F;
-    --success-green: #4CAF50;
+    --text-dark: #212121;
+    --dark-brown: #3E2723; /* Rich Dark Brown font for choices */
+    --choice-bg: #EFEBE9;   /* Warm light taupe button background */
+    --choice-border: #6D4C41; /* Distinct Brown border */
   }
-  * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+  * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
   body { background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 100%); color: var(--text-dark); min-height: 100vh; padding: 20px; }
-  .container { max-width: 900px; margin: 0 auto; background: var(--card-white); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 30px; border: 4px solid var(--sponge-yellow); }
-  h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 20px; }
+  .container { max-width: 900px; margin: 0 auto; background: var(--card-white); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 30px; border: 4px solid var(--sponge-yellow); }
+  h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 18px; }
   .screen { display: none; }
   .active { display: block; }
-  .avatar-picker { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
-  .avatar-card { border: 3px solid #CFD8DC; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; }
+  .avatar-picker { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+  .avatar-card { border: 3px solid #CFD8DC; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; color: #263238; font-weight: bold; }
   .avatar-card.selected { border-color: var(--coral-pink); background: #FBE9E7; transform: scale(1.05); }
   .avatar-card .icon { font-size: 50px; }
-  input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #B0BEC5; border-radius: 10px; margin: 10px 0; }
-  button { background: var(--coral-pink); color: white; border: none; border-radius: 10px; padding: 12px 24px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-  button:hover { background: #E64A19; }
+  input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #78909C; border-radius: 10px; margin: 10px 0; color: #102027; font-weight: 500; }
+  button.primary-btn { background: var(--coral-pink); color: #FFFFFF; border: none; border-radius: 10px; padding: 14px 24px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  button.primary-btn:hover { background: #BF360C; }
+  button.quit-btn { background: #78909C; color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  button.quit-btn:hover { background: #D32F2F; }
   .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin: 20px 0; }
-  .topic-card { background: #E0F2F1; border-radius: 12px; padding: 15px; text-align: center; border: 2px solid #80CBC4; cursor: pointer; }
-  .topic-card:hover { background: #B2DFDB; }
+  .topic-card { background: #E0F2F1; border-radius: 12px; padding: 18px; text-align: center; border: 2px solid #80CBC4; cursor: pointer; transition: 0.2s; }
+  .topic-card:hover { background: #B2DFDB; transform: translateY(-2px); }
+  .topic-card h4 { color: #004D40; font-size: 18px; margin-bottom: 6px; }
+  .topic-card p { color: #37474F; font-size: 14px; font-weight: 600; }
   .leaderboard-table, .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-  .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 10px; text-align: left; }
-  .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: white; }
-  .option-btn { display: block; width: 100%; text-align: left; margin: 10px 0; background: #F5F5F5; border: 2px solid #CFD8DC; padding: 14px; border-radius: 10px; cursor: pointer; font-size: 16px; }
-  .option-btn:hover { background: #ECEFF1; }
-  .teacher-btn { position: fixed; bottom: 20px; right: 20px; background: #607D8B; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-  .badge-display { background: #FFF3E0; border: 2px dashed #FFB74D; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
+  .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 10px 12px; text-align: left; }
+  .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: #FFFFFF; font-weight: bold; }
+  .leaderboard-table td, .admin-table td { color: #212121; font-weight: 500; }
+  
+  /* Choice Buttons: Rich Dark Brown Font */
+  .option-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 12px 0;
+    background: var(--choice-bg);
+    border: 2px solid var(--choice-border);
+    color: var(--dark-brown) !important;
+    padding: 16px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(62,39,35,0.12);
+    transition: 0.2s ease;
+  }
+  .option-btn:hover {
+    background: #D7CCC8;
+    border-color: #3E2723;
+    color: #27120B !important;
+    transform: translateX(4px);
+  }
+  .teacher-btn { position: fixed; bottom: 20px; right: 20px; background: #455A64; border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: 2px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.25); color: #FFFFFF; }
+  
+  /* Companion Dressing Stage */
+  .avatar-dressing-room {
+    background: #FFF8E1;
+    border: 2px solid #FFD54F;
+    border-radius: 15px;
+    padding: 18px;
+    margin: 15px 0 25px 0;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
+  .avatar-stage-box {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: #FFFFFF;
+    border: 3px solid #FFA000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(255, 160, 0, 0.2);
+    flex-shrink: 0;
+  }
+  .avatar-character-emoji { font-size: 60px; z-index: 1; }
+  .slot-accessory { position: absolute; z-index: 2; font-size: 28px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+  .slot-head { top: -8px; }
+  .slot-chest { bottom: 2px; }
+  .slot-left { left: -6px; top: 40px; }
+  .slot-right { right: -6px; top: 40px; }
+  
+  .wardrobe-list { flex-grow: 1; }
+  .wardrobe-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .wardrobe-tag {
+    background: #FFE082;
+    color: #4E342E;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid #FFB300;
+  }
+
+  .hud-bar { display: flex; justify-content: space-between; align-items: center; background: #ECEFF1; padding: 12px 18px; border-radius: 10px; margin-bottom: 15px; }
+  .badge-display { background: #FFF3E0; border: 2px dashed #FF9800; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; color: #4E342E; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Registration Screen -->
+  <!-- Auth Screen -->
   <div id="screen-auth" class="screen active">
     <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center;">Form 6 English Booster — Conquer Grammar & Outfit Your Avatar!</p>
-    <div style="margin-top:20px;">
-      <label><strong>Enter Your Student Name or ID:</strong></label>
-      <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
-      <h3>Pick Your Companion:</h3>
-      <div class="avatar-picker">
-        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', '🧽', this)">
-          <div class="icon">🧽</div>
-          <div>Sponge-Lad</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', '⭐', this)">
-          <div class="icon">⭐</div>
-          <div>Star-Buddy</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', '🐙', this)">
-          <div class="icon">🐙</div>
-          <div>Tentacle-Prof</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', '🐿️', this)">
-          <div class="icon">🐿️</div>
-          <div>Sandy-Squirrel</div>
-        </div>
-      </div>
-      <button style="width:100%;" onclick="registerUser()">Start Journey</button>
-    </div>
-  </div>
-
-  <!-- Dashboard Screen -->
-  <div id="screen-dash" class="screen">
-    <h2>Welcome back, <span id="display-user-name"></span>!</h2>
-    <div class="badge-display">
-      <div><strong>Active Companion:</strong> <span id="display-avatar-icon"></span> <span id="display-avatar-name"></span></div>
-      <div id="display-outfit" style="margin-top:5px; font-weight:bold; color:var(--deep-ocean);">Current Wardrobe: Standard Novice Gear</div>
-    </div>
-    <h3>Select Grammar Mission</h3>
-    <div class="topic-grid" id="topics-container"></div>
-    <h3>🏆 Class Leaderboard</h3>
-    <table class="leaderboard-table">
-      <thead>
-        <tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>High Score</th></tr>
-      </thead>
-      <tbody id="leaderboard-body"></tbody>
-    </table>
-  </div>
-
-  <!-- Quiz Screen -->
-  <div id="screen-quiz" class="screen">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 id="quiz-topic-title">Topic</h3>
-      <span id="quiz-progress" style="font-weight:bold;">Question 1 / 20</span>
-    </div>
-    <div style="margin:20px 0; font-size:18px; line-height:1.5;" id="question-text">Loading question...</div>
-    <div id="options-container"></div>
-  </div>
-
-  <!-- Result Screen -->
-  <div id="screen-result" class="screen" style="text-align:center;">
-    <h2 id="result-title">Stage Complete!</h2>
-    <p id="result-score" style="font-size:22px; margin:20px 0;"></p>
-    <div id="result-reward" class="badge-display" style="display:none;"></div>
-    <button onclick="returnToDashboard()">Return to Mission Hub</button>
-  </div>
-
-  <!-- Teacher Admin Screen -->
-  <div id="screen-admin" class="screen">
-    <h2>🔒 Teacher Backdoor Management Console</h2>
-    <div style="text-align:center; margin-bottom:20px;">
-      <button onclick="exportToExcel()" style="background:#2E7D32;">📥 Download Results as Excel (.CSV)</button>
-      <button onclick="returnToDashboard()" style="background:#607D8B; margin-left:10px;">Back to Game</button>
-    </div>
-    <table class="admin-table">
-      <thead>
-        <tr><th>Student Name</th><th>Topic</th><th>Stage</th><th>Score</th><th>Passed?</th><th>Timestamp</th></tr>
-      </thead>
-      <tbody id="admin-records-body"></tbody>
-    </table>
-  </div>
-</div>
-
-<div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
-
-<script>
-const TEACHER_PIN = "F6ENG2026";
-let currentUser = null;
-let currentAvatar = { name: "Sponge-Lad", icon: "🧽" };
-let currentTopic = "";
-let currentStage = 1;
-let currentQuestionIndex = 0;
-let currentScore = 0;
-let activeQuestions = [];
-
-const topics = [
-  "Prepositions",
-  "Word Formation",
-  "Tenses",
-  "Articles",
-  "Plurals",
-  "Synonyms"
-];
-
-const rewards = {
-  "Prepositions": ["Nautical Cap", "Sailor Vest", "Anchor Brooch", "Admiral Epaulettes", "Royal Pearl Tricorne"],
-  "Word Formation": ["Wooden Quill", "Grammar Monocle", "Velvet Cloak", "Crystal Thesaurus", "Crown of Syntax"],
-  "Tenses": ["Bronze Stopwatch", "Pocket Watch", "Chrono-Belt", "Hourglass Cape", "Timekeeper Robe"],
-  "Articles": ["Paper Badge", "Copper Pin", "Silver Tag", "Gold Plaque", "Royal Medallion"],
-  "Plurals": ["Wristbands", "Star Rings", "Multi-Chain Sash", "Gem Bracers", "Infinity Crown"],
-  "Synonyms": ["Pocket Glossary", "Word Pouch", "Chameleon Scarf", "Polyglot Tunic", "Iridescent Wings"]
-};
-
-// 20 Non-Repeating Questions per category for Stage 1
-const questionBank = {
-  "Prepositions": {
-    1: [
-      { q: "She has lived in Hong Kong _____ 2018.", a: "since", dist: ["for", "in", "during"] },
-      { q: "The meeting is scheduled to begin _____ 9:30 a.m.", a: "at", dist: ["on", "in", "by"] },
-      { q: "Our DSE exam will be held _____ April.", a: "in", dist: ["on", "at", "to"] },
-      { q: "He placed his mobile phone _____ the desk.", a: "on", dist: ["in", "at", "into"] },
-      { q: "We walked _____ the tunnel to escape the rain.", a: "through", dist: ["across", "between", "over"] },
-      { q: "The teacher divided the prize money _____ the two winners.", a: "between", dist: ["among", "along", "within"] },
-      { q: "She shared her sweets _____ all her classmates.", a: "among", dist: ["between", "with", "into"] },
-      { q: "I am waiting _____ the bus at the bus stop.", a: "for", dist: ["to", "at", "of"] },
-      { q: "He jumped _____ the swimming pool to cool off.", a: "into", dist: ["onto", "in", "to"] },
-      { q: "The library is located _____ the second floor.", a: "on", dist: ["at", "in", "by"] },
-      { q: "She apologized _____ being late to assembly.", a: "for", dist: ["of", "about", "with"] },
-      { q: "He is interested _____ learning graphic design.", a: "in", dist: ["on", "at", "for"] },
-      { q: "Are you afraid _____ speaking in public?", a: "of", dist: ["with", "for", "at"] },
-      { q: "The cat was hiding _____ the wooden chair.", a: "under", dist: ["between", "through", "inside of"] },
-      { q: "They travelled to Tokyo _____ plane.", a: "by", dist: ["with", "on", "in"] },
-      { q: "She congratulated him _____ his outstanding results.", a: "on", dist: ["for", "about", "with"] },
-      { q: "The shop is closed _____ Sundays.", a: "on", dist: ["in", "at", "by"] },
-      { q: "She has been waiting here _____ two hours.", a: "for", dist: ["since", "during", "while"] },
-      { q: "He succeeded _____ passing the entrance exam.", a: "in", dist: ["on", "at", "to"] },
-      { q: "Listen carefully _____ what the teacher explains.", a: "to", dist: ["at", "for", "with"] }
-    ]
-  },
-  "Word Formation": {
-    1: [
-      { q: "Her explanation was completely _____ (logic).", a: "logical", dist: ["logically", "logician", "logicize"] },
-      { q: "The company values employee _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] },
-      { q: "Regular exercise is _____ (benefit) to health.", a: "beneficial", dist: ["beneficiary", "beneficially", "benefit"] },
-      { q: "The children played _____ (happy) in the park.", a: "happily", dist: ["happiness", "happy", "unhappy"] },
-      { q: "She made a quick _____ (decide) under pressure.", a: "decision", dist: ["decisive", "decisiveness", "deciding"] },
-      { q: "Air pollution is a major _____ (environment) problem.", a: "environmental", dist: ["environmentally", "environmentalist", "environments"] },
-      { q: "He accepted full _____ (responsible) for the mistake.", a: "responsibility", dist: ["responsible", "responsibly", "irresponsible"] },
-      { q: "The magician gave an _____ (amaze) performance.", a: "amazing", dist: ["amazingly", "amazed", "amazement"] },
-      { q: "We need to find an effective _____ (solve) to this issue.", a: "solution", dist: ["solvable", "solver", "solving"] },
-      { q: "She spoke with great _____ (confident) during the interview.", a: "confidence", dist: ["confident", "confidently", "confiding"] },
-      { q: "Drinking enough water is _____ (necessity) for survival.", a: "necessary", dist: ["necessarily", "necessitate", "necessities"] },
-      { q: "He showed great _____ (kind) to the lost stray puppy.", a: "kindness", dist: ["kindly", "unkind", "kinder"] },
-      { q: "The weather today is quite _____ (predict).", a: "predictable", dist: ["prediction", "predictably", "predictor"] },
-      { q: "They celebrated their team's _____ (victor).", a: "victory", dist: ["victorious", "victoriously", "victim"] },
-      { q: "She works as a _____ (profession) translator.", a: "professional", dist: ["profession", "professionally", "profess"] },
-      { q: "Please handle this parcel with _____ (careful).", a: "care", dist: ["careless", "carefully", "caringly"] },
-      { q: "His sudden _____ (appear) surprised everyone.", a: "appearance", dist: ["appearing", "apparent", "apparently"] },
-      { q: "The lecture was informative and _____ (use).", a: "useful", dist: ["useless", "usefully", "usability"] },
-      { q: "He gained widespread _____ (popular) among his peers.", a: "popularity", dist: ["popularly", "popularize", "popular"] },
-      { q: "The school organized an _____ (educate) field trip.", a: "educational", dist: ["education", "educationally", "educator"] }
-    ]
-  },
-  "Tenses": {
-    1: [
-      { q: "By the time the bell rang, the students _____ writing.", a: "had finished", dist: ["finish", "have finished", "will finish"] },
-      { q: "Listen! The principal _____ to the assembly right now.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] },
-      { q: "They _____ in Sha Tin since they arrived in Hong Kong.", a: "have lived", dist: ["live", "lived", "are living"] },
-      { q: "Water _____ at 100 degrees Celsius under normal pressure.", a: "boils", dist: ["is boiling", "boiled", "will boil"] },
-      { q: "Yesterday, she _____ her English revision notes on the bus.", a: "lost", dist: ["loses", "has lost", "was losing"] },
-      { q: "If it rains tomorrow, we _____ the sports carnival.", a: "will cancel", dist: ["cancelled", "would cancel", "cancel"] },
-      { q: "While he _____ home, he ran into his primary school tutor.", a: "was walking", dist: ["walks", "has walked", "walked"] },
-      { q: "I _____ the DSE past paper twice already this week.", a: "have completed", dist: ["complete", "completed", "had completed"] },
-      { q: "Next Monday, our school _____ its annual sports day.", a: "will hold", dist: ["held", "has held", "holds"] },
-      { q: "He usually _____ up at 6:30 a.m. on school days.", a: "wakes", dist: ["is waking", "woke", "has woken"] },
-      { q: "When I arrived at the cinema, the movie _____ already.", a: "had started", dist: ["starts", "has started", "will start"] },
-      { q: "Right now, my classmates _____ for the mock examinations.", a: "are preparing", dist: ["prepare", "prepared", "have prepared"] },
-      { q: "She _____ lunch before she left for tutoring.", a: "had eaten", dist: ["eats", "is eating", "has eaten"] },
-      { q: "The sun _____ in the east every morning.", a: "rises", dist: ["is rising", "rose", "has risen"] },
-      { q: "Last night, they _____ until midnight to finish the project.", a: "worked", dist: ["work", "are working", "have worked"] },
-      { q: "I promise I _____ you back as soon as I get home.", a: "will call", dist: ["call", "called", "have called"] },
-      { q: "Look! The bus _____ around the corner.", a: "is coming", dist: ["comes", "came", "has come"] },
-      { q: "She _____ in three speech festivals so far.", a: "has participated", dist: ["participates", "participated", "was participating"] },
-      { q: "When the phone rang, I _____ a shower.", a: "was taking", dist: ["took", "take", "am taking"] },
-      { q: "Every Saturday, he _____ football with his neighbours.", a: "plays", dist: ["is playing", "played", "has played"] }
-    ]
-  },
-  "Articles": {
-    1: [
-      { q: "Honesty is considered _____ noble virtue.", a: "a", dist: ["an", "the", "no article"] },
-      { q: "She plays _____ piano exceptionally well.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "He wants to become _____ astronaut in the future.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "We visited _____ Hong Kong Museum of Art last weekend.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "Breakfast is _____ most important meal of the day.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "She bought _____ umbrella because of the sudden downpour.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "Do you have _____ extra pen I could borrow?", a: "an", dist: ["a", "the", "no article"] },
-      { q: "Mount Everest is _____ highest mountain in the world.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "He drank a cold glass of _____ fresh milk.", a: "no article", dist: ["a", "an", "the"] },
-      { q: "They travelled across _____ United States last summer.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "She is _____ honest and hardworking student.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "I watched _____ interesting documentary on climate change.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "Can you turn off _____ light when you leave the room?", a: "the", dist: ["a", "an", "no article"] },
-      { q: "He loves playing _____ basketball after school.", a: "no article", dist: ["the", "a", "an"] },
-      { q: "We had lunch at _____ Italian restaurant near our campus.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "The Earth moves around _____ Sun.", a: "the", dist: ["a", "an", "no article"] },
-      { q: "It took him nearly _____ hour to complete the essay.", a: "an", dist: ["a", "the", "no article"] },
-      { q: "She adopted _____ puppy from the animal shelter.", a: "a", dist: ["an", "the", "no article"] },
-      { q: "They go to _____ church every Sunday morning.", a: "no article", dist: ["the", "a", "an"] },
-      { q: "He is _____ European citizen residing in Asia.", a: "a", dist: ["an", "the", "no article"] }
-    ]
-  },
-  "Plurals": {
-    1: [
-      { q: "A series of economic _____ (crisis) shocked the market.", a: "crises", dist: ["crisises", "crisi", "crisis"] },
-      { q: "Scientists observed multiple natural _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] },
-      { q: "The dentist examined all the patient's _____ (tooth).", a: "teeth", dist: ["tooths", "toothes", "teethes"] },
-      { q: "Several _____ (child) were playing on the lawn.", a: "children", dist: ["childs", "childrens", "childes"] },
-      { q: "We need to chop three large _____ (potato) for the soup.", a: "potatoes", dist: ["potatos", "potatoies", "potato"] },
-      { q: "The chef sharpened all the kitchen _____ (knife).", a: "knives", dist: ["knifes", "knifees", "knife"] },
-      { q: "A flock of _____ (goose) flew over Victoria Harbour.", a: "geese", dist: ["gooses", "geeses", "goosies"] },
-      { q: "The autumn winds shook dry _____ (leaf) from the trees.", a: "leaves", dist: ["leafs", "leafes", "leavies"] },
-      { q: "The farmers sheared wool from twenty _____ (sheep).", a: "sheep", dist: ["sheeps", "sheepes", "sheepies"] },
-      { q: "The research team gathered extensive statistical _____ (datum).", a: "data", dist: ["datums", "datas", "datae"] },
-      { q: "Two _____ (policeman) were patrolling the subway station.", a: "policemen", dist: ["policemans", "policemenes", "policeman"] },
-      { q: "The room was infested with tiny _____ (mouse).", a: "mice", dist: ["mouses", "mices", "mouse"] },
-      { q: "Both _____ (country) signed the peace treaty.", a: "countries", dist: ["countrys", "countries'", "countryes"] },
-      { q: "She bought two fresh _____ (loaf) of artisan bread.", a: "loaves", dist: ["loafs", "loafes", "loave"] },
-      { q: "Different _____ (species) of coral thrive in warm reefs.", a: "species", dist: ["specieses", "specie", "specis"] },
-      { q: "Both _____ (half) of the class agreed with the proposal.", a: "halves", dist: ["halfs", "halfes", "halve"] },
-      { q: "The pack of _____ (wolf) hunted together in winter.", a: "wolves", dist: ["wolfs", "wolfes", "wolve"] },
-      { q: "The students placed their notebooks on the _____ (shelf).", a: "shelves", dist: ["shelfs", "shelfes", "shelve"] },
-      { q: "He wore smart leather shoes on both _____ (foot).", a: "feet", dist: ["foots", "feets", "foot"] },
-      { q: "Many young _____ (woman) participated in the marathon.", a: "women", dist: ["womans", "womens", "woman"] }
-    ]
-  },
-  "Synonyms": {
-    1: [
-      { q: "Select the word closest in meaning to 'ABUNDANT':", a: "plentiful", dist: ["scarce", "fragile", "modest"] },
-      { q: "Select the word closest in meaning to 'COMMENCE':", a: "initiate", dist: ["terminate", "hesitate", "postpone"] },
-      { q: "Select the word closest in meaning to 'RELUCTANT':", a: "unwilling", dist: ["eager", "confident", "cheerful"] },
-      { q: "Select the word closest in meaning to 'HAZARDOUS':", a: "dangerous", dist: ["convenient", "beneficial", "harmless"] },
-      { q: "Select the word closest in meaning to 'ACCURATE':", a: "precise", dist: ["vague", "faulty", "approximate"] },
-      { q: "Select the word closest in meaning to 'DIMINISH':", a: "decrease", dist: ["expand", "amplify", "stabilize"] },
-      { q: "Select the word closest in meaning to 'CONCEAL':", a: "hide", dist: ["reveal", "display", "announce"] },
-      { q: "Select the word closest in meaning to 'PROSPEROUS':", a: "thriving", dist: ["struggling", "penniless", "fragile"] },
-      { q: "Select the word closest in meaning to 'OBVIOUS':", a: "evident", dist: ["hidden", "subtle", "complex"] },
-      { q: "Select the word closest in meaning to 'VITAL':", a: "crucial", dist: ["optional", "minor", "trivial"] },
-      { q: "Select the word closest in meaning to 'AUTHENTIC':", a: "genuine", dist: ["fake", "counterfeit", "artificial"] },
-      { q: "Select the word closest in meaning to 'TRANQUIL':", a: "peaceful", dist: ["chaotic", "turbulent", "noisy"] },
-      { q: "Select the word closest in meaning to 'IMPEDE':", a: "hinder", dist: ["assist", "accelerate", "promote"] },
-      { q: "Select the word closest in meaning to 'RIGID':", a: "stiff", dist: ["flexible", "elastic", "adaptable"] },
-      { q: "Select the word closest in meaning to 'FEEBLE':", a: "weak", dist: ["muscular", "sturdy", "robust"] },
-      { q: "Select the word closest in meaning to 'APPARENT':", a: "clear", dist: ["vague", "unseen", "doubtful"] },
-      { q: "Select the word closest in meaning to 'BENEFICIAL':", a: "advantageous", dist: ["harmful", "detrimental", "useless"] },
-      { q: "Select the word closest in meaning to 'CANDID':", a: "frank", dist: ["deceitful", "reserved", "sarcastic"] },
-      { q: "Select the word closest in meaning to 'DWINDLE':", a: "shrink", dist: ["increase", "multiply", "expand"] },
-      { q: "Select the word closest in meaning to 'EXHAUSTED':", a: "fatigued", dist: ["energized", "refreshed", "spirited"] }
-    ]
-  }
-};
-
-function selectAvatar(name, icon, element) {
-  currentAvatar = { name, icon };
-  document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('selected'));
-  element.classList.add('selected');
-}
-
-function registerUser() {
-  const name = document.getElementById('student-name-input').value.trim();
-  if (!name) { alert("Please type your name or ID!"); return; }
-  currentUser = name;
-  let users = JSON.parse(localStorage.getItem('f6_users') || "{}");
-  if (!users[currentUser]) {
-    users[currentUser] = { avatar: currentAvatar, progress: {}, totalScore: 0 };
-  } else {
-    currentAvatar = users[currentUser].avatar;
-  }
-  localStorage.setItem('f6_users', JSON.stringify(users));
-  showDashboard();
-}
-
-function showDashboard() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-dash').classList.add('active');
-  document.getElementById('display-user-name').innerText = currentUser;
-  document.getElementById('display-avatar-icon').innerText = currentAvatar.icon;
-  document.getElementById('display-avatar-name').innerText = currentAvatar.name;
-  
-  const users = JSON.parse(localStorage.getItem('f6_users') || "{}");
-  const userData = users[currentUser] || { progress: {} };
-  
-  let outfits = [];
-  topics.forEach(t => {
-    let lvl = userData.progress[t] || 1;
-    if (lvl > 1) outfits.push(rewards[t][lvl - 2]);
-  });
-  document.getElementById('display-outfit').innerText = outfits.length ? "Unlocked Gear: " + outfits.join(", ") : "Current Wardrobe: Standard Novice Gear";
-
-  const container = document.getElementById('topics-container');
-  container.innerHTML = "";
-  topics.forEach(t => {
-    let stage = userData.progress[t] || 1;
-    let card = document.createElement('div');
-    card.className = "topic-card";
-    card.innerHTML = `<h4>${t}</h4><p>Current: Stage ${stage} / 5</p>`;
-    card.onclick = () => startQuiz(t, stage);
-    container.appendChild(card);
-  });
-
-  updateLeaderboard();
-}
-
-function startQuiz(topic, stage) {
-  currentTopic = topic;
-  currentStage = stage;
-  currentQuestionIndex = 0;
-  currentScore = 0;
-
-  // Retrieve 20 non-repeating items from question bank
-  let stageBank = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : [];
-  
-  // Safety fallback if higher stage has not yet been populated
-  if (stageBank.length < 20) {
-    stageBank = questionBank[topic][1];
-  }
-
-  // Shuffle question sequence and randomise choices
-  let shuffledQuestions = shuffle(stageBank).slice(0, 20);
-  activeQuestions = shuffledQuestions.map(item => ({
-    text: item.q,
-    correct: item.a,
-    choices: shuffle([item.a, ...item.dist])
-  }));
-
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-quiz').classList.add('active');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = activeQuestions[currentQuestionIndex];
-  document.getElementById('quiz-topic-title').innerText = `${currentTopic} (Stage ${currentStage})`;
-  document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIndex + 1} / 20`;
-  document.getElementById('question-text').innerText = q.text;
-
-  const optionsBox = document.getElementById('options-container');
-  optionsBox.innerHTML = "";
-  q.choices.forEach(choice => {
-    let btn = document.createElement('button');
-    btn.className = "option-btn";
-    btn.innerText = choice;
-    btn.onclick = () => selectOption(choice);
-    optionsBox.appendChild(btn);
-  });
-}
-
-function selectOption(chosen) {
-  if (chosen === activeQuestions[currentQuestionIndex].correct) {
-    currentScore++;
-  }
-  currentQuestionIndex++;
-  if (currentQuestionIndex < activeQuestions.length) {
-    renderQuestion();
-  } else {
-    finishQuiz();
-  }
-}
-
-function finishQuiz() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-result').classList.add('active');
-  
-  let passed = currentScore >= 18;
-  document.getElementById('result-title').innerText = passed ? "🎉 Stage Cleared!" : "⚓ Try Again!";
-  document.getElementById('result-score').innerText = `Score: ${currentScore} / 20 (Requirement: 18/20)`;
-
-  let users = JSON.parse(localStorage.getItem('f6_users') || "{}");
-  if (!users[currentUser].progress[currentTopic]) users[currentUser].progress[currentTopic] = 1;
-
-  let rewardBox = document.getElementById('result-reward');
-  if (passed) {
-    if (currentStage < 5 && users[currentUser].progress[currentTopic] === currentStage) {
-      users[currentUser].progress[currentTopic]++;
-    }
-    let accessory = rewards[currentTopic][currentStage - 1];
-    rewardBox.style.display = "block";
-    rewardBox.innerHTML = `<strong>✨ Wardrobe Upgrade Unlocked:</strong><br>${accessory} for ${users[currentUser].avatar.name}!`;
-  } else {
-    rewardBox.style.display = "none";
-  }
-
-  users[currentUser].totalScore = (users[currentUser].totalScore || 0) + currentScore;
-  localStorage.setItem('f6_users', JSON.stringify(users));
-
-  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
-  logs.push({
-    student: currentUser,
-    topic: currentTopic,
-    stage: currentStage,
-    score: currentScore,
-    passed: passed ? "YES" : "NO",
-    time: new Date().toLocaleString()
-  });
-  localStorage.setItem('f6_logs', JSON.stringify(logs));
-}
-
-function returnToDashboard() { showDashboard(); }
-
-function updateLeaderboard() {
-  const users = JSON.parse(localStorage.getItem('f6_users') || "{}");
-  let list = Object.keys(users).map(k => {
-    let cleared = Object.values(users[k].progress || {}).reduce((a, b) => a + (b - 1), 0);
-    return { name: k, avatar: users[k].avatar.icon, cleared: cleared, score: users[k].totalScore || 0 };
-  });
-  list.sort((a, b) => b.score - a.score);
-
-  const tbody = document.getElementById('leaderboard-body');
-  tbody.innerHTML = "";
-  list.slice(0, 10).forEach((entry, idx) => {
-    tbody.innerHTML += `<tr><td>${idx + 1}</td><td>${entry.name}</td><td>${entry.avatar}</td><td>${entry.cleared}</td><td>${entry.score}</td></tr>`;
-  });
-}
-
-function openTeacherLogin() {
-  let pin = prompt("Please enter Teacher Backdoor PIN:");
-  if (pin === TEACHER_PIN) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-admin').classList.add('active');
-    renderAdminTable();
-  } else if (pin !== null) {
-    alert("Incorrect PIN.");
-  }
-}
-
-function renderAdminTable() {
-  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
-  let tbody = document.getElementById('admin-records-body');
-  tbody.innerHTML = "";
-  logs.slice().reverse().forEach(log => {
-    tbody.innerHTML += `<tr><td>${log.student}</td><td>${log.topic}</td><td>${log.stage}</td><td>${log.score}/20</td><td>${log.passed}</td><td>${log.time}</td></tr>`;
-  });
-}
-
-function exportToExcel() {
-  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
-  if (!logs.length) { alert("No student records available to export!"); return; }
-  let csvContent = "data:text/csv;charset=utf-8,Student Name,Grammar Topic,Stage,Score,Passed,Timestamp\n";
-  logs.forEach(l => {
-    csvContent += `"${l.student}","${l.topic}",${l.stage},${l.score},"${l.passed}","${l.time}"\n`;
-  });
-  let encodedUri = encodeURI(csvContent);
-  let link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `F6_Grammar_Quest_Records_${new Date().toISOString().slice(0,10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-function shuffle(array) {
-  let arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-</script>
-</body>
-</html>
+    <p style="text-align:center; font-size: 16px; color:#455A64; font-weig

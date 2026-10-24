@@ -16,58 +16,136 @@
   }
   * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
   body { background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 100%); color: #212121; min-height: 100vh; padding: 15px; }
-  .container { max-width: 860px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 25px; border: 4px solid var(--sponge-yellow); }
+  .container { max-width: 880px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 25px; border: 4px solid var(--sponge-yellow); }
   h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 15px; }
   .screen { display: none; }
   .active { display: block; }
-  .avatar-picker { display: flex; justify-content: center; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
-  .avatar-card { border: 3px solid #CFD8DC; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; width: 130px; background: #FAFAFA; font-weight: bold; }
+
+  /* Avatar Picker */
+  .avatar-picker { display: flex; justify-content: center; gap: 14px; margin: 15px 0; flex-wrap: wrap; }
+  .avatar-card { border: 3px solid #CFD8DC; border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; font-weight: bold; }
   .avatar-card.selected { border-color: var(--coral-pink); background: #FBE9E7; transform: scale(1.05); }
-  .avatar-card .icon { font-size: 45px; }
-  input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #78909C; border-radius: 10px; margin: 10px 0; color: #102027; font-weight: 600; }
+
+  /* 🎭 LIVING CHARACTER DOLL (FULL BODY WITH ATTACHMENT SLOTS) 🎭 */
+  .char-pedestal {
+    position: relative;
+    width: 150px;
+    height: 190px;
+    background: radial-gradient(circle, #FFFFFF 55%, #FFF8E1 100%);
+    border: 3px solid #FFA000;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(255, 160, 0, 0.2);
+  }
+  .doll-body {
+    position: relative;
+    width: 110px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* WEARABLE ACCESSORY ATTACHMENT SLOTS */
+  .wear-slot {
+    position: absolute;
+    z-index: 10;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35));
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .wear-head { top: -20px; font-size: 32px; left: 50%; transform: translateX(-50%); }
+  .wear-torso { top: 58px; font-size: 26px; left: 50%; transform: translateX(-50%); }
+  .wear-hand-left { top: 62px; left: -16px; font-size: 24px; }
+  .wear-hand-right { top: 62px; right: -16px; font-size: 24px; }
+
+  /* Body Segments */
+  .doll-head {
+    width: 60px; height: 52px; border-radius: 12px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12); z-index: 2; border: 2px solid rgba(0,0,0,0.15);
+  }
+  .doll-face { font-size: 22px; }
+  .doll-torso {
+    width: 52px; height: 46px; margin-top: -2px; border-radius: 6px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+    z-index: 1; border: 2px solid rgba(0,0,0,0.15);
+  }
+  .doll-arm-l, .doll-arm-r {
+    position: absolute; top: 8px; width: 12px; height: 36px; border-radius: 6px;
+    border: 2px solid rgba(0,0,0,0.15);
+  }
+  .doll-arm-l { left: -14px; transform: rotate(18deg); }
+  .doll-arm-r { right: -14px; transform: rotate(-18deg); }
+  .doll-legs { display: flex; gap: 10px; margin-top: -2px; }
+  .doll-leg {
+    width: 12px; height: 26px; border-radius: 4px; border: 2px solid rgba(0,0,0,0.15); position: relative;
+  }
+  .doll-leg::after {
+    content: ''; position: absolute; bottom: -4px; left: -3px; width: 18px; height: 8px;
+    background: #212121; border-radius: 4px;
+  }
+
+  /* Specific Character Skins */
+  .skin-sponge .doll-head { background: #FFEE58; border-radius: 8px; width: 66px; height: 56px; }
+  .skin-sponge .doll-torso { background: #FFFFFF; border-bottom: 12px solid #8D6E63; }
+  .skin-sponge .doll-torso::before { content: '👔'; font-size: 14px; position: absolute; top: 4px; }
+  .skin-sponge .doll-arm-l, .skin-sponge .doll-arm-r { background: #FFEE58; }
+  .skin-sponge .doll-leg { background: #FFEE58; }
+
+  .skin-star .doll-head { background: #FF8A80; border-radius: 22px 22px 6px 6px; width: 50px; height: 48px; }
+  .skin-star .doll-torso { background: #FF8A80; border-bottom: 14px solid #7CB342; }
+  .skin-star .doll-arm-l, .skin-star .doll-arm-r { background: #FF8A80; }
+  .skin-star .doll-leg { background: #FF8A80; }
+
+  .skin-squid .doll-head { background: #80CBC4; border-radius: 20px 20px 8px 8px; width: 54px; height: 58px; }
+  .skin-squid .doll-torso { background: #BCAAA4; border-bottom: 8px solid #80CBC4; }
+  .skin-squid .doll-arm-l, .skin-squid .doll-arm-r { background: #80CBC4; }
+  .skin-squid .doll-leg { background: #80CBC4; }
+
+  .skin-squirrel .doll-head { background: #BCAAA4; border-radius: 50%; width: 56px; height: 54px; border: 3px solid #81D4FA; }
+  .skin-squirrel .doll-torso { background: #ECEFF1; border-bottom: 8px solid #B0BEC5; }
+  .skin-squirrel .doll-arm-l, .skin-squirrel .doll-arm-r { background: #ECEFF1; }
+  .skin-squirrel .doll-leg { background: #ECEFF1; }
+
+  /* Dressing Area on Dashboard */
+  .dressing-card {
+    background: #FFF8E1; border: 3px solid #FFE082; border-radius: 16px; padding: 16px;
+    margin: 15px 0 20px 0; display: flex; align-items: center; gap: 24px;
+  }
+  .wardrobe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .wardrobe-tag { background: #FFE082; color: #4E342E; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid #FFB300; }
+
+  /* Inputs & Choice Buttons */
+  input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #78909C; border-radius: 10px; margin: 10px 0; font-weight: 600; }
   button.primary-btn { background: var(--coral-pink); color: #FFFFFF; border: none; border-radius: 10px; padding: 14px 20px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
   button.primary-btn:hover { background: #BF360C; }
   button.quit-btn { background: #78909C; color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: bold; cursor: pointer; }
   button.quit-btn:hover { background: #D32F2F; }
+  
   .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 15px 0; }
   .topic-card { background: #E0F2F1; border-radius: 12px; padding: 15px; text-align: center; border: 2px solid #80CBC4; cursor: pointer; transition: 0.2s; }
   .topic-card:hover { background: #B2DFDB; transform: translateY(-2px); }
   .topic-card h4 { color: #004D40; font-size: 17px; margin-bottom: 5px; }
-  .topic-card p { color: #37474F; font-size: 13px; font-weight: 600; }
-  
-  /* Choice Buttons with Dark Brown Font */
+
+  /* Dark Brown Choice Buttons */
   .option-btn {
     display: block; width: 100%; text-align: left; margin: 10px 0;
     background: var(--choice-bg); border: 2px solid var(--choice-border);
     color: var(--dark-brown) !important; padding: 15px 18px;
     border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 700;
-    box-shadow: 0 2px 4px rgba(62,39,35,0.1); transition: 0.2s;
+    box-shadow: 0 2px 4px rgba(62,39,35,0.12); transition: 0.2s;
   }
   .option-btn:hover { background: #D7CCC8; border-color: #3E2723; color: #27120B !important; transform: translateX(3px); }
 
-  /* Companion Avatar & Dressing Room */
-  .avatar-dressing-room {
-    background: #FFF8E1; border: 2px solid #FFD54F; border-radius: 15px; padding: 15px; margin: 15px 0 20px 0;
-    display: flex; align-items: center; gap: 20px;
-  }
-  .avatar-stage-box {
-    position: relative; width: 110px; height: 110px; background: #FFFFFF; border: 3px solid #FFA000;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .avatar-character-emoji { font-size: 55px; z-index: 1; }
-  .slot-accessory { position: absolute; z-index: 2; font-size: 26px; }
-  .slot-head { top: -8px; }
-  .slot-chest { bottom: 2px; }
-  .slot-left { left: -6px; top: 35px; }
-  .slot-right { right: -6px; top: 35px; }
-  .wardrobe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .wardrobe-tag { background: #FFE082; color: #4E342E; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 15px; border: 1px solid #FFB300; }
-
   .hud-bar { display: flex; justify-content: space-between; align-items: center; background: #ECEFF1; padding: 10px 14px; border-radius: 10px; margin-bottom: 15px; }
   .leaderboard-table, .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-  .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 8px 10px; text-align: left; }
-  .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: #FFFFFF; font-size: 14px; }
-  .leaderboard-table td, .admin-table td { font-size: 14px; }
+  .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 8px 10px; text-align: left; font-size: 14px; }
+  .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: #FFFFFF; }
   .teacher-btn { position: fixed; bottom: 20px; right: 20px; background: #455A64; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; border: 2px solid #FFFFFF; color: #FFFFFF; }
   .badge-display { background: #FFF3E0; border: 2px dashed #FF9800; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
 </style>
@@ -75,43 +153,78 @@
 <body>
 
 <div class="container">
-  <!-- 1. Registration / Login Screen -->
+  <!-- Screen 1: Registration -->
   <div id="screen-auth" class="screen active">
     <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Score 18/20 to Advance & Dress Your Avatar!</p>
+    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Advance & Outfit Your Companion Body with Gear!</p>
+    
     <div style="margin-top:20px;">
       <label style="font-weight:bold; color:#263238;">Enter Your Student Name or ID:</label>
       <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
-      <h3 style="margin-top:15px;">Pick Your Companion:</h3>
+      
+      <h3 style="margin-top:15px;">Choose Your Companion Character:</h3>
       <div class="avatar-picker">
-        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', '🧽', this)"><div class="icon">🧽</div><div>Sponge-Lad</div></div>
-        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', '⭐', this)"><div class="icon">⭐</div><div>Star-Buddy</div></div>
-        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', '🐙', this)"><div class="icon">🐙</div><div>Tentacle-Prof</div></div>
-        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', '🐿️', this)"><div class="icon">🐿️</div><div>Sandy-Squirrel</div></div>
+        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
+          <div style="font-size:32px;">🧽</div><div>Sponge-Lad</div>
+          <span style="font-size:11px; color:#78909C;">Full Body Explorer</span>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', 'skin-star', '🌟', this)">
+          <div style="font-size:32px;">⭐</div><div>Star-Buddy</div>
+          <span style="font-size:11px; color:#78909C;">Star-Point Companion</span>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', 'skin-squid', '👓', this)">
+          <div style="font-size:32px;">🐙</div><div>Tentacle-Prof</div>
+          <span style="font-size:11px; color:#78909C;">Academic Scholar</span>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', 'skin-squirrel', '🥜', this)">
+          <div style="font-size:32px;">🐿️</div><div>Sandy-Squirrel</div>
+          <span style="font-size:11px; color:#78909C;">Space Suit Master</span>
+        </div>
       </div>
       <button class="primary-btn" onclick="registerUser()">Start Journey</button>
     </div>
   </div>
 
-  <!-- 2. Dashboard Screen -->
+  <!-- Screen 2: Dashboard & Dressing Stage -->
   <div id="screen-dash" class="screen">
     <h2>Welcome back, <span id="display-user-name"></span>!</h2>
-    <div class="avatar-dressing-room">
-      <div class="avatar-stage-box">
-        <span class="slot-accessory slot-head" id="equip-head"></span>
-        <span class="avatar-character-emoji" id="equip-character">🧽</span>
-        <span class="slot-accessory slot-chest" id="equip-chest"></span>
-        <span class="slot-accessory slot-left" id="equip-left"></span>
-        <span class="slot-accessory slot-right" id="equip-right"></span>
+    
+    <!-- LIVING AVATAR DRESSING ROOM -->
+    <div class="dressing-card">
+      <div class="char-pedestal">
+        <div id="companion-doll" class="doll-body skin-sponge">
+          <!-- Head Slot -->
+          <span class="wear-slot wear-head" id="slot-head"></span>
+          <div class="doll-head">
+            <div class="doll-face" id="char-face">👀</div>
+          </div>
+          <!-- Torso & Chest Slot -->
+          <div class="doll-torso">
+            <div class="doll-arm-l"></div>
+            <div class="doll-arm-r"></div>
+            <span class="wear-slot wear-torso" id="slot-torso"></span>
+          </div>
+          <!-- Legs -->
+          <div class="doll-legs">
+            <div class="doll-leg"></div>
+            <div class="doll-leg"></div>
+          </div>
+          <!-- Left & Right Hands (Carrying / Arm slots) -->
+          <span class="wear-slot wear-hand-left" id="slot-hand-left"></span>
+          <span class="wear-slot wear-hand-right" id="slot-hand-right"></span>
+        </div>
       </div>
+
       <div style="flex-grow:1;">
-        <h4 style="color:#E65100; font-size:16px;">Companion: <span id="display-companion-name">Sponge-Lad</span></h4>
-        <p style="font-size:13px; color:#5D4037; margin-top:2px;" id="display-wardrobe-summary">Standard Novice Gear</p>
+        <h3 style="text-align:left; color:#E65100; margin-bottom:4px;" id="display-companion-name">Sponge-Lad</h3>
+        <p style="font-size:14px; color:#4E342E; font-weight:600;" id="display-wardrobe-summary">Currently Wearing: Standard Academy Uniform</p>
         <div class="wardrobe-tags" id="wardrobe-tag-container"></div>
       </div>
     </div>
+
     <h3>Select Grammar Mission</h3>
     <div class="topic-grid" id="topics-container"></div>
+    
     <h3>🏆 Class Leaderboard</h3>
     <table class="leaderboard-table">
       <thead><tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>Total Score</th></tr></thead>
@@ -119,7 +232,7 @@
     </table>
   </div>
 
-  <!-- 3. Quiz Screen -->
+  <!-- Screen 3: Quiz Screen -->
   <div id="screen-quiz" class="screen">
     <div class="hud-bar">
       <div>
@@ -132,7 +245,7 @@
     <div id="options-container"></div>
   </div>
 
-  <!-- 4. Result Screen -->
+  <!-- Screen 4: Result Screen -->
   <div id="screen-result" class="screen" style="text-align:center;">
     <h2 id="result-title">Stage Complete!</h2>
     <p id="result-score" style="font-size:22px; font-weight:bold; margin:15px 0;"></p>
@@ -140,7 +253,7 @@
     <button class="primary-btn" style="max-width:280px;" onclick="returnToDashboard()">Return to Mission Hub</button>
   </div>
 
-  <!-- 5. Teacher Admin Screen -->
+  <!-- Screen 5: Teacher Admin Screen -->
   <div id="screen-admin" class="screen">
     <h2>🔒 Teacher Backdoor Management Console</h2>
     <div style="text-align:center; margin-bottom:15px;">
@@ -157,28 +270,19 @@
 <div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
 
 <script>
-// Resilient storage wrapper (guaranteed safe on school laptops & incognito tabs)
+// Crash-safe Storage Handler
 const storage = {
-  get: function(key, fallback) {
-    try {
-      const v = localStorage.getItem(key);
-      return v ? JSON.parse(v) : fallback;
-    } catch(e) {
-      return window['__mem_' + key] || fallback;
-    }
+  get: function(k, d) {
+    try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return window['__mem_' + k] || d; }
   },
-  set: function(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch(e) {
-      window['__mem_' + key] = value;
-    }
+  set: function(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { window['__mem_' + k] = v; }
   }
 };
 
 const TEACHER_PIN = "F6ENG2026";
 let currentUser = null;
-let currentAvatar = { name: "Sponge-Lad", icon: "🧽" };
+let currentAvatar = { name: "Sponge-Lad", skin: "skin-sponge", face: "👀" };
 let currentTopic = "";
 let currentStage = 1;
 let currentQuestionIndex = 0;
@@ -194,52 +298,53 @@ const topics = [
   "Synonyms"
 ];
 
+// Wearable & Carry slots directly linked to the avatar body
 const rewards = {
   "Prepositions": [
     { name: "Nautical Cap", slot: "head", icon: "🧢" },
-    { name: "Sailor Vest", slot: "chest", icon: "🦺" },
-    { name: "Anchor Brooch", slot: "chest", icon: "⚓" },
-    { name: "Admiral Epaulettes", slot: "left", icon: "🎖️" },
+    { name: "Sailor Vest", slot: "torso", icon: "🦺" },
+    { name: "Anchor Brooch", slot: "torso", icon: "⚓" },
+    { name: "Admiral Epaulettes", slot: "hand-left", icon: "🎖️" },
     { name: "Royal Pearl Tricorne", slot: "head", icon: "👑" }
   ],
   "Word Formation": [
-    { name: "Wooden Quill", slot: "right", icon: "🪶" },
+    { name: "Wooden Quill", slot: "hand-right", icon: "🪶" },
     { name: "Grammar Monocle", slot: "head", icon: "🧐" },
-    { name: "Velvet Cloak", slot: "chest", icon: "🥋" },
-    { name: "Crystal Thesaurus", slot: "left", icon: "💎" },
+    { name: "Velvet Cloak", slot: "torso", icon: "🥋" },
+    { name: "Crystal Thesaurus", slot: "hand-left", icon: "💎" },
     { name: "Crown of Syntax", slot: "head", icon: "👑" }
   ],
   "Tenses": [
-    { name: "Bronze Stopwatch", slot: "left", icon: "⏱️" },
-    { name: "Silver Pocket Watch", slot: "right", icon: "🕰️" },
-    { name: "Chrono-Belt", slot: "chest", icon: "🥋" },
-    { name: "Hourglass Cape", slot: "chest", icon: "⏳" },
-    { name: "Timekeeper Robe", slot: "chest", icon: "🧙‍♂️" }
+    { name: "Bronze Stopwatch", slot: "hand-left", icon: "⏱️" },
+    { name: "Silver Pocket Watch", slot: "hand-right", icon: "🕰️" },
+    { name: "Chrono-Belt", slot: "torso", icon: "🥋" },
+    { name: "Hourglass Cape", slot: "torso", icon: "⏳" },
+    { name: "Timekeeper Robe", slot: "torso", icon: "🧙‍♂️" }
   ],
   "Articles": [
-    { name: "Paper Badge", slot: "chest", icon: "🏷️" },
-    { name: "Copper Pin", slot: "chest", icon: "🧷" },
-    { name: "Silver Tag", slot: "chest", icon: "🥈" },
-    { name: "Gold Plaque", slot: "left", icon: "🥇" },
-    { name: "Royal Medallion", slot: "chest", icon: "🏅" }
+    { name: "Paper Badge", slot: "torso", icon: "🏷️" },
+    { name: "Copper Pin", slot: "torso", icon: "🧷" },
+    { name: "Silver Tag", slot: "torso", icon: "🥈" },
+    { name: "Gold Plaque", slot: "hand-left", icon: "🥇" },
+    { name: "Royal Medallion", slot: "torso", icon: "🏅" }
   ],
   "Plurals": [
-    { name: "Dual Wristbands", slot: "left", icon: "🧣" },
-    { name: "Star Rings", slot: "right", icon: "💍" },
-    { name: "Multi-Chain Sash", slot: "chest", icon: "🎗️" },
-    { name: "Gem Bracers", slot: "left", icon: "🔮" },
+    { name: "Dual Wristbands", slot: "hand-left", icon: "🧣" },
+    { name: "Star Rings", slot: "hand-right", icon: "💍" },
+    { name: "Multi-Chain Sash", slot: "torso", icon: "🎗️" },
+    { name: "Gem Bracers", slot: "hand-left", icon: "🔮" },
     { name: "Infinity Crown", slot: "head", icon: "👑" }
   ],
   "Synonyms": [
-    { name: "Pocket Glossary", slot: "right", icon: "📖" },
-    { name: "Silver Word Pouch", slot: "left", icon: "👛" },
+    { name: "Pocket Glossary", slot: "hand-right", icon: "📖" },
+    { name: "Silver Word Pouch", slot: "hand-left", icon: "👛" },
     { name: "Chameleon Scarf", slot: "head", icon: "🧣" },
-    { name: "Polyglot Tunic", slot: "chest", icon: "🎽" },
-    { name: "Iridescent Wings", slot: "right", icon: "🪽" }
+    { name: "Polyglot Tunic", slot: "torso", icon: "🎽" },
+    { name: "Iridescent Wings", slot: "hand-right", icon: "🪽" }
   ]
 };
 
-// Distinct questions across Stages 1 to 5
+// 5 DISTINCT STAGES per category (calibrated from short sentences to DSE Part B)
 const questionBank = {
   "Prepositions": {
     1: [
@@ -915,9 +1020,9 @@ const questionBank = {
   }
 };
 
-function selectAvatar(name, icon, element) {
+function selectAvatar(name, skin, face, element) {
   try {
-    currentAvatar = { name: name, icon: icon };
+    currentAvatar = { name: name, skin: skin, face: face };
     document.querySelectorAll('.avatar-card').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
   } catch(e) {}
@@ -953,13 +1058,19 @@ function showDashboard() {
 
     document.getElementById('display-user-name').innerText = currentUser || "Student";
     document.getElementById('display-companion-name').innerText = currentAvatar.name;
-    document.getElementById('equip-character').innerText = currentAvatar.icon;
+    
+    // Update companion body skin & face
+    const doll = document.getElementById('companion-doll');
+    if (doll) {
+      doll.className = "doll-body " + (currentAvatar.skin || 'skin-sponge');
+      document.getElementById('char-face').innerText = currentAvatar.face || '👀';
+    }
 
     const users = storage.get('f6_users', {});
     const userData = (users && currentUser && users[currentUser]) ? users[currentUser] : { progress: {} };
 
-    // Reset equipped slots
-    ['equip-head', 'equip-chest', 'equip-left', 'equip-right'].forEach(function(id) {
+    // Reset wearable item slots
+    ['slot-head', 'slot-torso', 'slot-hand-left', 'slot-hand-right'].forEach(function(id) {
       const el = document.getElementById(id);
       if (el) el.innerText = "";
     });
@@ -971,7 +1082,7 @@ function showDashboard() {
         if (rewards[t] && rewards[t][s - 1]) {
           let item = rewards[t][s - 1];
           unlockedItems.push(item.name);
-          const target = document.getElementById('equip-' + item.slot);
+          const target = document.getElementById('slot-' + item.slot);
           if (target) target.innerText = item.icon;
         }
       }
@@ -981,7 +1092,7 @@ function showDashboard() {
     const sumBox = document.getElementById('display-wardrobe-summary');
     if (tagBox) tagBox.innerHTML = "";
     if (unlockedItems.length > 0) {
-      if (sumBox) sumBox.innerText = "Equipped (" + unlockedItems.length + " items):";
+      if (sumBox) sumBox.innerText = "Equipped Gear (" + unlockedItems.length + " items fitted):";
       unlockedItems.forEach(function(item) {
         let span = document.createElement('span');
         span.className = 'wardrobe-tag';
@@ -989,7 +1100,7 @@ function showDashboard() {
         if (tagBox) tagBox.appendChild(span);
       });
     } else {
-      if (sumBox) sumBox.innerText = "Standard Novice Gear (Clear 18/20 in any stage to equip clothes!)";
+      if (sumBox) sumBox.innerText = "Currently Wearing: Standard Academy Uniform (Score 18/20 to earn wearable clothes!)";
     }
 
     const topicsBox = document.getElementById('topics-container');
@@ -1093,7 +1204,7 @@ function finishQuiz() {
       }
       let acc = (rewards[currentTopic] && rewards[currentTopic][currentStage - 1]) ? rewards[currentTopic][currentStage - 1] : { name: "Champion Badge", icon: "⭐" };
       rewardBox.style.display = "block";
-      rewardBox.innerHTML = "<strong>✨ Wardrobe Upgrade Unlocked:</strong><br>" + acc.icon + " " + acc.name + " for " + users[currentUser].avatar.name + "!";
+      rewardBox.innerHTML = "<strong>✨ Wardrobe Upgrade Fitted:</strong><br>" + acc.icon + " " + acc.name + " worn by " + users[currentUser].avatar.name + "!";
     } else {
       rewardBox.style.display = "none";
     }
@@ -1123,7 +1234,7 @@ function updateLeaderboard() {
     const users = storage.get('f6_users', {});
     let list = Object.keys(users).map(function(k) {
       let cleared = Object.values(users[k].progress || {}).reduce(function(a, b) { return a + (b - 1); }, 0);
-      return { name: k, avatar: (users[k].avatar && users[k].avatar.icon) ? users[k].avatar.icon : "🧽", cleared: cleared, score: users[k].totalScore || 0 };
+      return { name: k, avatar: (users[k].avatar && users[k].avatar.name) ? users[k].avatar.name : "Student", cleared: cleared, score: users[k].totalScore || 0 };
     });
     list.sort(function(a, b) { return b.score - a.score; });
 
@@ -1165,9 +1276,9 @@ function exportToExcel() {
   try {
     let logs = storage.get('f6_logs', []);
     if (!logs.length) { alert("No student records available to export!"); return; }
-    let csv = "data:text/csv;charset=utf-8,Student Name,Grammar Topic,Stage,Score,Passed,Timestamp\n";
+    let csv = "data:text/csv;charset=utf-8,Student Name,Grammar Topic,Stage,Score,Passed,Timestamp\\n";
     logs.forEach(function(l) {
-      csv += '"' + l.student + '","' + l.topic + '",' + l.stage + ',' + l.score + ',"' + l.passed + '","' + l.time + '"\n';
+      csv += '"' + l.student + '","' + l.topic + '",' + l.stage + ',' + l.score + ',"' + l.passed + '","' + l.time + '"\\n';
     });
     let uri = encodeURI(csv);
     let link = document.createElement("a");

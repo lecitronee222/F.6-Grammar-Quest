@@ -31,7 +31,7 @@
   .avatar-card { border: 3px solid #CFD8DC; border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; font-weight: bold; }
   .avatar-card.selected { border-color: var(--coral-pink); background: #FBE9E7; transform: scale(1.05); }
 
-  /* PROPERLY ALIGNED CHARACTER DOLL & ACCESSORIES */
+  /* CHARACTER DOLL & ACCESSORIES */
   .dressing-card { background: #FFF8E1; border: 3px solid #FFE082; border-radius: 16px; padding: 16px; margin: 15px 0 20px 0; display: flex; align-items: center; gap: 24px; }
   .char-pedestal {
     position: relative;
@@ -55,7 +55,6 @@
     align-items: center;
     justify-content: center;
   }
-  /* Precise Wearable Item Alignment Slots */
   .wear-slot {
     position: absolute;
     z-index: 10;
@@ -145,18 +144,19 @@
   <!-- Screen 1: Registration / Login -->
   <div id="screen-auth" class="screen active">
     <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Score 16/20 to Advance & Earn Gear!</p>
+    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Pass to Advance &amp; Earn Gear!</p>
     
     <div id="existing-profiles-container" class="profile-section" style="display:none;">
-      <h3 style="margin-bottom:5px; font-size:15px;">👋 Login to Returning Account:</h3>
+      <h3 style="margin-bottom:5px; font-size:15px;">👋 Select Account to Log In &amp; Resume:</h3>
       <div id="profile-list" class="profile-list"></div>
     </div>
 
-    <div style="margin-top:15px;">
-      <label style="font-weight:bold; color:#263238;">Enter Your Student Name or ID:</label>
+    <div style="margin-top:15px; background: #F5F5F5; padding: 15px; border-radius: 12px;">
+      <h3 style="text-align:left; font-size:16px;">Create / Login with Student ID or Name:</h3>
+      <label style="font-weight:bold; color:#263238; font-size:13px;">Student Name or ID:</label>
       <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
       
-      <h3 style="margin-top:15px;">Choose Your Living Companion:</h3>
+      <h3 style="margin-top:10px; text-align:left; font-size:15px;">Choose Companion Avatar:</h3>
       <div class="avatar-picker">
         <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
           <div style="font-size:32px;">🧽</div><div>Sponge-Lad</div>
@@ -171,21 +171,20 @@
           <div style="font-size:32px;">🐿️</div><div>Sandy-Squirrel</div>
         </div>
       </div>
-      <button class="primary-btn" onclick="registerUser()">Start / Resume Journey</button>
+      <button class="primary-btn" onclick="registerUser()">🔑 Login / Resume Progress</button>
     </div>
   </div>
 
   <!-- Screen 2: Dashboard & Dressing Stage -->
   <div id="screen-dash" class="screen">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2 style="text-align:left;">Welcome back, <span id="display-user-name"></span>!</h2>
-      <button class="quit-btn" onclick="switchUser()" style="background:#546E7A;">Switch User</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <h2 style="text-align:left; margin:0;">Welcome back, <span id="display-user-name"></span>!</h2>
+      <button class="quit-btn" onclick="switchUser()" style="background:#00838F; padding:8px 16px; font-size:14px;">🚪 Log Out</button>
     </div>
     
     <div class="dressing-card">
       <div class="char-pedestal">
         <div id="companion-doll" class="doll-body skin-sponge">
-          <!-- Wearable Slots -->
           <span class="wear-slot wear-head" id="slot-head"></span>
           <div class="doll-head">
             <div class="doll-face" id="char-face">👀</div>
@@ -225,7 +224,7 @@
     <div class="hud-bar">
       <div>
         <h3 id="quiz-topic-title" style="margin:0; font-size:16px; text-align:left;">Topic</h3>
-        <span id="quiz-progress" style="font-weight:bold; color:#004D40; font-size:13px;">Question 1 / 20</span>
+        <span id="quiz-progress" style="font-weight:bold; color:#004D40; font-size:13px;">Question 1</span>
       </div>
       <button class="quit-btn" onclick="confirmQuitToMenu()">✕ Main Menu (Quit)</button>
     </div>
@@ -240,7 +239,7 @@
     <div id="result-reward" class="badge-display" style="display:none;"></div>
     
     <div id="review-section" class="review-section">
-      <h3 style="text-align:left; color:#004D40;">📋 Stage Question Review & Answer Key:</h3>
+      <h3 style="text-align:left; color:#004D40;">📋 Stage Question Review &amp; Answer Key:</h3>
       <div class="review-container" id="review-container"></div>
     </div>
 
@@ -251,8 +250,9 @@
   <div id="screen-admin" class="screen">
     <h2>🔒 Teacher Backdoor Management Console</h2>
     <div style="text-align:center; margin-bottom:15px;">
-      <button class="primary-btn" style="max-width:260px; background:#2E7D32;" onclick="exportToExcel()">📥 Download Results (.CSV)</button>
-      <button class="primary-btn" style="max-width:160px; background:#546E7A; margin-left:10px;" onclick="returnToDashboard()">Back to Game</button>
+      <button class="primary-btn" style="max-width:220px; background:#2E7D32;" onclick="exportToExcel()">📥 Download CSV</button>
+      <button class="primary-btn" style="max-width:200px; background:#D32F2F; margin-left:8px;" onclick="clearLeaderboardRecords()">🗑️ Clear Leaderboard</button>
+      <button class="primary-btn" style="max-width:140px; background:#546E7A; margin-left:8px;" onclick="returnToDashboard()">Back to Game</button>
     </div>
     <table class="admin-table">
       <thead><tr><th>Student Name</th><th>Topic</th><th>Stage</th><th>Score</th><th>Passed?</th><th>Timestamp</th></tr></thead>
@@ -269,7 +269,7 @@ const storage = {
 };
 
 const TEACHER_PIN = "F6ENG2026";
-const PASSING_THRESHOLD = 16;
+const PASSING_THRESHOLD = 4; // Passing requires 80%+ accuracy
 let currentUser = null;
 let currentAvatar = { name: "Sponge-Lad", skin: "skin-sponge", face: "👀" };
 let currentTopic = "";
@@ -326,7 +326,7 @@ const rewards = {
   ]
 };
 
-// FULL UNIQUE QUESTION BANK (20 DISTINCT QUESTIONS PER STAGE, NO REPEATS)
+// DISTINCT TOPIC QUESTION BANK (NO REPEATED QUESTIONS ACROSS ANY TOPIC OR STAGE)
 const questionBank = {
   "Prepositions": {
     1: [
@@ -334,115 +334,56 @@ const questionBank = {
       { q: "The tutorial begins promptly _____ 9:30 a.m.", a: "at", dist: ["on", "in", "by"] },
       { q: "The HKDSE written exams take place _____ April.", a: "in", dist: ["on", "at", "to"] },
       { q: "He placed his revision guide _____ the desk.", a: "on", dist: ["in", "at", "into"] },
-      { q: "We walked _____ the covered walkway to avoid the shower.", a: "through", dist: ["across", "between", "over"] },
-      { q: "The scholarship was divided equally _____ the two top candidates.", a: "between", dist: ["among", "along", "within"] },
-      { q: "She shared her notes _____ all her study group members.", a: "among", dist: ["between", "with", "into"] },
-      { q: "The students are waiting patiently _____ the bus.", a: "for", dist: ["to", "at", "of"] },
-      { q: "He dove _____ the swimming pool to train for the gala.", a: "into", dist: ["onto", "in", "to"] },
-      { q: "Our school library is situated _____ the second floor.", a: "on", dist: ["at", "in", "by"] },
-      { q: "She apologized sincerely _____ submitting her SBA late.", a: "for", dist: ["of", "about", "with"] },
-      { q: "He is keen _____ pursuing digital media in university.", a: "on", dist: ["in", "at", "for"] },
-      { q: "Are you afraid _____ delivering speeches in English?", a: "of", dist: ["with", "for", "at"] },
-      { q: "The student stored his school bag _____ the desk.", a: "under", dist: ["between", "through", "inside of"] },
-      { q: "They travelled from Kowloon to Central _____ MTR.", a: "by", dist: ["with", "on", "in"] },
-      { q: "The principal congratulated her _____ winning the essay contest.", a: "on", dist: ["for", "about", "with"] },
-      { q: "The community centre remains closed _____ Sundays.", a: "on", dist: ["in", "at", "by"] },
-      { q: "He has been revising continuously _____ three hours.", a: "for", dist: ["since", "during", "while"] },
-      { q: "She succeeded _____ obtaining Level 5 in her mock paper.", a: "in", dist: ["on", "at", "to"] },
-      { q: "Pay close attention _____ the examiner's instructions.", a: "to", dist: ["at", "for", "with"] }
-    ],
-    2: [
-      { q: "All secondary students must abide _____ the examination regulations.", a: "by", dist: ["with", "to", "on"] },
-      { q: "The candidate was accused _____ copying someone else's work.", a: "of", dist: ["with", "for", "about"] },
-      { q: "The revised syllabus caters _____ students of varying learning abilities.", a: "to", dist: ["for", "with", "at"] },
-      { q: "He refrained _____ making unverified claims during the debate.", a: "from", dist: ["to", "by", "against"] },
-      { q: "Her success can be attributed _____ systematic daily practice.", a: "to", dist: ["for", "with", "by"] },
-      { q: "The head prefect is responsible _____ coordinating the morning duty team.", a: "for", dist: ["to", "of", "in"] },
-      { q: "The committee agreed _____ the suggested timetable after deliberations.", a: "on", dist: ["with", "into", "for"] },
-      { q: "Smoking in public indoor areas is prohibited _____ law.", a: "by", dist: ["with", "from", "under"] },
-      { q: "The teacher advised us not to rely entirely _____ model answers.", a: "on", dist: ["to", "with", "at"] },
-      { q: "The youth centre caters _____ underprivileged teenagers in Kowloon.", a: "for", dist: ["with", "at", "of"] },
-      { q: "He was disqualified _____ entering the venue without his admission form.", a: "from", dist: ["to", "by", "of"] },
-      { q: "She is capable _____ handling high-pressure assessment situations.", a: "of", dist: ["to", "with", "for"] },
-      { q: "His opinion conflicts sharply _____ the statistical evidence.", a: "with", dist: ["against", "to", "at"] },
-      { q: "The prefect reminded students to adhere _____ the dress code.", a: "to", dist: ["with", "by", "on"] },
-      { q: "We must protect wildlife habitats _____ reckless commercial expansion.", a: "from", dist: ["against", "off", "away"] },
-      { q: "He takes great pride _____ his team's sportsmanship.", a: "in", dist: ["on", "with", "of"] },
-      { q: "The new youth initiative focuses _____ promoting mental well-being.", a: "on", dist: ["at", "towards", "into"] },
-      { q: "She insists _____ completing the past paper under real exam timing.", a: "on", dist: ["in", "to", "with"] },
-      { q: "The charity appeals _____ the public for generous contributions.", a: "to", dist: ["for", "at", "towards"] },
-      { q: "He was deeply absorbed _____ the English literary novel.", a: "in", dist: ["with", "at", "by"] }
-    ],
-    3: [
-      { q: "To all appearances, the candidate performed well in the speaking test.", a: "To", dist: ["By", "From", "In"] },
-      { q: "The policy was enacted _____ accordance with statutory guidelines.", a: "in", dist: ["on", "by", "at"] },
-      { q: "The youth club launched the program _____ behalf of underprivileged youth.", a: "on", dist: ["in", "at", "by"] },
-      { q: "The school building was renovated _____ expense to the alumni foundation.", a: "at", dist: ["with", "by", "for"] },
-      { q: "She remained composed _____ the face of severe adversity.", a: "in", dist: ["at", "on", "under"] },
-      { q: "The argument was dismissed as irrelevant _____ the matter in dispute.", a: "to", dist: ["with", "for", "at"] },
-      { q: "He acted _____ good faith when reporting the incident.", a: "in", dist: ["with", "on", "by"] },
-      { q: "The new regulation came into effect _____ midnight.", a: "at", dist: ["on", "in", "by"] },
-      { q: "In respect of post-secondary pathways, students have multiple choices.", a: "In", dist: ["With", "At", "On"] },
-      { q: "The speaker deviated _____ the main agenda during the Q&A session.", a: "from", dist: ["off", "out of", "away"] },
-      { q: "In light of recent findings, the council revised its recommendations.", a: "In", dist: ["Under", "With", "By"] },
-      { q: "She accomplished the synthesis task _____ great distinction.", a: "with", dist: ["in", "by", "at"] },
-      { q: "The sports venue was closed _____ account of adverse weather.", a: "on", dist: ["in", "by", "with"] },
-      { q: "The two universities collaborated _____ conjunction with the NGO.", a: "in", dist: ["on", "by", "with"] },
-      { q: "The proposal is _____ consideration by the academic review board.", a: "under", dist: ["in", "on", "at"] },
-      { q: "He accepted the verdict _____ protest, feeling treated unfairly.", a: "under", dist: ["with", "against", "in"] },
-      { q: "The debate centered _____ whether AI benefits secondary learning.", a: "on", dist: ["in", "with", "at"] },
-      { q: "She persevered _____ spite of physical exhaustion.", a: "in", dist: ["at", "with", "by"] },
-      { q: "The committee is _____ possession of confidential test data.", a: "in", dist: ["at", "with", "under"] },
-      { q: "His comments were interpreted as derogatory _____ nature.", a: "in", dist: ["by", "with", "of"] }
-    ],
-    4: [
-      { q: "The candidate's rationale is contingent _____ survey validation.", a: "upon", dist: ["with", "to", "at"] },
-      { q: "Public sentiment is largely incompatible _____ the proposed tariff hike.", a: "with", dist: ["to", "against", "for"] },
-      { q: "The educational reform culminated _____ a widespread revision of criteria.", a: "in", dist: ["to", "at", "into"] },
-      { q: "His critique is devoid _____ substantiated factual references.", a: "of", dist: ["from", "off", "with"] },
-      { q: "The author expresses deep indignation _____ socio-economic disparity.", a: "at", dist: ["for", "towards", "on"] },
-      { q: "The university degree is synonymous _____ prestige and academic rigour.", a: "with", dist: ["to", "for", "as"] },
-      { q: "The council must reconcile economic growth _____ conservation needs.", a: "with", dist: ["to", "against", "along"] },
-      { q: "The scholar demonstrated an aversion _____ sensationalist headlines.", a: "to", dist: ["against", "with", "from"] },
-      { q: "The candidate was oblivious _____ the strict time constraint.", a: "to", dist: ["of", "at", "about"] },
-      { q: "His research paper impinges _____ sensitive intellectual property issues.", a: "on", dist: ["to", "at", "into"] },
-      { q: "The committee voiced reservations _____ the proposed curriculum change.", a: "about", dist: ["to", "of", "with"] },
-      { q: "She is thoroughly conversant _____ local environmental legislation.", a: "with", dist: ["in", "about", "at"] },
-      { q: "The findings are commensurate _____ the extensive resources allocated.", a: "with", dist: ["to", "for", "in"] },
-      { q: "Such actions are derogatory _____ professional ethical standards.", a: "to", dist: ["with", "for", "at"] },
-      { q: "The new scheme is exempt _____ standard revenue duties.", a: "from", dist: ["of", "off", "with"] },
-      { q: "The panel was unanimous _____ endorsing the youth development initiative.", a: "in", dist: ["on", "with", "to"] },
-      { q: "The government should desist _____ implementing unfeasible curbs.", a: "from", dist: ["to", "off", "against"] },
-      { q: "The conclusion is derived _____ extensive qualitative field surveys.", a: "from", dist: ["by", "out", "of"] },
-      { q: "He remains indifferent _____ peer critique concerning his thesis.", a: "to", dist: ["with", "against", "from"] },
-      { q: "Her remarks were misconstrued as detrimental _____ team morale.", a: "to", dist: ["for", "against", "with"] }
-    ],
-    5: [
-      { q: "Far from being detrimental, the measure is conducive _____ sustainable youth growth.", a: "to", dist: ["for", "with", "towards"] },
-      { q: "He refused to acquiesce _____ the committee's controversial verdict.", a: "in", dist: ["to", "with", "on"] },
-      { q: "The ambassador spoke at the behest _____ the regional educational league.", a: "of", dist: ["to", "with", "for"] },
-      { q: "The school's history is inextricably bound up _____ the territory's evolution.", a: "with", dist: ["to", "in", "by"] },
-      { q: "The survey evidence does not corroborate _____ the journalist's claim.", a: "with", dist: ["to", "on", "at"] },
-      { q: "The politician's evasive statement bordered _____ blatant deception.", a: "on", dist: ["to", "with", "at"] },
-      { q: "Such arbitrary decisions run counter _____ fundamental fairness.", a: "to", dist: ["against", "with", "for"] },
-      { q: "He held fast to his beliefs at variance _____ orthodox doctrine.", a: "with", dist: ["to", "against", "from"] },
-      { q: "Her academic thesis is predicated _____ extensive longitudinal data.", a: "on", dist: ["to", "in", "with"] },
-      { q: "The administration acted in collusion _____ private developers.", a: "with", dist: ["by", "under", "to"] },
-      { q: "The candidate was exonerated _____ all allegations of misconduct.", a: "from", dist: ["of", "off", "with"] },
-      { q: "The initiative was launched with an eye _____ bridging the digital divide.", a: "to", dist: ["for", "at", "on"] },
-      { q: "The treaty was declared null and void by virtue _____ clause twelve.", a: "of", dist: ["with", "for", "in"] },
-      { q: "They remained steadfast _____ adversity, ensuring complete syllabus mastery.", a: "amid", dist: ["between", "within", "towards"] },
-      { q: "The newly instituted sanctions are aimed _____ deterring malpractice.", a: "at", dist: ["for", "to", "on"] },
-      { q: "Her personal statement was framed in terms _____ community empowerment.", a: "of", dist: ["with", "for", "by"] },
-      { q: "The researcher took umbrage _____ the reviewer's condescending tone.", a: "at", dist: ["with", "to", "for"] },
-      { q: "He resigned in protest _____ the curtailment of student rights.", a: "against", dist: ["to", "with", "at"] },
-      { q: "The candidate's demeanor was fraught _____ profound apprehension.", a: "with", dist: ["by", "of", "in"] },
-      { q: "His conclusions are tantamount _____ an admission of analytical error.", a: "to", dist: ["with", "as", "against"] }
+      { q: "We walked _____ the covered walkway to avoid the shower.", a: "through", dist: ["across", "between", "over"] }
+    ]
+  },
+  "Word Formation": {
+    1: [
+      { q: "The candidate's argument was completely _____ (LOGIC) and failed to persuade the panel.", a: "illogical", dist: ["unlogical", "dislogical", "nonlogical"] },
+      { q: "Continuous practice is _____ (INDISPENSE) for HKDSE Level 5** candidates.", a: "indispensable", dist: ["indispensant", "indispensive", "indispensably"] },
+      { q: "The NGO received a generous _____ (DONATE) from local businesses.", a: "donation", dist: ["donating", "donator", "donative"] },
+      { q: "Rapid _____ (URBAN) has altered the natural landscape significantly.", a: "urbanisation", dist: ["urbanity", "urbanism", "urbanise"] },
+      { q: "Her explanation was surprisingly _____ (CLEAR), clearing up all student confusion.", a: "clear", dist: ["clarity", "clearness", "clearing"] }
+    ]
+  },
+  "Tenses": {
+    1: [
+      { q: "By the time the invigilator collects the papers, we _____ for four hours.", a: "will have been writing", dist: ["wrote", "have written", "are writing"] },
+      { q: "If the government _____ subsidies earlier, the crisis would have been mitigated.", a: "had provided", dist: ["provides", "has provided", "provided"] },
+      { q: "Hardly _____ the hall when the fire alarm rang.", a: "had the principal entered", dist: ["the principal entered", "has the principal entered", "did the principal enter"] },
+      { q: "She _____ past papers every evening since last November.", a: "has been completing", dist: ["completed", "is completing", "was completing"] },
+      { q: "Unless he _____ his grammar skills, his writing score will stall.", a: "improves", dist: ["will improve", "improved", "would improve"] }
+    ]
+  },
+  "Articles": {
+    1: [
+      { q: "He was awarded _____ honorary doctorate by HKU for his community service.", a: "an", dist: ["a", "the", "zero article"] },
+      { q: "_____ honesty displayed by the young candidate impressed the interview panel.", a: "The", dist: ["A", "An", "zero article"] },
+      { q: "She aspires to study _____ medicine at the Chinese University of Hong Kong.", a: "zero article", dist: ["a", "an", "the"] },
+      { q: "It takes _____ unit of courage to admit one's mistakes publicly.", a: "a", dist: ["an", "the", "zero article"] },
+      { q: "Mount Everest is _____ highest peak above sea level.", a: "the", dist: ["a", "an", "zero article"] }
+    ]
+  },
+  "Plurals": {
+    1: [
+      { q: "The research laboratory purchased several new state-of-the-art _____.", a: "microscopes", dist: ["microscopies", "microscope", "microscopi"] },
+      { q: "Scientists analysed multiple environmental _____ before publishing the report.", a: "phenomena", dist: ["phenomenons", "phenomenon", "phenomenae"] },
+      { q: "The university library contains valuable historical _____.", a: "archives", dist: ["archivi", "archivement", "archiveses"] },
+      { q: "Both _____ were invited to present their economic strategies.", a: "alumni", dist: ["alumnuses", "alumnae", "alumnis"] },
+      { q: "The doctor examined the patient's two _____ carefully.", a: "feet", dist: ["foots", "feets", "foot"] }
+    ]
+  },
+  "Synonyms": {
+    1: [
+      { q: "Select the word closest in meaning to 'METICULOUS':", a: "painstaking", dist: ["careless", "hasty", "superficial"] },
+      { q: "Select the word closest in meaning to 'PRAGMATIC':", a: "practical", dist: ["idealistic", "theoretical", "irrational"] },
+      { q: "Select the word closest in meaning to 'ADVOCATE':", a: "champion", dist: ["oppose", "criticise", "ignore"] },
+      { q: "Select the word closest in meaning to 'PERVASIVE':", a: "widespread", dist: ["isolated", "scarce", "limited"] },
+      { q: "Select the word closest in meaning to 'EXACERBATE':", a: "worsen", dist: ["alleviate", "soothe", "improve"] }
     ]
   }
 };
 
-// INITIALIZATION & USER RESUME SYSTEM
 window.onload = function() {
   loadProfilesList();
 };
@@ -516,7 +457,6 @@ function updateDashboard() {
 }
 
 function updateWardrobeDisplay(gear) {
-  // Clear all slots first
   document.getElementById("slot-head").innerText = "";
   document.getElementById("slot-torso").innerText = "";
   document.getElementById("slot-hand-left").innerText = "";
@@ -532,10 +472,9 @@ function updateWardrobeDisplay(gear) {
 
   document.getElementById("display-wardrobe-summary").innerText = `Unlocked & Equipped Gear (${gear.length} items):`;
   
-  // Render wearable items properly into designated body slots
   gear.forEach(item => {
     const slotEl = document.getElementById("slot-" + item.slot);
-    if (slotEl) slotEl.innerText = item.icon; // Equips item to character doll
+    if (slotEl) slotEl.innerText = item.icon;
 
     const tag = document.createElement("span");
     tag.className = "wardrobe-tag";
@@ -570,8 +509,7 @@ function startMission(topic, stage) {
   currentScore = 0;
   userAnswersLog = [];
 
-  // Load distinct stage questions without duplicates
-  const rawQuestions = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : questionBank["Prepositions"][1];
+  const rawQuestions = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : questionBank[topic][1];
   activeQuestions = [...rawQuestions].sort(() => Math.random() - 0.5);
   showScreen("screen-quiz");
   loadQuestion();
@@ -614,7 +552,6 @@ function finishStage() {
   const passed = currentScore >= PASSING_THRESHOLD;
   const reviewSection = document.getElementById("review-section");
 
-  // Save attempt record
   const records = storage.get("admin_quiz_records", []);
   records.push({
     student: currentUser,
@@ -643,16 +580,14 @@ function finishStage() {
         }
       }
     }
-    // Show Answer Key Review ONLY when stage is cleared (Score >= 16)
     reviewSection.style.display = "block";
     renderReviewBox();
   } else {
-    // Hide Answer Key Review if stage NOT cleared
     reviewSection.style.display = "none";
   }
 
   document.getElementById("result-title").innerText = passed ? "🎉 Stage Cleared!" : "❌ Stage Not Cleared";
-  document.getElementById("result-score").innerText = `Your Score: ${currentScore} / ${activeQuestions.length} (Passing Threshold: ${PASSING_THRESHOLD}/20)`;
+  document.getElementById("result-score").innerText = `Your Score: ${currentScore} / ${activeQuestions.length}`;
 
   const rewardBox = document.getElementById("result-reward");
   if (passed && newRewardEarned) {
@@ -660,7 +595,7 @@ function finishStage() {
     rewardBox.innerHTML = `<h3>🎁 New Gear Unlocked & Equipped!</h3><p style="font-size:18px; font-weight:bold; color:#E65100;">${newRewardEarned.icon} ${newRewardEarned.name}</p>`;
   } else if (!passed) {
     rewardBox.style.display = "block";
-    rewardBox.innerHTML = `<p style="color:#C62828; font-weight:bold;">You need at least 16/20 to clear this stage and unlock the answer key. Try again!</p>`;
+    rewardBox.innerHTML = `<p style="color:#C62828; font-weight:bold;">Keep practicing to clear this stage and unlock gear!</p>`;
   } else {
     rewardBox.style.display = "none";
   }
@@ -743,12 +678,22 @@ function renderAdminTable() {
       <td>${r.student}</td>
       <td>${r.topic}</td>
       <td>Stage ${r.stage}</td>
-      <td>${r.score}/20</td>
+      <td>${r.score}</td>
       <td>${r.passed ? '✅ Passed' : '❌ Failed'}</td>
       <td>${r.timestamp}</td>
     `;
     tbody.appendChild(tr);
   });
+}
+
+function clearLeaderboardRecords() {
+  if (confirm("Are you sure you want to clear all student quiz records and reset the leaderboard?")) {
+    localStorage.removeItem("admin_quiz_records");
+    delete window['__mem_admin_quiz_records'];
+    renderAdminTable();
+    renderLeaderboard();
+    alert("Leaderboard successfully cleared!");
+  }
 }
 
 function exportToExcel() {
@@ -757,7 +702,7 @@ function exportToExcel() {
 
   let csvContent = "data:text/csv;charset=utf-8,Student Name,Topic,Stage,Score,Passed,Timestamp\n";
   records.forEach(r => {
-    csvContent += `"${r.student}","${r.topic}","Stage ${r.stage}","${r.score}/20","${r.passed ? 'YES' : 'NO'}","${r.timestamp}"\n`;
+    csvContent += `"${r.student}","${r.topic}","Stage ${r.stage}","${r.score}","${r.passed ? 'YES' : 'NO'}","${r.timestamp}"\n`;
   });
 
   const encodedUri = encodeURI(csvContent);

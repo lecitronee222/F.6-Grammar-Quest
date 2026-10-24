@@ -120,4 +120,1073 @@
   <!-- Auth Screen -->
   <div id="screen-auth" class="screen active">
     <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center; font-size: 16px; color:#455A64; font-weig
+    <p style="text-align:center; font-size: 16px; color:#455A64; font-weight: 600;">Form 6 English Booster — Complete 18/20 to Advance & Equip Exclusive Gear!</p>
+    <div style="margin-top:25px;">
+      <label style="font-weight:bold; color:#263238;">Enter Your Student Name or ID:</label>
+      <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
+      <h3 style="margin-top:15px;">Pick Your Companion:</h3>
+      <div class="avatar-picker">
+        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', '🧽', this)">
+          <div class="icon">🧽</div><div>Sponge-Lad</div>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', '⭐', this)">
+          <div class="icon">⭐</div><div>Star-Buddy</div>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', '🐙', this)">
+          <div class="icon">🐙</div><div>Tentacle-Prof</div>
+        </div>
+        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', '🐿️', this)">
+          <div class="icon">🐿️</div><div>Sandy-Squirrel</div>
+        </div>
+      </div>
+      <button class="primary-btn" style="width:100%;" onclick="registerUser()">Start Journey</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <div id="screen-dash" class="screen">
+    <h2>Welcome back, <span id="display-user-name"></span>!</h2>
+    
+    <!-- Companion Dressing Room -->
+    <div class="avatar-dressing-room">
+      <div class="avatar-stage-box">
+        <span class="slot-accessory slot-head" id="equip-head"></span>
+        <span class="avatar-character-emoji" id="equip-character">🧽</span>
+        <span class="slot-accessory slot-chest" id="equip-chest"></span>
+        <span class="slot-accessory slot-left" id="equip-left"></span>
+        <span class="slot-accessory slot-right" id="equip-right"></span>
+      </div>
+      <div class="wardrobe-list">
+        <h4 style="color:#E65100; font-size:17px; margin-bottom:4px;">Companion Status: <span id="display-companion-name">Sponge-Lad</span></h4>
+        <p style="font-size:14px; color:#5D4037;" id="display-wardrobe-summary">Equipped: Standard Novice Gear</p>
+        <div class="wardrobe-tags" id="wardrobe-tag-container"></div>
+      </div>
+    </div>
+
+    <h3>Select Grammar Mission</h3>
+    <div class="topic-grid" id="topics-container"></div>
+    <h3>🏆 Class Leaderboard</h3>
+    <table class="leaderboard-table">
+      <thead>
+        <tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>High Score</th></tr>
+      </thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="screen-quiz" class="screen">
+    <div class="hud-bar">
+      <div>
+        <h3 id="quiz-topic-title" style="margin:0; font-size:18px; text-align:left;">Topic</h3>
+        <span id="quiz-progress" style="font-weight:bold; color:#004D40; font-size:14px;">Question 1 / 20</span>
+      </div>
+      <button class="quit-btn" onclick="confirmQuitToMenu()">✕ Main Menu (Quit)</button>
+    </div>
+    <div style="margin:20px 0; font-size:19px; line-height:1.6; font-weight:600; color:#212121;" id="question-text">Loading question...</div>
+    <div id="options-container"></div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="screen-result" class="screen" style="text-align:center;">
+    <h2 id="result-title">Stage Complete!</h2>
+    <p id="result-score" style="font-size:22px; font-weight:bold; margin:20px 0; color:#263238;"></p>
+    <div id="result-reward" class="badge-display" style="display:none;"></div>
+    <button class="primary-btn" onclick="returnToDashboard()">Return to Mission Hub</button>
+  </div>
+
+  <!-- Teacher Admin Screen -->
+  <div id="screen-admin" class="screen">
+    <h2>🔒 Teacher Backdoor Management Console</h2>
+    <div style="text-align:center; margin-bottom:20px;">
+      <button class="primary-btn" onclick="exportToExcel()" style="background:#2E7D32;">📥 Download Results as Excel (.CSV)</button>
+      <button class="primary-btn" onclick="returnToDashboard()" style="background:#546E7A; margin-left:10px;">Back to Game</button>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr><th>Student Name</th><th>Topic</th><th>Stage</th><th>Score</th><th>Passed?</th><th>Timestamp</th></tr>
+      </thead>
+      <tbody id="admin-records-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
+
+<script>
+const TEACHER_PIN = "F6ENG2026";
+let currentUser = null;
+let currentAvatar = { name: "Sponge-Lad", icon: "🧽" };
+let currentTopic = "";
+let currentStage = 1;
+let currentQuestionIndex = 0;
+let currentScore = 0;
+let activeQuestions = [];
+
+const topics = [
+  "Prepositions",
+  "Word Formation",
+  "Tenses",
+  "Articles",
+  "Plurals",
+  "Synonyms"
+];
+
+// Wearable accessory slots & metadata
+const rewards = {
+  "Prepositions": [
+    { name: "Nautical Cap", slot: "head", icon: "🧢" },
+    { name: "Sailor Vest", slot: "chest", icon: "🦺" },
+    { name: "Anchor Brooch", slot: "chest", icon: "⚓" },
+    { name: "Admiral Epaulettes", slot: "left", icon: "🎖️" },
+    { name: "Royal Pearl Tricorne", slot: "head", icon: "👑" }
+  ],
+  "Word Formation": [
+    { name: "Wooden Quill", slot: "right", icon: "🪶" },
+    { name: "Grammar Monocle", slot: "head", icon: "🧐" },
+    { name: "Velvet Cloak", slot: "chest", icon: "🥋" },
+    { name: "Crystal Thesaurus", slot: "left", icon: "💎" },
+    { name: "Crown of Syntax", slot: "head", icon: "👑" }
+  ],
+  "Tenses": [
+    { name: "Bronze Stopwatch", slot: "left", icon: "⏱️" },
+    { name: "Silver Pocket Watch", slot: "right", icon: "🕰️" },
+    { name: "Chrono-Belt", slot: "chest", icon: "🥋" },
+    { name: "Hourglass Cape", slot: "chest", icon: "⏳" },
+    { name: "Timekeeper Robe", slot: "chest", icon: "🧙‍♂️" }
+  ],
+  "Articles": [
+    { name: "Paper Badge", slot: "chest", icon: "🏷️" },
+    { name: "Copper Pin", slot: "chest", icon: "🧷" },
+    { name: "Silver Crest Tag", slot: "chest", icon: "🥈" },
+    { name: "Gold Plaque", slot: "left", icon: "🥇" },
+    { name: "Royal Medallion", slot: "chest", icon: "🏅" }
+  ],
+  "Plurals": [
+    { name: "Dual Wristbands", slot: "left", icon: "🧣" },
+    { name: "Star Rings", slot: "right", icon: "💍" },
+    { name: "Multi-Chain Sash", slot: "chest", icon: "🎗️" },
+    { name: "Gem Bracers", slot: "left", icon: "🔮" },
+    { name: "Infinity Crown", slot: "head", icon: "👑" }
+  ],
+  "Synonyms": [
+    { name: "Pocket Glossary", slot: "right", icon: "📖" },
+    { name: "Silver Word Pouch", slot: "left", icon: "👛" },
+    { name: "Chameleon Scarf", slot: "head", icon: "🧣" },
+    { name: "Polyglot Tunic", slot: "chest", icon: "🎽" },
+    { name: "Iridescent Wings", slot: "right", icon: "🪽" }
+  ]
+};
+
+// 5 DISTINCT STAGES across all categories (calibrated from short sentences to DSE Part B)
+const questionBank = {
+  "Prepositions": {
+    1: [
+      { q: "She has lived in Hong Kong _____ 2018.", a: "since", dist: ["for", "in", "during"] },
+      { q: "The tutorial begins promptly _____ 9:30 a.m.", a: "at", dist: ["on", "in", "by"] },
+      { q: "The HKDSE written exams take place _____ April.", a: "in", dist: ["on", "at", "to"] },
+      { q: "He placed his revision guide _____ the desk.", a: "on", dist: ["in", "at", "into"] },
+      { q: "We walked _____ the covered walkway to avoid the shower.", a: "through", dist: ["across", "between", "over"] },
+      { q: "The scholarship was divided equally _____ the two top candidates.", a: "between", dist: ["among", "along", "within"] },
+      { q: "She shared her notes _____ all her study group members.", a: "among", dist: ["between", "with", "into"] },
+      { q: "The students are waiting patiently _____ the bus.", a: "for", dist: ["to", "at", "of"] },
+      { q: "He dove _____ the swimming pool to train for the gala.", a: "into", dist: ["onto", "in", "to"] },
+      { q: "Our school library is situated _____ the second floor.", a: "on", dist: ["at", "in", "by"] },
+      { q: "She apologized sincerely _____ submitting her SBA late.", a: "for", dist: ["of", "about", "with"] },
+      { q: "He is keen _____ pursuing digital media in university.", a: "on", dist: ["in", "at", "for"] },
+      { q: "Are you afraid _____ delivering speeches in English?", a: "of", dist: ["with", "for", "at"] },
+      { q: "The student stored his school bag _____ the desk.", a: "under", dist: ["between", "through", "inside of"] },
+      { q: "They travelled from Kowloon to Central _____ MTR.", a: "by", dist: ["with", "on", "in"] },
+      { q: "The principal congratulated her _____ winning the essay contest.", a: "on", dist: ["for", "about", "with"] },
+      { q: "The community centre remains closed _____ Sundays.", a: "on", dist: ["in", "at", "by"] },
+      { q: "He has been revising continuously _____ three hours.", a: "for", dist: ["since", "during", "while"] },
+      { q: "She succeeded _____ obtaining Level 5 in her mock paper.", a: "in", dist: ["on", "at", "to"] },
+      { q: "Pay close attention _____ the examiner's instructions.", a: "to", dist: ["at", "for", "with"] }
+    ],
+    2: [
+      { q: "All secondary students must abide _____ the examination regulations.", a: "by", dist: ["with", "to", "on"] },
+      { q: "The candidate was accused _____ copying someone else's work.", a: "of", dist: ["with", "for", "about"] },
+      { q: "The revised syllabus caters _____ students of varying learning abilities.", a: "to", dist: ["for", "with", "at"] },
+      { q: "He refrained _____ making unverified claims during the debate.", a: "from", dist: ["to", "by", "against"] },
+      { q: "Her success can be attributed _____ systematic daily practice.", a: "to", dist: ["for", "with", "by"] },
+      { q: "The head prefect is responsible _____ coordinating the morning duty team.", a: "for", dist: ["to", "of", "in"] },
+      { q: "The committee agreed _____ the suggested timetable after deliberations.", a: "on", dist: ["with", "into", "for"] },
+      { q: "Smoking in the public indoor area is prohibited _____ law.", a: "by", dist: ["with", "from", "under"] },
+      { q: "The teacher advised us not to rely entirely _____ model answers.", a: "on", dist: ["to", "with", "at"] },
+      { q: "The youth centre caters _____ underprivileged teenagers in Kowloon.", a: "for", dist: ["with", "at", "of"] },
+      { q: "He was disqualified _____ entering the venue without his admission form.", a: "from", dist: ["to", "by", "of"] },
+      { q: "She is capable _____ handling high-pressure assessment situations.", a: "of", dist: ["to", "with", "for"] },
+      { q: "His opinion conflicts sharply _____ the statistical evidence.", a: "with", dist: ["against", "to", "at"] },
+      { q: "The prefect reminded students to adhere _____ the dress code.", a: "to", dist: ["with", "by", "on"] },
+      { q: "We must protect wildlife habitats _____ reckless commercial expansion.", a: "from", dist: ["against", "off", "away"] },
+      { q: "He takes great pride _____ his team's sportsmanship.", a: "in", dist: ["on", "with", "of"] },
+      { q: "The new youth initiative focuses _____ promoting mental well-being.", a: "on", dist: ["at", "towards", "into"] },
+      { q: "She insists _____ completing the past paper under real exam timing.", a: "on", dist: ["in", "to", "with"] },
+      { q: "The charity appeals _____ the public for generous contributions.", a: "to", dist: ["for", "at", "towards"] },
+      { q: "He was deeply absorbed _____ the English literary novel.", a: "in", dist: ["with", "at", "by"] }
+    ],
+    3: [
+      { q: "_____ all appearances, the candidate performed well in the speaking test.", a: "To", dist: ["By", "From", "In"] },
+      { q: "The policy was enacted _____ accordance with statutory guidelines.", a: "in", dist: ["on", "by", "at"] },
+      { q: "The youth club launched the program _____ behalf of underprivileged youth.", a: "on", dist: ["in", "at", "by"] },
+      { q: "The school building was renovated _____ expense to the alumni foundation.", a: "at", dist: ["with", "by", "for"] },
+      { q: "She remained composed _____ the face of severe adversity.", a: "in", dist: ["at", "on", "under"] },
+      { q: "The argument was dismissed as irrelevant _____ the matter in dispute.", a: "to", dist: ["with", "for", "at"] },
+      { q: "He acted _____ good faith when reporting the incident.", a: "in", dist: ["with", "on", "by"] },
+      { q: "The new regulation came into effect _____ midnight.", a: "at", dist: ["on", "in", "by"] },
+      { q: "_____ respect of post-secondary pathways, students have multiple choices.", a: "In", dist: ["With", "At", "On"] },
+      { q: "The speaker deviated _____ the main agenda during the Q&A session.", a: "from", dist: ["off", "out of", "away"] },
+      { q: "_____ light of recent findings, the council revised its recommendations.", a: "In", dist: ["Under", "With", "By"] },
+      { q: "She accomplished the synthesis task _____ great distinction.", a: "with", dist: ["in", "by", "at"] },
+      { q: "The sports venue was closed _____ account of adverse weather.", a: "on", dist: ["in", "by", "with"] },
+      { q: "The two universities collaborated _____ conjunction with the NGO.", a: "in", dist: ["on", "by", "with"] },
+      { q: "The proposal is _____ consideration by the academic review board.", a: "under", dist: ["in", "on", "at"] },
+      { q: "He accepted the verdict _____ protest, feeling treated unfairly.", a: "under", dist: ["with", "against", "in"] },
+      { q: "The debate centered _____ whether AI benefits secondary learning.", a: "on", dist: ["in", "with", "at"] },
+      { q: "She persevered _____ spite of physical exhaustion.", a: "in", dist: ["at", "with", "by"] },
+      { q: "The committee is _____ possession of confidential test data.", a: "in", dist: ["at", "with", "under"] },
+      { q: "His comments were interpreted as derogatory _____ nature.", a: "in", dist: ["by", "with", "of"] }
+    ],
+    4: [
+      { q: "The candidate's rationale is contingent _____ survey validation.", a: "upon", dist: ["with", "to", "at"] },
+      { q: "Public sentiment is largely incompatible _____ the proposed tariff hike.", a: "with", dist: ["to", "against", "for"] },
+      { q: "The educational reform culminated _____ a widespread revision of criteria.", a: "in", dist: ["to", "at", "into"] },
+      { q: "His critique is devoid _____ substantiated factual references.", a: "of", dist: ["from", "off", "with"] },
+      { q: "The author expresses deep indignation _____ socio-economic disparity.", a: "at", dist: ["for", "towards", "on"] },
+      { q: "The university degree is synonymous _____ prestige and academic rigour.", a: "with", dist: ["to", "for", "as"] },
+      { q: "The council must reconcile economic growth _____ conservation needs.", a: "with", dist: ["to", "against", "along"] },
+      { q: "The scholar demonstrated an aversion _____ sensationalist headlines.", a: "to", dist: ["against", "with", "from"] },
+      { q: "The candidate was oblivious _____ the strict time constraint.", a: "to", dist: ["of", "at", "about"] },
+      { q: "His research paper impinges _____ sensitive intellectual property issues.", a: "on", dist: ["to", "at", "into"] },
+      { q: "The committee voiced reservations _____ the proposed curriculum change.", a: "about", dist: ["to", "of", "with"] },
+      { q: "She is thoroughly conversant _____ local environmental legislation.", a: "with", dist: ["in", "about", "at"] },
+      { q: "The findings are commensurate _____ the extensive resources allocated.", a: "with", dist: ["to", "for", "in"] },
+      { q: "Such actions are derogatory _____ professional ethical standards.", a: "to", dist: ["with", "for", "at"] },
+      { q: "The new scheme is exempt _____ standard revenue duties.", a: "from", dist: ["of", "off", "with"] },
+      { q: "The panel was unanimous _____ endorsing the youth development initiative.", a: "in", dist: ["on", "with", "to"] },
+      { q: "The government should desist _____ implementing unfeasible curbs.", a: "from", dist: ["to", "off", "against"] },
+      { q: "The conclusion is derived _____ extensive qualitative field surveys.", a: "from", dist: ["by", "out", "of"] },
+      { q: "He remains indifferent _____ peer critique concerning his thesis.", a: "to", dist: ["with", "against", "from"] },
+      { q: "Her remarks were misconstrued as detrimental _____ team morale.", a: "to", dist: ["for", "against", "with"] }
+    ],
+    5: [
+      { q: "Far from being detrimental, the measure is conducive _____ sustainable youth growth.", a: "to", dist: ["for", "with", "towards"] },
+      { q: "He refused to acquiesce _____ the committee's controversial verdict.", a: "in", dist: ["to", "with", "on"] },
+      { q: "The ambassador spoke _____ behest of the regional educational league.", a: "at the", dist: ["on the", "by the", "in the"] },
+      { q: "The school's history is inextricably bound up _____ the territory's evolution.", a: "with", dist: ["to", "in", "by"] },
+      { q: "The survey evidence does not corroborate _____ the journalist's claim.", a: "with", dist: ["to", "on", "at"] },
+      { q: "The politician's evasive statement bordered _____ blatant deception.", a: "on", dist: ["to", "with", "at"] },
+      { q: "Such arbitrary decisions run counter _____ fundamental fairness.", a: "to", dist: ["against", "with", "for"] },
+      { q: "He held fast to his beliefs _____ variance with orthodox doctrine.", a: "at", dist: ["in", "by", "under"] },
+      { q: "Her academic thesis is predicated _____ extensive longitudinal data.", a: "on", dist: ["to", "in", "with"] },
+      { q: "The administration acted _____ collusion with private developers.", a: "in", dist: ["by", "under", "with"] },
+      { q: "The candidate was exonerated _____ all allegations of misconduct.", a: "from", dist: ["of", "off", "with"] },
+      { q: "The initiative was launched _____ an eye to bridging the digital divide.", a: "with", dist: ["in", "for", "at"] },
+      { q: "The treaty was declared null and void _____ virtue of clause twelve.", a: "by", dist: ["in", "on", "under"] },
+      { q: "They remained steadfast _____ adversity, ensuring complete syllabus mastery.", a: "amid", dist: ["between", "within", "towards"] },
+      { q: "The newly instituted sanctions are aimed _____ deterring malpractice.", a: "at", dist: ["for", "to", "on"] },
+      { q: "Her personal statement was framed _____ terms of community empowerment.", a: "in", dist: ["on", "with", "by"] },
+      { q: "The researcher took umbrage _____ the reviewer's condescending tone.", a: "at", dist: ["with", "to", "for"] },
+      { q: "He resigned _____ protest against the curtailment of student rights.", a: "in", dist: ["under", "with", "by"] },
+      { q: "The candidate's demeanor was fraught _____ profound apprehension.", a: "with", dist: ["by", "of", "in"] },
+      { q: "His conclusions are tantamount _____ an admission of analytical error.", a: "to", dist: ["with", "as", "against"] }
+    ]
+  },
+  "Word Formation": {
+    1: [
+      { q: "Her explanation was completely _____ (logic).", a: "logical", dist: ["logically", "logician", "logicize"] },
+      { q: "Our school values academic honesty and student _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] },
+      { q: "Regular physical activity is _____ (benefit) to adolescents.", a: "beneficial", dist: ["beneficiary", "beneficially", "benefit"] },
+      { q: "The children participated _____ (happy) in the activity.", a: "happily", dist: ["happiness", "happy", "unhappy"] },
+      { q: "Making an informed _____ (decide) about JUPAS requires research.", a: "decision", dist: ["decisive", "decisiveness", "deciding"] },
+      { q: "Global warming is a critical _____ (environment) challenge.", a: "environmental", dist: ["environmentally", "environmentalist", "environments"] },
+      { q: "The class representative took full _____ (responsible) for the event.", a: "responsibility", dist: ["responsible", "responsibly", "irresponsible"] },
+      { q: "The drama club gave an _____ (amaze) performance.", a: "amazing", dist: ["amazingly", "amazed", "amazement"] },
+      { q: "We must brainstorm a viable _____ (solve) to reduce waste.", a: "solution", dist: ["solvable", "solver", "solving"] },
+      { q: "She answered the interviewers with poise and _____ (confident).", a: "confidence", dist: ["confident", "confidently", "confiding"] },
+      { q: "Getting adequate sleep is _____ (necessity) for exam performance.", a: "necessary", dist: ["necessarily", "necessitate", "necessities"] },
+      { q: "The volunteer displayed immense _____ (kind) towards elderly residents.", a: "kindness", dist: ["kindly", "unkind", "kinder"] },
+      { q: "Tropical weather in July is often _____ (predict).", a: "predictable", dist: ["prediction", "predictably", "predictor"] },
+      { q: "The basketball team celebrated their thrilling championship _____ (victor).", a: "victory", dist: ["victorious", "victoriously", "victim"] },
+      { q: "He is seeking advice from a _____ (profession) career counsellor.", a: "professional", dist: ["profession", "professionally", "profess"] },
+      { q: "Please handle the laboratory glassware with extreme _____ (careful).", a: "care", dist: ["careless", "carefully", "caringly"] },
+      { q: "His unexpected _____ (appear) at the alumni dinner delighted everyone.", a: "appearance", dist: ["appearing", "apparent", "apparently"] },
+      { q: "The teacher provided a list of highly _____ (use) exam tips.", a: "useful", dist: ["useless", "usefully", "usability"] },
+      { q: "The game has surged in _____ (popular) among local teenagers.", a: "popularity", dist: ["popularly", "popularize", "popular"] },
+      { q: "The museum trip was a memorable _____ (educate) experience.", a: "educational", dist: ["education", "educationally", "educator"] }
+    ],
+    2: [
+      { q: "His rude remark was totally _____ (appropriate) for the classroom.", a: "inappropriate", dist: ["unappropriate", "disappropriate", "misappropriate"] },
+      { q: "The athlete's rapid recovery seemed almost _____ (possible).", a: "impossible", dist: ["unpossible", "inpossible", "dispossible"] },
+      { q: "She looked at the confusing directions in total _____ (believe).", a: "disbelief", dist: ["unbelief", "misbelief", "inbelief"] },
+      { q: "It is _____ (legal) to copy examination papers without authorization.", a: "illegal", dist: ["unlegal", "inlegal", "dislegal"] },
+      { q: "The candidate spoke _____ (persuade) during the debate session.", a: "persuasively", dist: ["persuasion", "persuasive", "persuaded"] },
+      { q: "Poor time management will _____ (advantage) Form 6 candidates.", a: "disadvantage", dist: ["unadvantage", "inadvantage", "misadvantage"] },
+      { q: "The team demonstrated remarkable _____ (patient) while waiting.", a: "patience", dist: ["patiently", "impatient", "impatience"] },
+      { q: "The scientist noted an _____ (regular) heartbeat pattern.", a: "irregular", dist: ["unregular", "disregular", "inregular"] },
+      { q: "His sudden resignation was entirely _____ (expect).", a: "unexpected", dist: ["disexpected", "inexpected", "misexpected"] },
+      { q: "The teacher encouraged active student _____ (participate).", a: "participation", dist: ["participator", "participative", "participated"] },
+      { q: "Her handwriting was completely _____ (legible) on the answer sheet.", a: "illegible", dist: ["unlegible", "inlegible", "dislegible"] },
+      { q: "Social media can promote unrealistic standards of _____ (perfect).", a: "perfection", dist: ["perfectness", "perfectible", "perfectionist"] },
+      { q: "The two accounts of the event were completely _____ (consist).", a: "inconsistent", dist: ["unconsistent", "disconsistent", "misconsistent"] },
+      { q: "He suffered from severe _____ (anxious) before major assessments.", a: "anxiety", dist: ["anxiousness", "anxiously", "anxious"] },
+      { q: "The decision was _____ (reversible), so they had to comply.", a: "irreversible", dist: ["unreversible", "disreversible", "inreversible"] },
+      { q: "The student answered all comprehension prompts _____ (accurate).", a: "accurately", dist: ["accuracy", "accurateness", "inaccurate"] },
+      { q: "He felt _____ (secure) about speaking English in front of adults.", a: "insecure", dist: ["unsecure", "dissecure", "missecure"] },
+      { q: "The essay lacked clarity and coherent _____ (organize).", a: "organization", dist: ["organizer", "organizational", "organized"] },
+      { q: "She showed great _____ (mature) when addressing the controversy.", a: "maturity", dist: ["matureness", "immature", "maturation"] },
+      { q: "His statement proved to be entirely _____ (accurate) after fact-checking.", a: "inaccurate", dist: ["unaccurate", "disaccurate", "misaccurate"] }
+    ],
+    3: [
+      { q: "Consistent daily effort ensures academic _____ (competent).", a: "competence", dist: ["competency", "competition", "competitor"] },
+      { q: "The headmaster acknowledged the prefects' valuable _____ (assist).", a: "assistance", dist: ["assistant", "assisting", "assisted"] },
+      { q: "The project requires close _____ (collaborate) among all members.", a: "collaboration", dist: ["collaborator", "collaborative", "collaboratively"] },
+      { q: "His tireless dedication gained the _____ (admire) of his teachers.", a: "admiration", dist: ["admiring", "admirer", "admirative"] },
+      { q: "We must promote the _____ (conserve) of natural coastal habitats.", a: "conservation", dist: ["conservative", "conservator", "conservancy"] },
+      { q: "The student provided documentary _____ (prove) of his medical absence.", a: "proof", dist: ["proven", "proving", "provable"] },
+      { q: "The candidate handled the heated debate with remarkable _____ (tolerant).", a: "tolerance", dist: ["toleration", "tolerant", "tolerable"] },
+      { q: "High motivation fuels academic _____ (achieve) across terms.", a: "achievement", dist: ["achiever", "achieving", "achievable"] },
+      { q: "The charity aims to eradicate regional _____ (poor).", a: "poverty", dist: ["poorness", "pauper", "poorly"] },
+      { q: "Her eloquent delivery left a lasting _____ (impress) on the judges.", a: "impression", dist: ["impressiveness", "impressive", "impressed"] },
+      { q: "The debate focused on the ethical _____ (imply) of human cloning.", a: "implications", dist: ["implicitness", "impliers", "implying"] },
+      { q: "Students should cultivate cultural _____ (aware) in a global society.", a: "awareness", dist: ["awarement", "awaring", "wareness"] },
+      { q: "The committee questioned the legal _____ (valid) of the agreement.", a: "validity", dist: ["validation", "validness", "validator"] },
+      { q: "He suffered severe financial _____ (hard) during his undergraduate years.", a: "hardship", dist: ["hardness", "harding", "hardily"] },
+      { q: "The author emphasizes the _____ (signify) of preserving heritage.", a: "significance", dist: ["signification", "significant", "signifier"] },
+      { q: "She maintained her composure despite the emotional _____ (turbulent).", a: "turbulence", dist: ["turbulency", "turbulent", "turbulently"] },
+      { q: "The community showed great _____ (resilient) following the storm.", a: "resilience", dist: ["resiliency", "resilient", "resiliently"] },
+      { q: "He received formal _____ (acknowledge) for his voluntary work.", a: "acknowledgement", dist: ["acknowledging", "acknowledged", "acknowledger"] },
+      { q: "The school encourages independent critical _____ (think).", a: "thinking", dist: ["thoughtfulness", "thinker", "thinks"] },
+      { q: "The speaker clarified any potential _____ (understand) with clear charts.", a: "misunderstanding", dist: ["disunderstanding", "inunderstanding", "understatement"] }
+    ],
+    4: [
+      { q: "Technological automation has led to the _____ (diminish) of manual jobs.", a: "diminution", dist: ["diminishment", "diminishing", "diminutive"] },
+      { q: "The policy resulted in severe social _____ (equal).", a: "inequality", dist: ["unequality", "disequality", "unequalness"] },
+      { q: "The essay offered an insightful _____ (critique) analysis of the poem.", a: "critical", dist: ["critique", "critic", "criticism"] },
+      { q: "The minister underscored the _____ (indispensable) of foreign direct investment.", a: "indispensability", dist: ["indispensableness", "dispensation", "dispensability"] },
+      { q: "The two proposals are completely _____ (reconcile) due to ideological clashes.", a: "irreconcilable", dist: ["unreconcilable", "disreconcilable", "nonreconcilable"] },
+      { q: "The researcher noted a marked _____ (differ) between both groups.", a: "differentiation", dist: ["difference", "differentness", "differing"] },
+      { q: "His actions demonstrated an alarming _____ (regard) for safety.", a: "disregard", dist: ["unregard", "misregard", "inregard"] },
+      { q: "The curriculum reform promotes _____ (discipline) learning across sciences.", a: "interdisciplinary", dist: ["crossdisciplinary", "multidiscipline", "transdiscipline"] },
+      { q: "He spoke with unprecedented _____ (eloquent) during his valedictory address.", a: "eloquence", dist: ["eloquency", "eloquent", "eloquently"] },
+      { q: "The team sought to _____ (legitimate) their research methodology.", a: "legitimize", dist: ["legitimify", "legitimatize", "legitimate"] },
+      { q: "The evidence presented was overwhelmingly _____ (refute).", a: "irrefutable", dist: ["unrefutable", "disrefutable", "inrefutable"] },
+      { q: "The company announced a significant _____ (organize) restructuring.", a: "organizational", dist: ["organizing", "organizer", "organized"] },
+      { q: "Her outstanding academic record is truly _____ (exemplar).", a: "exemplary", dist: ["exemplifying", "exemplarity", "exemplative"] },
+      { q: "There was a palpable _____ (reluctant) among youth to voice complaints.", a: "reluctance", dist: ["reluctancy", "reluctant", "reluctantly"] },
+      { q: "The editorial criticized the government's perceived _____ (action).", a: "inaction", dist: ["unaction", "disaction", "misaction"] },
+      { q: "The scientist proved the _____ (fall) nature of earlier hypotheses.", a: "fallacious", dist: ["fallible", "falling", "fallacy"] },
+      { q: "He demonstrated remarkable intellectual _____ (versatile) in exams.", a: "versatility", dist: ["versatileness", "versatile", "versatilization"] },
+      { q: "The contract contains an explicit _____ (indemnify) clause.", a: "indemnity", dist: ["indemnification", "indemnifying", "indemnitee"] },
+      { q: "We must avoid hasty _____ (generalize) regarding youth behaviour.", a: "generalizations", dist: ["generalities", "generals", "generalizers"] },
+      { q: "His explanation lacked coherence and analytical _____ (rigour).", a: "rigour", dist: ["rigidity", "rigorousness", "rigorism"] }
+    ],
+    5: [
+      { q: "The report warned against the creeping _____ (commodify) of basic healthcare.", a: "commodification", dist: ["commoditizing", "commodity", "commodifying"] },
+      { q: "Her thesis scrutinized the _____ (pervade) influence of digital surveillance.", a: "pervasive", dist: ["pervading", "pervasiveness", "pervasion"] },
+      { q: "The treaty guarantees the territorial _____ (violate) of small sovereign states.", a: "inviolability", dist: ["unviolability", "nonviolation", "inviolable"] },
+      { q: "He addressed the gathering with uncharacteristic _____ (solemn).", a: "solemnity", dist: ["solemness", "solemn", "solemnize"] },
+      { q: "The candidate's rationale proved to be entirely _____ (defend).", a: "indefensible", dist: ["undefensible", "disdefensible", "nondefensible"] },
+      { q: "The urban project aims to reverse decades of environmental _____ (grade).", a: "degradation", dist: ["degrading", "degradance", "gradualism"] },
+      { q: "The author exposed the underlying _____ (hypocrite) of social elites.", a: "hypocrisy", dist: ["hypocritical", "hypocritism", "hypocrite"] },
+      { q: "His unexpected announcement sent _____ (shock) through the stock market.", a: "shockwaves", dist: ["shocking", "shocks", "shockers"] },
+      { q: "The initiative reflects a commendable commitment to _____ (equal).", a: "egalitarianism", dist: ["equality", "equalization", "egalitarian"] },
+      { q: "The critic condemned the _____ (banal) of modern reality programming.", a: "banality", dist: ["banalness", "banalization", "banal"] },
+      { q: "The student showed an extraordinary capacity for intellectual _____ (synthesize).", a: "synthesis", dist: ["synthesizer", "synthetic", "synthesizing"] },
+      { q: "She maintained an air of stoic _____ (perturb) throughout the ordeal.", a: "imperturbability", dist: ["unperturbation", "imperturbance", "nonperturbation"] },
+      { q: "The candidate demonstrated an acute _____ (perceive) of geopolitical nuances.", a: "perception", dist: ["perceptiveness", "perceptivity", "perceiving"] },
+      { q: "The economic forecast was marred by persistent _____ (certain).", a: "uncertainty", dist: ["incertainty", "discertainty", "uncertainness"] },
+      { q: "The judge noted the defendant's complete lack of _____ (repent).", a: "repentance", dist: ["repenting", "repentant", "repentment"] },
+      { q: "The government sought to _____ (capital) on the tourism rebound.", a: "capitalize", dist: ["capitalify", "capitalism", "capitalist"] },
+      { q: "His essay provided a poignant and _____ (evoke) portrayal of old Hong Kong.", a: "evocative", dist: ["evoking", "evocation", "evocatory"] },
+      { q: "The ambassador spoke of the _____ (alien) rights inherent to all citizens.", a: "inalienable", dist: ["unalienable", "disalienable", "nonalienable"] },
+      { q: "The editorial praised the judicial bench for its staunch _____ (partial).", a: "impartiality", dist: ["unpartiality", "dispartiality", "partialness"] },
+      { q: "The author explored the philosophical _____ (dichotomy) between fate and free will.", a: "dichotomy", dist: ["dichotomic", "dichotomizing", "dichotomism"] }
+    ]
+  },
+  "Tenses": {
+    1: [
+      { q: "By the time the bell rang, all candidates _____ writing.", a: "had finished", dist: ["finish", "have finished", "will finish"] },
+      { q: "Listen! The guest speaker _____ in the school hall right now.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] },
+      { q: "They _____ in Kowloon Tong since they moved to Hong Kong.", a: "have lived", dist: ["live", "lived", "are living"] },
+      { q: "Pure water _____ at 100 degrees Celsius at sea level.", a: "boils", dist: ["is boiling", "boiled", "will boil"] },
+      { q: "Yesterday after school, she _____ her vocabulary notebook on the train.", a: "lost", dist: ["loses", "has lost", "was losing"] },
+      { q: "If the typhoon signal is raised tomorrow morning, classes _____ cancelled.", a: "will be", dist: ["were", "would be", "are being"] },
+      { q: "While he _____ home, he ran into his primary school classmate.", a: "was walking", dist: ["walks", "has walked", "walked"] },
+      { q: "I _____ the past paper analysis twice already.", a: "have completed", dist: ["complete", "completed", "had completed"] },
+      { q: "Next Thursday, our school _____ its annual athletics meet.", a: "will hold", dist: ["held", "has held", "holds"] },
+      { q: "He usually _____ up at 6:30 a.m. to review vocabulary.", a: "wakes", dist: ["is waking", "woke", "has woken"] },
+      { q: "When we reached the auditorium, the ceremony _____ already.", a: "had started", dist: ["starts", "has started", "will start"] },
+      { q: "At the moment, the candidates _____ for the mock interview.", a: "are preparing", dist: ["prepare", "prepared", "have prepared"] },
+      { q: "She _____ lunch before she rushed to the tutorial centre.", a: "had eaten", dist: ["eats", "is eating", "has eaten"] },
+      { q: "The sun _____ in the east every morning without fail.", a: "rises", dist: ["is rising", "rose", "has risen"] },
+      { q: "Last night, the debate team _____ past midnight on their speech.", a: "worked", dist: ["work", "are working", "have worked"] },
+      { q: "I promise I _____ you as soon as the results are announced.", a: "will call", dist: ["call", "called", "have called"] },
+      { q: "Look! The school bus _____ around the bend.", a: "is coming", dist: ["comes", "came", "has come"] },
+      { q: "She _____ in several speech competitions so far.", a: "has participated", dist: ["participates", "participated", "was participating"] },
+      { q: "When the announcement came over the PA system, we _____ our quiz.", a: "were taking", dist: ["took", "take", "are taking"] },
+      { q: "Every weekend, he _____ badminton with his siblings.", a: "plays", dist: ["is playing", "played", "has played"] }
+    ],
+    2: [
+      { q: "The principal _____ in the educational sector for over thirty years.", a: "has worked", dist: ["works", "is working", "worked"] },
+      { q: "Three days ago, the education bureau _____ the revised exam guidelines.", a: "published", dist: ["has published", "publishes", "had published"] },
+      { q: "While the students _____ their essays, the fire alarm went off.", a: "were writing", dist: ["wrote", "have written", "had written"] },
+      { q: "She _____ her JUPAS choices several times since the seminar.", a: "has modified", dist: ["modifies", "modified", "had modified"] },
+      { q: "He _____ any meals since early yesterday morning.", a: "has not had", dist: ["did not have", "had not had", "does not have"] },
+      { q: "As soon as he arrives tomorrow, we _____ the briefing session.", a: "will begin", dist: ["begin", "began", "have begun"] },
+      { q: "By ten o'clock tonight, she _____ for six straight hours.", a: "will have been studying", dist: ["studies", "will study", "studied"] },
+      { q: "When I opened the locker, someone _____ my English textbook.", a: "had taken", dist: ["took", "has taken", "takes"] },
+      { q: "Over the last decade, smartphone usage _____ exponentially.", a: "has grown", dist: ["grew", "grows", "had grown"] },
+      { q: "They _____ in London for two years before relocating to Hong Kong.", a: "had lived", dist: ["have lived", "lived", "were living"] },
+      { q: "Listen! Somebody _____ at the staffroom door.", a: "is knocking", dist: ["knocks", "knocked", "has knocked"] },
+      { q: "In 2021, our school _____ its diamond jubilee anniversary.", a: "celebrated", dist: ["has celebrated", "had celebrated", "celebrates"] },
+      { q: "She suddenly realized that she _____ her student ID card behind.", a: "had left", dist: ["left", "has left", "leaves"] },
+      { q: "At this exact time next week, we _____ our DSE mock papers.", a: "will be sitting", dist: ["will sit", "are sitting", "sat"] },
+      { q: "He _____ his ankle during PE lessons yesterday afternoon.", a: "sprained", dist: ["has sprained", "sprains", "had sprained"] },
+      { q: "The research team _____ the lab samples since daybreak.", a: "has been analyzing", dist: ["analyzed", "analyzes", "is analyzing"] },
+      { q: "Before the teacher entered, the class _____ quiet already.", a: "had fallen", dist: ["fell", "has fallen", "falls"] },
+      { q: "I _____ never _____ such an inspiring valedictory speech before.", a: "have ... heard", dist: ["did ... hear", "had ... heard", "was ... hearing"] },
+      { q: "Tomorrow evening, the choir _____ in the cultural centre auditorium.", a: "will perform", dist: ["performed", "has performed", "performs"] },
+      { q: "The candidate sighed with relief after she _____ her final paper.", a: "had submitted", dist: ["submits", "has submitted", "will submit"] }
+    ],
+    3: [
+      { q: "If he _____ more diligently earlier, he would have achieved Level 5**.", a: "had studied", dist: ["studied", "studies", "would study"] },
+      { q: "Unless she _____ now, she will certainly miss the registration deadline.", a: "leaves", dist: ["will leave", "left", "had left"] },
+      { q: "If I _____ in your position, I would consult the careers guidance mistress.", a: "were", dist: ["am", "was", "would be"] },
+      { q: "By the end of next month, our Form 6 classes _____ the entire syllabus.", a: "will have completed", dist: ["complete", "will complete", "completed"] },
+      { q: "Had the committee known the true facts, they _____ a different verdict.", a: "would have reached", dist: ["will reach", "reached", "would reach"] },
+      { q: "If technological innovation continues, green energy _____ widespread.", a: "will become", dist: ["became", "becomes", "had become"] },
+      { q: "Supposing it _____ tomorrow, where would the sports heats be held?", a: "rained", dist: ["rains", "will rain", "had rained"] },
+      { q: "If you had informed me earlier, I _____ you with the synthesis report.", a: "could have helped", dist: ["can help", "helped", "will help"] },
+      { q: "By next September, he _____ in university for an entire term.", a: "will have been studying", dist: ["studies", "will study", "studied"] },
+      { q: "Were she _____ the competition, she would represent Hong Kong overseas.", a: "to win", dist: ["wins", "won", "winning"] },
+      { q: "Provided that you _____ your best, your teachers will be proud.", a: "do", dist: ["will do", "did", "had done"] },
+      { q: "If climate change were not addressed, sea levels _____ dramatically.", a: "would rise", dist: ["will rise", "rose", "had risen"] },
+      { q: "By 2030, scientists predict that humanity _____ new clean fuels.", a: "will have discovered", dist: ["discovers", "will discover", "discovered"] },
+      { q: "Had they departed on schedule, they _____ trapped in the tunnel.", a: "would not have been", dist: ["will not be", "were not", "are not"] },
+      { q: "If he _____ his temper yesterday, he would not be facing penalties.", a: "had not lost", dist: ["did not lose", "does not lose", "would not lose"] },
+      { q: "In case an earthquake _____, drop to the floor and take cover.", a: "occurs", dist: ["will occur", "occurred", "has occurred"] },
+      { q: "If she had revised systematically, she _____ confident right now.", a: "would feel", dist: ["felt", "will feel", "had felt"] },
+      { q: "By midnight, the rescue team _____ the rubble for twenty-four hours.", a: "will have searched", dist: ["searches", "will search", "searched"] },
+      { q: "Should you _____ any assistance with JUPAS, contact Mr. Lee.", a: "require", dist: ["required", "will require", "requires"] },
+      { q: "If the government _____ subsidies earlier, businesses would have survived.", a: "had provided", dist: ["provides", "provided", "would provide"] }
+    ],
+    4: [
+      { q: "Hardly _____ entered the examination hall when the loudspeaker crackled.", a: "had the candidate", dist: ["the candidate had", "did the candidate", "has the candidate"] },
+      { q: "The teacher demanded that each student _____ their SBA portfolio on time.", a: "submit", dist: ["submits", "submitted", "will submit"] },
+      { q: "Seldom _____ such exceptional critical analysis from a secondary student.", a: "have we seen", dist: ["we have seen", "did we see", "we saw"] },
+      { q: "It is vital that he _____ present at tomorrow morning's roll call.", a: "be", dist: ["is", "was", "will be"] },
+      { q: "No sooner _____ seated than the invigilator instructed us to begin.", a: "had we been", dist: ["we were", "were we", "we had been"] },
+      { q: "If he were more disciplined, he _____ the deadline last Friday.", a: "would not have missed", dist: ["did not miss", "will not miss", "had not missed"] },
+      { q: "Little _____ that his essay would be featured in the school journal.", a: "did he realize", dist: ["he realized", "he had realized", "does he realize"] },
+      { q: "It is high time that society _____ urgent steps against cyberbullying.", a: "took", dist: ["takes", "will take", "had taken"] },
+      { q: "Under no circumstances _____ allowed to leave the examination desk early.", a: "are candidates", dist: ["candidates are", "candidates were", "will candidates"] },
+      { q: "She recommended that the club president _____ the constitution.", a: "revise", dist: ["revises", "revised", "revising"] },
+      { q: "Not only _____ first prize, but she also earned the Best Speaker title.", a: "did she win", dist: ["she won", "she had won", "does she win"] },
+      { q: "If I _____ my umbrella this morning, I would not be soaked right now.", a: "had not forgotten", dist: ["did not forget", "do not forget", "would not forget"] },
+      { q: "Scarcely _____ the announcement when the bell chimed.", a: "had she finished", dist: ["she finished", "she had finished", "did she finish"] },
+      { q: "The council proposed that the school sports day _____ postponed.", a: "be", dist: ["is", "was", "will be"] },
+      { q: "Only after checking the results thrice _____ believe her success.", a: "did she", dist: ["she did", "she could", "was she"] },
+      { q: "I would rather you _____ alone in the computer lab after dusk.", a: "did not stay", dist: ["do not stay", "will not stay", "not stayed"] },
+      { q: "Never before _____ such widespread solidarity among the student body.", a: "had there been", dist: ["there had been", "there was", "was there"] },
+      { q: "It is essential that every candidate _____ their barcode labels carefully.", a: "affix", dist: ["affixes", "affixed", "will affix"] },
+      { q: "Rarely _____ seen such unwavering perseverance in the face of exams.", a: "has the tutor", dist: ["the tutor has", "did the tutor", "the tutor had"] },
+      { q: "If she had secured university admission last year, she _____ in London now.", a: "would be living", dist: ["will live", "lived", "had lived"] }
+    ],
+    5: [
+      { q: "Not until the final script had been verified _____ announced.", a: "were the results", dist: ["the results were", "had the results been", "did the results"] },
+      { q: "It is imperative that the research protocol _____ strictly adhered to.", a: "be", dist: ["is", "was", "will be"] },
+      { q: "Had it not been for her prompt intervention, the crisis _____ into panic.", a: "would have escalated", dist: ["will escalate", "escalated", "had escalated"] },
+      { q: "Only by implementing stringent oversight _____ curb examination malpractice.", a: "can authorities", dist: ["authorities can", "authorities could", "did authorities"] },
+      { q: "Were such unethical measures _____ adopted, public trust would collapse.", a: "to be", dist: ["are", "being", "been"] },
+      { q: "No sooner _____ the podium than thunderous applause erupted.", a: "had she stepped onto", dist: ["did she step onto", "she stepped onto", "she had stepped onto"] },
+      { q: "It is high time the administration _____ accountability for the glitch.", a: "assumed", dist: ["assumes", "assume", "had assumed"] },
+      { q: "So severe _____ the storm damage that school remained suspended for a week.", a: "was", dist: ["is", "had been", "were"] },
+      { q: "Had they not underestimated the workload, they _____ their project today.", a: "would be exhibiting", dist: ["exhibited", "will exhibit", "exhibit"] },
+      { q: "On no account _____ authorized to tamper with official grade sheets.", a: "is any student", dist: ["any student is", "was any student", "any student was"] },
+      { q: "The invigilator insisted that every electronic gadget _____ powered down.", a: "be", dist: ["is", "was", "will be"] },
+      { q: "Only when the historical context is grasped _____ fully appreciate the text.", a: "can one", dist: ["one can", "could one", "one could"] },
+      { q: "Little _____ what monumental challenges lay ahead in the coming term.", a: "did they envision", dist: ["they envisioned", "they had envisioned", "do they envision"] },
+      { q: "She acts as though she _____ the sole authority on English syntax.", a: "were", dist: ["is", "was", "would be"] },
+      { q: "Such _____ the eloquence of his address that the entire auditorium stood.", a: "was", dist: ["is", "had been", "were"] },
+      { q: "Had the committee members _____ consulted, the oversight would not have occurred.", a: "been", dist: ["being", "be", "were"] },
+      { q: "Hardly _____ the examination hall when an emergency siren blared.", a: "had we evacuated", dist: ["we had evacuated", "did we evacuate", "we evacuated"] },
+      { q: "It was requested that all submissions _____ anonymously by the panel.", a: "be evaluated", dist: ["are evaluated", "were evaluated", "evaluate"] },
+      { q: "Not only _____ the scholarship, but she was also named Student of the Year.", a: "did she secure", dist: ["she secured", "she has secured", "was she securing"] },
+      { q: "Should negotiations _____ fail, secondary contingency measures will take effect.", a: "indeed", dist: ["have", "will", "did"] }
+    ]
+  },
+  "Articles": {
+    1: [
+      { q: "Honesty is widely recognized as _____ noble quality.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "She has learned to play _____ piano since childhood.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "His dream is to become _____ aerospace engineer.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "We visited _____ Hong Kong Palace Museum during our study trip.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "Consistent sleep is _____ most effective remedy for exam stress.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "She took _____ umbrella in case of an afternoon thunderstorm.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Could you spare _____ extra ballpoint pen for the exam?", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Mount Everest is _____ highest peak on Earth.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "Many doctors recommend drinking _____ fresh water upon waking.", a: "no article", dist: ["a", "an", "the"] },
+      { q: "They spent three weeks touring _____ United Kingdom.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "She was awarded a scholarship for being _____ honest and diligent student.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "We listened to _____ inspiring lecture on environmental conservation.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Please turn off _____ projector before leaving the classroom.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He enjoys playing _____ volleyball with teammates after school.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "Our class attended a talk by _____ European diplomat.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "The Earth revolves around _____ Sun.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "It took almost _____ hour to proofread the entire passage.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "They adopted _____ stray kitten rescued near the school playground.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "Many believers go to _____ church every Sunday morning.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "He demonstrated _____ unique approach to tackling synthesis tasks.", a: "a", dist: ["an", "the", "no article"] }
+    ],
+    2: [
+      { q: "Students travel to _____ school by MTR every morning.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "The injured pedestrian was rushed immediately to _____ hospital.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "The principal visited _____ hospital where our injured athlete was recovering.", a: "the", dist: ["no article", "a", "an"] },
+      { q: "She needs to gain more practical _____ experience before university.", a: "no article", dist: ["an", "a", "the"] },
+      { q: "We stayed at _____ hotel overlooking Victoria Harbour.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "_____ Pacific Ocean is the largest body of water on the planet.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "He was sentenced to two years in _____ prison for fraud.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "Her mother went to _____ school to attend the parent-teacher meeting.", a: "the", dist: ["no article", "a", "an"] },
+      { q: "We bought _____ loaf of artisan bread from the bakery.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "_____ knowledge is essential for empowering future generations.", a: "no article", dist: ["The", "A", "An"] },
+      { q: "The debate team stayed at _____ YMCA during the regional finals.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "Have you ever seen _____ UFO hovering in the night sky?", a: "a", dist: ["an", "the", "no article"] },
+      { q: "She has _____ university degree in chemical engineering.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "_____ happiness cannot be measured solely by wealth.", a: "no article", dist: ["The", "A", "An"] },
+      { q: "He ate _____ apple and two bananas for breakfast.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "The expedition climbed _____ Himalayas in freezing winter.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "We took a leisurely stroll along _____ Thames during our visit to London.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "_____ breakfast served at the hotel was exceptionally hearty.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "She suffers from _____ asthma during changes of season.", a: "no article", dist: ["the", "an", "a"] },
+      { q: "He showed _____ profound understanding of classical literature.", a: "a", dist: ["the", "an", "no article"] }
+    ],
+    3: [
+      { q: "She demonstrated _____ courage that inspired everyone in the community.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "They set sail across _____ Mediterranean Sea last summer.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "_____ Republic of Korea has achieved rapid technological transformation.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "He has _____ great admiration for his English literature teacher.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "The ship cruised through _____ Panama Canal into the Pacific.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "We spent our vacation relaxing in _____ Bahamas.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He has _____ deep knowledge of Chinese calligraphy.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "_____ Sahara Desert spans vast expanses of northern Africa.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "She exhibited _____ patience rarely seen among teenage athletes.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "They visited _____ Netherlands to study sustainable flood barriers.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He was elected _____ president of the student union.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "_____ French are renowned worldwide for their culinary traditions.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "She works for _____ United Nations educational commission.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He is _____ one-legged runner who competed in the Paralympic Games.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "The report analyzed _____ poverty in urban areas.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "_____ poverty experienced by street sleepers warrants civic attention.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "He was appointed _____ captain of the senior basketball team.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "We booked tickets to tour _____ Louvre in Paris.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "She possesses _____ wisdom far beyond her teenage years.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "They hiked up _____ Lion Rock on a crisp autumn morning.", a: "no article", dist: ["the", "a", "an"] }
+    ],
+    4: [
+      { q: "_____ pen is mightier than the sword.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "She caught him by _____ collar as he tried to slip away.", a: "the", dist: ["a", "his", "no article"] },
+      { q: "The two siblings walked hand _____ hand along the waterfront.", a: "in", dist: ["with", "to", "by"] },
+      { q: "He took the criticism _____ heart and resolved to improve.", a: "to", dist: ["at", "in", "by"] },
+      { q: "_____ rich should contribute more to public welfare schemes.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "He is _____ Newton of modern astrophysics.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "The delegates met face _____ face after years of virtual summits.", a: "to", dist: ["with", "by", "in"] },
+      { q: "The candidate was struck on _____ shoulder by a stray shuttlecock.", a: "the", dist: ["a", "his", "no article"] },
+      { q: "She loves listening to _____ radio while revising her notes.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "Watching television all night can disrupt _____ sleep patterns.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "He made _____ fortune in software development.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "The committee discussed the issue at _____ length.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "_____ tiger is an endangered predator native to Asian forests.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "She knows the grammar rules by _____ heart.", a: "no article", dist: ["the", "a", "her"] },
+      { q: "He was kept in _____ dark about the surprise farewell party.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "The proposal was accepted in _____ principle by the committee.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "He was elected to _____ parliament in the general election.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "The author sheds _____ light on forgotten historical episodes.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "We must protect _____ unemployed from economic shocks.", a: "the", dist: ["an", "a", "no article"] },
+      { q: "He was taken by _____ surprise by the examiner's tough question.", a: "no article", dist: ["the", "a", "an"] }
+    ],
+    5: [
+      { q: "The scholar argued that _____ education is the catalyst for reform.", a: "no article", dist: ["an", "the", "a"] },
+      { q: "_____ education that he received at King's College shaped his career.", a: "The", dist: ["An", "A", "no article"] },
+      { q: "She had _____ suspicion that the survey figures had been distorted.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "He is regarded as _____ father of modern biotechnology.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "_____ man is a social being by fundamental nature.", a: "no article", dist: ["The", "A", "An"] },
+      { q: "The suspect is believed to be still at _____ large in the territory.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "She was elected _____ chairperson of the disciplinary tribunal.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "_____ more one studies past papers, the better one performs.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "They signed the non-disclosure agreement in _____ secret.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "_____ higher the mountain, the cooler the air becomes.", a: "The", dist: ["A", "An", "no article"] },
+      { q: "He paid _____ lip service to environmental protection while logging.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "The candidate has _____ command of spoken English that impresses judges.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "He made a solemn promise on his word of _____ honour.", a: "no article", dist: ["the", "an", "a"] },
+      { q: "The agreement was deemed invalid under _____ international law.", a: "no article", dist: ["the", "an", "a"] },
+      { q: "She was crowned _____ queen of the aquatic gala.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "They set off at _____ dawn to climb the summit.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "The essay provides _____ critique that dismantles common fallacies.", a: "a", dist: ["the", "an", "no article"] },
+      { q: "He acted in _____ capacity of official legal advisor.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "The students were instructed to line up in _____ alphabetical order.", a: "no article", dist: ["an", "the", "a"] },
+      { q: "She has _____ flair for languages, speaking four fluently.", a: "a", dist: ["the", "an", "no article"] }
+    ]
+  },
+  "Plurals": {
+    1: [
+      { q: "The region successfully navigated multiple financial _____ (crisis).", a: "crises", dist: ["crisises", "crisi", "crisis"] },
+      { q: "Scientists have documented various atmospheric _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] },
+      { q: "The dentist recommended brushing all your _____ (tooth) twice daily.", a: "teeth", dist: ["tooths", "toothes", "teethes"] },
+      { q: "Several young _____ (child) took part in the community clean-up.", a: "children", dist: ["childs", "childrens", "childes"] },
+      { q: "The chef purchased five kilograms of fresh _____ (potato).", a: "potatoes", dist: ["potatos", "potatoies", "potato"] },
+      { q: "All the kitchen _____ (knife) must be stored safely in the drawer.", a: "knives", dist: ["knifes", "knifees", "knife"] },
+      { q: "A formation of wild _____ (goose) migrated across the coastline.", a: "geese", dist: ["gooses", "geeses", "goosies"] },
+      { q: "In autumn, dry _____ (leaf) flutter from the trees in the courtyard.", a: "leaves", dist: ["leafs", "leafes", "leavies"] },
+      { q: "The rural farm is home to fifty _____ (sheep).", a: "sheep", dist: ["sheeps", "sheepes", "sheepies"] },
+      { q: "The research thesis was supported by concrete empirical _____ (datum).", a: "data", dist: ["datums", "datas", "datae"] },
+      { q: "Two courteous _____ (policeman) guided the crowd during the marathon.", a: "policemen", dist: ["policemans", "policemenes", "policeman"] },
+      { q: "Laboratory researchers observed nocturnal _____ (mouse) in trials.", a: "mice", dist: ["mouses", "mices", "mouse"] },
+      { q: "Delegates from both _____ (country) signed the cross-border pact.", a: "countries", dist: ["countrys", "countries'", "countryes"] },
+      { q: "The bakery sold thirty fresh _____ (loaf) of sourdough bread.", a: "loaves", dist: ["loafs", "loafes", "loave"] },
+      { q: "Hundreds of rare marine _____ (species) reside in deep trenches.", a: "species", dist: ["specieses", "specie", "specis"] },
+      { q: "Both _____ (half) of the student body supported the recycling campaign.", a: "halves", dist: ["halfs", "halfes", "halve"] },
+      { q: "A pack of wild _____ (wolf) was tracked across the snowy forest.", a: "wolves", dist: ["wolfs", "wolfes", "wolve"] },
+      { q: "The library assistant restocked all the reference _____ (shelf).", a: "shelves", dist: ["shelfs", "shelfes", "shelve"] },
+      { q: "After the long cross-country hike, both his _____ (foot) were sore.", a: "feet", dist: ["foots", "feets", "foot"] },
+      { q: "Many accomplished _____ (woman) hold leadership roles in the school.", a: "women", dist: ["womans", "womens", "woman"] }
+    ],
+    2: [
+      { q: "The committee established rigorous evaluation _____ (criterion).", a: "criteria", dist: ["criterions", "criterias", "criteri"] },
+      { q: "Botanists analyzed the internal cell structures of various _____ (fungus).", a: "fungi", dist: ["funguses", "fungis", "fungoes"] },
+      { q: "Multiple volcanic _____ (oasis) thrive amidst the arid desert.", a: "oases", dist: ["oasises", "oasi", "oasisese"] },
+      { q: "Astronomers plotted the orbital _____ (axis) of distant exoplanets.", a: "axes", dist: ["axises", "axi", "axese"] },
+      { q: "The professor examined several competitive _____ (hypothesis).", a: "hypotheses", dist: ["hypothesises", "hypothesi", "hypothese"] },
+      { q: "The marine biologist studied coastal _____ (alga) blooming in the bay.", a: "algae", dist: ["algas", "algaes", "algis"] },
+      { q: "The school library holds diverse historical _____ (syllabus).", a: "syllabi", dist: ["syllabuses", "syllabis", "syllaba"] },
+      { q: "Statisticians mapped the geometric _____ (radius) around epicenter points.", a: "radii", dist: ["radiuses", "radiis", "radia"] },
+      { q: "The textbook included concise chapter _____ (synopsis).", a: "synopses", dist: ["synopsises", "synopsi", "synopse"] },
+      { q: "Archeologists excavated multiple royal _____ (sarcophagus).", a: "sarcophagi", dist: ["sarcophaguses", "sarcophagis", "sarcophaga"] },
+      { q: "The report provided detailed statistical _____ (analysis).", a: "analyses", dist: ["analysises", "analysi", "analysese"] },
+      { q: "The university honored three distinguished _____ (alumnus).", a: "alumni", dist: ["alumnuses", "alumnis", "alumnae"] },
+      { q: "The desert night was filled with scurrying desert _____ (cactus).", a: "cacti", dist: ["cactuses", "cactis", "cacta"] },
+      { q: "Engineers tested the load-bearing _____ (stratum) of underlying rock.", a: "strata", dist: ["stratums", "stratas", "strati"] },
+      { q: "The book contains supplementary mathematical _____ (appendix).", a: "appendices", dist: ["appendixes", "appendicies", "appendis"] },
+      { q: "They measured light emission from miniature glass _____ (bulb).", a: "bulbs", dist: ["bulbes", "bulbies", "bulb"] },
+      { q: "The telescope tracked blazing orbital _____ (comet).", a: "comets", dist: ["cometes", "cometies", "comet"] },
+      { q: "Students compared diverse literary _____ (genre).", a: "genres", dist: ["genre", "genra", "genri"] },
+      { q: "The lab bred several generations of fruit _____ (fly).", a: "flies", dist: ["flys", "flyes", "flyies"] },
+      { q: "The zoologists tagged thirty wild _____ (salmon).", a: "salmon", dist: ["salmons", "salmones", "salmonies"] }
+    ],
+    3: [
+      { q: "Both his _____ (brother-in-law) work in the accounting industry.", a: "brothers-in-law", dist: ["brother-in-laws", "brothers-in-laws", "brother-ins-law"] },
+      { q: "Several curious _____ (passer-by) paused to watch the street drama.", a: "passers-by", dist: ["passer-bys", "passers-bys", "passer-byes"] },
+      { q: "The fleet was protected by specialized military _____ (aircraft).", a: "aircraft", dist: ["aircrafts", "aircraftes", "aircraves"] },
+      { q: "The government appointed three new _____ (attorney-general).", a: "attorneys-general", dist: ["attorney-generals", "attorneys-generals", "attorney-general"] },
+      { q: "The room was furnished with antique mahogany _____ (furniture).", a: "furniture", dist: ["furnitures", "furniture pieces", "furnitureses"] },
+      { q: "The news anchor reported on recent economic _____ (crisis).", a: "crises", dist: ["crisises", "crisi", "crisis"] },
+      { q: "The forest trail was populated by herds of wild _____ (deer).", a: "deer", dist: ["deers", "deeres", "deeries"] },
+      { q: "Police searched for multiple convicted _____ (runner-up).", a: "runners-up", dist: ["runner-ups", "runners-ups", "runner-up"] },
+      { q: "She collected relevant background _____ (information) from archives.", a: "information", dist: ["informations", "informationes", "informs"] },
+      { q: "The kitchen counter was covered with loose bread _____ (crumb).", a: "crumbs", dist: ["crumbes", "crumb", "crumbies"] },
+      { q: "The teacher noticed several subtle _____ (looker-on) near the pitch.", a: "lookers-on", dist: ["looker-ons", "lookers-ons", "looker-on"] },
+      { q: "The chef bought five fresh _____ (trout) at the morning harbour market.", a: "trout", dist: ["trouts", "troutes", "troutie"] },
+      { q: "He suffered severe burns to both of his _____ (arm).", a: "arms", dist: ["armes", "arm", "armies"] },
+      { q: "The police unit seized stacks of counterfeit _____ (banknote).", a: "banknotes", dist: ["banknoteses", "banknote", "banknoten"] },
+      { q: "Her research focuses on the migration patterns of arctic _____ (tern).", a: "terns", dist: ["ternes", "tern", "ternies"] },
+      { q: "The board consists of ten prominent _____ (court-martial).", a: "courts-martial", dist: ["court-martials", "courts-martials", "court-martial"] },
+      { q: "He owns three luxury _____ (property) in Kowloon Tong.", a: "properties", dist: ["propertys", "propertyes", "property"] },
+      { q: "The committee investigated two distinct _____ (memorandum).", a: "memoranda", dist: ["memorandums", "memorandi", "memorandas"] },
+      { q: "The children built castles with buckets of dry _____ (sand).", a: "sand", dist: ["sands", "sandes", "sandies"] },
+      { q: "The lab imported four specialized _____ (microscope).", a: "microscopes", dist: ["microscops", "microscopi", "microscope"] }
+    ],
+    4: [
+      { q: "The company's headquarters _____ located in North Point.", a: "is", dist: ["are", "were", "being"] },
+      { q: "All his luggage _____ already screened at the terminal gate.", a: "was", dist: ["were", "are", "have been"] },
+      { q: "The committee _____ divided over the disciplinary measure.", a: "were", dist: ["was", "is", "has been"] },
+      { q: "Physics _____ considered one of the most challenging electives.", a: "is", dist: ["are", "were", "being"] },
+      { q: "Ten kilometers _____ a demanding distance for novice runners.", a: "is", dist: ["are", "were", "have been"] },
+      { q: "The cattle _____ grazing peacefully on the lush hillside.", a: "were", dist: ["was", "is", "has been"] },
+      { q: "The scissors on the teacher's desk _____ extremely sharp.", a: "are", dist: ["is", "was", "has been"] },
+      { q: "This pair of trousers _____ tailored precisely to his measurements.", a: "is", dist: ["are", "were", "have been"] },
+      { q: "The police _____ investigating the break-in at the laboratory.", a: "are", dist: ["is", "was", "has been"] },
+      { q: "Bad news _____ quickly in the era of social media.", a: "travels", dist: ["travel", "are travelling", "have travelled"] },
+      { q: "Neither the captain nor the players _____ ready for the match.", a: "were", dist: ["was", "is", "has been"] },
+      { q: "Fifty thousand dollars _____ donated to the student bursary.", a: "was", dist: ["were", "are", "have been"] },
+      { q: "The faculty _____ unanimous in electing the new department dean.", a: "was", dist: ["were", "are", "have been"] },
+      { q: "Measles _____ once a prevalent childhood affliction.", a: "was", dist: ["were", "are", "have been"] },
+      { q: "The staff members _____ requested to submit their reports by noon.", a: "were", dist: ["was", "is", "has been"] },
+      { q: "Neither of the proposed options _____ suitable for the school.", a: "is", dist: ["are", "were", "have been"] },
+      { q: "Every candidate and teacher _____ seated in the auditorium.", a: "was", dist: ["were", "are", "have been"] },
+      { q: "The contents of the sealed envelope _____ strictly confidential.", a: "are", dist: ["is", "was", "has been"] },
+      { q: "Statistics _____ a branch of mathematics requiring rigorous logic.", a: "is", dist: ["are", "were", "being"] },
+      { q: "The statistics gathered by our team _____ glaring disparities.", a: "reveal", dist: ["reveals", "revealing", "is revealing"] }
+    ],
+    5: [
+      { q: "The scholars debated the theological _____ (dogma) of the medieval period.", a: "dogmata", dist: ["dogmas", "dogmi", "dogmatas"] },
+      { q: "Researchers categorized the distinctive _____ (schema) used by top students.", a: "schemata", dist: ["schemas", "schemi", "schematas"] },
+      { q: "Biologists catalogued the diverse _____ (stigma) on the tropical flowers.", a: "stigmata", dist: ["stigmas", "stigmi", "stigmates"] },
+      { q: "The museum displayed ancient Roman _____ (as) coins in glass cases.", a: "asses", dist: ["ases", "assi", "as"] },
+      { q: "The mathematical theorem depends on intersecting _____ (locus).", a: "loci", dist: ["locuses", "locis", "loca"] },
+      { q: "The physician observed recurring _____ (miasma) in polluted marshlands.", a: "miasmata", dist: ["miasmas", "miasmi", "miasmatas"] },
+      { q: "Linguists studied the tonal _____ (lexeme) across southern dialects.", a: "lexemes", dist: ["lexema", "lexemi", "lexemata"] },
+      { q: "The team examined multiple cellular _____ (nucleus) under the electron lens.", a: "nuclei", dist: ["nucleuses", "nuclea", "nucleis"] },
+      { q: "Archeologists identified ornamental _____ (fibula) in Bronze Age graves.", a: "fibulae", dist: ["fibulas", "fibulae", "fibulis"] },
+      { q: "Philosophers analyzed conflicting political _____ (paradox).", a: "paradoxes", dist: ["paradoxa", "paradoxi", "paradoxis"] },
+      { q: "The manuscript contained classical poetic _____ (strophe).", a: "strophes", dist: ["stropha", "strophi", "strophata"] },
+      { q: "Astronomers recorded high-energy flares from distant stellar _____ (nova).", a: "novae", dist: ["novas", "novi", "novata"] },
+      { q: "The ocean floor was covered with tiny calcareous _____ (testa).", a: "testae", dist: ["testas", "testi", "testata"] },
+      { q: "Engineers calibrated the resonant _____ (frequency) of antenna masts.", a: "frequencies", dist: ["frequencys", "frequency", "frequencie"] },
+      { q: "Historians documented the royal _____ (interregnum) following the king's death.", a: "interregna", dist: ["interregnums", "interregni", "interregnas"] },
+      { q: "The symposium addressed lingering moral _____ (dilemma).", a: "dilemmas", dist: ["dilemmata", "dilemmi", "dilemmatas"] },
+      { q: "The laboratory cultured various virulent _____ (bacterium).", a: "bacteria", dist: ["bacterias", "bacteriums", "bacterii"] },
+      { q: "Geologists sampled underground oil-bearing _____ (shale).", a: "shales", dist: ["shale", "shalia", "shali"] },
+      { q: "The manuscript was adorned with gold-leaf _____ (marginalia).", a: "marginalia", dist: ["marginalias", "marginalium", "marginalie"] },
+      { q: "The team decoded cryptic _____ (graffito) preserved in volcanic ash.", a: "graffiti", dist: ["graffitos", "graffities", "graffitas"] }
+    ]
+  },
+  "Synonyms": {
+    1: [
+      { q: "Select the word closest in meaning to 'ABUNDANT':", a: "plentiful", dist: ["scarce", "fragile", "modest"] },
+      { q: "Select the word closest in meaning to 'COMMENCE':", a: "initiate", dist: ["terminate", "hesitate", "postpone"] },
+      { q: "Select the word closest in meaning to 'RELUCTANT':", a: "unwilling", dist: ["eager", "confident", "cheerful"] },
+      { q: "Select the word closest in meaning to 'HAZARDOUS':", a: "dangerous", dist: ["convenient", "beneficial", "harmless"] },
+      { q: "Select the word closest in meaning to 'ACCURATE':", a: "precise", dist: ["vague", "faulty", "approximate"] },
+      { q: "Select the word closest in meaning to 'DIMINISH':", a: "decrease", dist: ["expand", "amplify", "stabilize"] },
+      { q: "Select the word closest in meaning to 'CONCEAL':", a: "hide", dist: ["reveal", "display", "announce"] },
+      { q: "Select the word closest in meaning to 'PROSPEROUS':", a: "thriving", dist: ["struggling", "penniless", "fragile"] },
+      { q: "Select the word closest in meaning to 'OBVIOUS':", a: "evident", dist: ["hidden", "subtle", "complex"] },
+      { q: "Select the word closest in meaning to 'VITAL':", a: "crucial", dist: ["optional", "minor", "trivial"] },
+      { q: "Select the word closest in meaning to 'AUTHENTIC':", a: "genuine", dist: ["fake", "counterfeit", "artificial"] },
+      { q: "Select the word closest in meaning to 'TRANQUIL':", a: "peaceful", dist: ["chaotic", "turbulent", "noisy"] },
+      { q: "Select the word closest in meaning to 'IMPEDE':", a: "hinder", dist: ["assist", "accelerate", "promote"] },
+      { q: "Select the word closest in meaning to 'RIGID':", a: "stiff", dist: ["flexible", "elastic", "adaptable"] },
+      { q: "Select the word closest in meaning to 'FEEBLE':", a: "weak", dist: ["muscular", "sturdy", "robust"] },
+      { q: "Select the word closest in meaning to 'APPARENT':", a: "clear", dist: ["vague", "unseen", "doubtful"] },
+      { q: "Select the word closest in meaning to 'BENEFICIAL':", a: "advantageous", dist: ["harmful", "detrimental", "useless"] },
+      { q: "Select the word closest in meaning to 'CANDID':", a: "frank", dist: ["deceitful", "reserved", "sarcastic"] },
+      { q: "Select the word closest in meaning to 'DWINDLE':", a: "shrink", dist: ["increase", "multiply", "expand"] },
+      { q: "Select the word closest in meaning to 'EXHAUSTED':", a: "fatigued", dist: ["energized", "refreshed", "spirited"] }
+    ],
+    2: [
+      { q: "Select the word closest in meaning to 'METICULOUS':", a: "thorough", dist: ["careless", "hasty", "sloppy"] },
+      { q: "Select the word closest in meaning to 'PLAUSIBLE':", a: "believable", dist: ["unlikely", "absurd", "ridiculous"] },
+      { q: "Select the word closest in meaning to 'ADVOCATE':", a: "champion", dist: ["oppose", "condemn", "protest"] },
+      { q: "Select the word closest in meaning to 'INEVITABLE':", a: "unavoidable", dist: ["preventable", "doubtful", "uncertain"] },
+      { q: "Select the word closest in meaning to 'AMBIGUOUS':", a: "unclear", dist: ["transparent", "definitive", "explicit"] },
+      { q: "Select the word closest in meaning to 'REPUTABLE':", a: "respectable", dist: ["notorious", "shady", "untrustworthy"] },
+      { q: "Select the word closest in meaning to 'SUBSTANTIAL':", a: "considerable", dist: ["insignificant", "meager", "tiny"] },
+      { q: "Select the word closest in meaning to 'ACCELERATE':", a: "quicken", dist: ["delay", "retard", "hinder"] },
+      { q: "Select the word closest in meaning to 'DEPICT':", a: "portray", dist: ["distort", "obscure", "suppress"] },
+      { q: "Select the word closest in meaning to 'TENACIOUS':", a: "persistent", dist: ["fickle", "yielding", "hesitant"] },
+      { q: "Select the word closest in meaning to 'INNOVATIVE':", a: "inventive", dist: ["conventional", "outdated", "traditional"] },
+      { q: "Select the word closest in meaning to 'APATHETIC':", a: "indifferent", dist: ["passionate", "enthusiastic", "concerned"] },
+      { q: "Select the word closest in meaning to 'MITIGATE':", a: "alleviate", dist: ["worsen", "aggravate", "intensify"] },
+      { q: "Select the word closest in meaning to 'DIVERSE':", a: "varied", dist: ["uniform", "homogeneous", "identical"] },
+      { q: "Select the word closest in meaning to 'SCRUTINIZE':", a: "examine", dist: ["ignore", "glance", "neglect"] },
+      { q: "Select the word closest in meaning to 'COGNIZANT':", a: "aware", dist: ["oblivious", "ignorant", "blind"] },
+      { q: "Select the word closest in meaning to 'PRAGMATIC':", a: "practical", dist: ["idealistic", "visionary", "reckless"] },
+      { q: "Select the word closest in meaning to 'CANDIDATE':", a: "applicant", dist: ["examiner", "adjudicator", "spectator"] },
+      { q: "Select the word closest in meaning to 'VULNERABLE':", a: "susceptible", dist: ["shielded", "immune", "resilient"] },
+      { q: "Select the word closest in meaning to 'REDUNDANT':", a: "superfluous", dist: ["essential", "indispensable", "vital"] }
+    ],
+    3: [
+      { q: "Select the word closest in meaning to 'LACONIC':", a: "concise", dist: ["verbose", "wordy", "loquacious"] },
+      { q: "Select the word closest in meaning to 'ANOMALY':", a: "irregularity", dist: ["normality", "standard", "routine"] },
+      { q: "Select the word closest in meaning to 'UBIQUITOUS':", a: "omnipresent", dist: ["scarce", "uncommon", "isolated"] },
+      { q: "Select the word closest in meaning to 'EPHEMERAL':", a: "transitory", dist: ["permanent", "eternal", "perpetual"] },
+      { q: "Select the word closest in meaning to 'ELOQUENT':", a: "articulate", dist: ["inarticulate", "clumsy", "stammering"] },
+      { q: "Select the word closest in meaning to 'SPURIOUS':", a: "inauthentic", dist: ["genuine", "valid", "legitimate"] },
+      { q: "Select the word closest in meaning to 'EXACERBATE':", a: "worsen", dist: ["soothe", "palliate", "ameliorate"] },
+      { q: "Select the word closest in meaning to 'PERSPICACIOUS':", a: "insightful", dist: ["dense", "obtuse", "foolish"] },
+      { q: "Select the word closest in meaning to 'FASTIDIOUS':", a: "demanding", dist: ["uncaring", "easygoing", "careless"] },
+      { q: "Select the word closest in meaning to 'GREGARIOUS':", a: "sociable", dist: ["introverted", "aloof", "solitary"] },
+      { q: "Select the word closest in meaning to 'BENEVOLENT':", a: "charitable", dist: ["malevolent", "malicious", "spiteful"] },
+      { q: "Select the word closest in meaning to 'FORTUITOUS':", a: "accidental", dist: ["deliberate", "planned", "intentional"] },
+      { q: "Select the word closest in meaning to 'DISPARATE':", a: "dissimilar", dist: ["identical", "congruent", "equivalent"] },
+      { q: "Select the word closest in meaning to 'SURREPTITIOUS':", a: "clandestine", dist: ["overt", "transparent", "blatant"] },
+      { q: "Select the word closest in meaning to 'OSTENTATIOUS':", a: "showy", dist: ["unpretentious", "modest", "plain"] },
+      { q: "Select the word closest in meaning to 'OBDURATE':", a: "stubborn", dist: ["compliant", "malleable", "flexible"] },
+      { q: "Select the word closest in meaning to 'CANDOUR':", a: "sincerity", dist: ["duplicity", "deception", "insincerity"] },
+      { q: "Select the word closest in meaning to 'INTRINSIC':", a: "inherent", dist: ["extrinsic", "acquired", "superficial"] },
+      { q: "Select the word closest in meaning to 'SUPERFICIAL':", a: "shallow", dist: ["profound", "penetrating", "deep"] },
+      { q: "Select the word closest in meaning to 'PERFIDIOUS':", a: "treacherous", dist: ["trustworthy", "loyal", "faithful"] }
+    ],
+    4: [
+      { q: "Select the word closest in meaning to 'PALLIATE':", a: "alleviate", dist: ["aggravate", "magnify", "incite"] },
+      { q: "Select the word closest in meaning to 'INTRANSIGENT':", a: "uncompromising", dist: ["amenable", "yielding", "submissive"] },
+      { q: "Select the word closest in meaning to 'ESOTERIC':", a: "abstruse", dist: ["mainstream", "accessible", "simplistic"] },
+      { q: "Select the word closest in meaning to 'DISSEMINATE':", a: "distribute", dist: ["suppress", "withhold", "conceal"] },
+      { q: "Select the word closest in meaning to 'EQUIVOCAL':", a: "evasive", dist: ["unambiguous", "lucid", "candid"] },
+      { q: "Select the word closest in meaning to 'PROLIFIC':", a: "productive", dist: ["barren", "unproductive", "sterile"] },
+      { q: "Select the word closest in meaning to 'ABERRATION':", a: "anomaly", dist: ["regularity", "conformity", "norm"] },
+      { q: "Select the word closest in meaning to 'SAGACIOUS':", a: "wise", dist: ["naive", "ignorant", "foolish"] },
+      { q: "Select the word closest in meaning to 'VACILLATE':", a: "hesitate", dist: ["resolve", "persist", "commit"] },
+      { q: "Select the word closest in meaning to 'ZEALOUS':", a: "fervent", dist: ["apathetic", "lukewarm", "detached"] },
+      { q: "Select the word closest in meaning to 'CASTIGATE':", a: "reprimand", dist: ["compliment", "acclaim", "endorse"] },
+      { q: "Select the word closest in meaning to 'PROPITIOUS':", a: "favourable", dist: ["inauspicious", "ominous", "unpromising"] },
+      { q: "Select the word closest in meaning to 'ACRIMONIOUS':", a: "bitter", dist: ["cordial", "amicable", "harmonious"] },
+      { q: "Select the word closest in meaning to 'INDOLENT':", a: "slothful", dist: ["industrious", "diligent", "enterprising"] },
+      { q: "Select the word closest in meaning to 'PUGILISTIC':", a: "combative", dist: ["peaceful", "passive", "conciliatory"] },
+      { q: "Select the word closest in meaning to 'RECONDITE':", a: "obscure", dist: ["lucid", "manifest", "comprehensible"] },
+      { q: "Select the word closest in meaning to 'RECALCITRANT':", a: "unruly", dist: ["obedient", "tractable", "docile"] },
+      { q: "Select the word closest in meaning to 'SANCTIMONIOUS':", a: "self-righteous", dist: ["humble", "modest", "sincere"] },
+      { q: "Select the word closest in meaning to 'TANTAMOUNT':", a: "equivalent", dist: ["divergent", "incomparable", "distinct"] },
+      { q: "Select the word closest in meaning to 'UBIQUITY':", a: "prevalence", dist: ["rarity", "scarcity", "absence"] }
+    ],
+    5: [
+      { q: "Select the word closest in meaning to 'PUSILLANIMOUS':", a: "craven", dist: ["valiant", "intrepid", "audacious"] },
+      { q: "Select the word closest in meaning to 'OBSEQUIOUS':", a: "servile", dist: ["imperious", "defiant", "assertive"] },
+      { q: "Select the word closest in meaning to 'ENERVATE':", a: "debilitate", dist: ["invigorate", "energize", "fortify"] },
+      { q: "Select the word closest in meaning to 'TRUCULENT':", a: "belligerent", dist: ["amiable", "conciliatory", "gentle"] },
+      { q: "Select the word closest in meaning to 'SANGUINE':", a: "optimistic", dist: ["morose", "cynical", "melancholy"] },
+      { q: "Select the word closest in meaning to 'PROFLIGATE':", a: "extravagant", dist: ["parsimonious", "frugal", "prudent"] },
+      { q: "Select the word closest in meaning to 'PELLUCID':", a: "limpid", dist: ["opaque", "turbid", "convoluted"] },
+      { q: "Select the word closest in meaning to 'QUERULOUS':", a: "peevish", dist: ["contented", "cheerful", "uncomplaining"] },
+      { q: "Select the word closest in meaning to 'VICISSITUDE':", a: "fluctuation", dist: ["stagnation", "permanence", "invariance"] },
+      { q: "Select the word closest in meaning to 'PERSPICUITY':", a: "clarity", dist: ["obscurity", "ambiguity", "vagueness"] },
+      { q: "Select the word closest in meaning to 'FRACTIOUS':", a: "irritable", dist: ["affable", "placid", "agreeable"] },
+      { q: "Select the word closest in meaning to 'PERFUNCTORY':", a: "cursory", dist: ["meticulous", "exhaustive", "detailed"] },
+      { q: "Select the word closest in meaning to 'INVECTIVE':", a: "diatribe", dist: ["panegyric", "encomium", "eulogy"] },
+      { q: "Select the word closest in meaning to 'INSOUCIANT':", a: "nonchalant", dist: ["anxious", "apprehensive", "agitated"] },
+      { q: "Select the word closest in meaning to 'GRANDILOQUENT':", a: "pompous", dist: ["unpretentious", "laconic", "simple"] },
+      { q: "Select the word closest in meaning to 'DISSEMBLE':", a: "feign", dist: ["reveal", "disclose", "manifest"] },
+      { q: "Select the word closest in meaning to 'EXCORIATE':", a: "denounce", dist: ["laud", "applaud", "commend"] },
+      { q: "Select the word closest in meaning to 'CONTUMACIOUS':", a: "insubordinate", dist: ["submissive", "dutiful", "acquiescent"] },
+      { q: "Select the word closest in meaning to 'REPROBATE':", a: "scoundrel", dist: ["paragon", "saint", "exemplar"] },
+      { q: "Select the word closest in meaning to 'VERISIMILITUDE':", a: "plausibility", dist: ["falsity", "incredibility", "artificiality"] }
+    ]
+  }
+};
+
+function selectAvatar(name, icon, element) {
+  currentAvatar = { name, icon };
+  document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+function registerUser() {
+  const name = document.getElementById('student-name-input').value.trim();
+  if (!name) { alert("Please type your name or student ID!"); return; }
+  currentUser = name;
+  let users = JSON.parse(localStorage.getItem('f6_users') || "{}");
+  if (!users[currentUser]) {
+    users[currentUser] = { avatar: currentAvatar, progress: {}, totalScore: 0 };
+  } else {
+    currentAvatar = users[currentUser].avatar;
+  }
+  localStorage.setItem('f6_users', JSON.stringify(users));
+  showDashboard();
+}
+
+function showDashboard() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-dash').classList.add('active');
+  document.getElementById('display-user-name').innerText = currentUser;
+  document.getElementById('display-companion-name').innerText = currentAvatar.name;
+  document.getElementById('equip-character').innerText = currentAvatar.icon;
+  
+  const users = JSON.parse(localStorage.getItem('f6_users') || "{}");
+  const userData = users[currentUser] || { progress: {} };
+  
+  // Clear slots before rendering newly unlocked gear
+  document.getElementById('equip-head').innerText = "";
+  document.getElementById('equip-chest').innerText = "";
+  document.getElementById('equip-left').innerText = "";
+  document.getElementById('equip-right').innerText = "";
+
+  let unlockedItems = [];
+  topics.forEach(t => {
+    let lvl = userData.progress[t] || 1;
+    for (let s = 1; s < lvl; s++) {
+      let rewardItem = rewards[t][s - 1];
+      unlockedItems.push(rewardItem.name);
+      // Equip onto avatar character sprite
+      if (rewardItem.slot === 'head') document.getElementById('equip-head').innerText = rewardItem.icon;
+      if (rewardItem.slot === 'chest') document.getElementById('equip-chest').innerText = rewardItem.icon;
+      if (rewardItem.slot === 'left') document.getElementById('equip-left').innerText = rewardItem.icon;
+      if (rewardItem.slot === 'right') document.getElementById('equip-right').innerText = rewardItem.icon;
+    }
+  });
+
+  const tagContainer = document.getElementById('wardrobe-tag-container');
+  tagContainer.innerHTML = "";
+  if (unlockedItems.length > 0) {
+    document.getElementById('display-wardrobe-summary').innerText = `Equipped (${unlockedItems.length} items):`;
+    unlockedItems.forEach(item => {
+      let tag = document.createElement('span');
+      tag.className = 'wardrobe-tag';
+      tag.innerText = "✨ " + item;
+      tagContainer.appendChild(tag);
+    });
+  } else {
+    document.getElementById('display-wardrobe-summary').innerText = "Equipped: Standard Novice Gear (Clear 18/20 in any stage to equip clothes!)";
+  }
+
+  const container = document.getElementById('topics-container');
+  container.innerHTML = "";
+  topics.forEach(t => {
+    let stage = userData.progress[t] || 1;
+    let card = document.createElement('div');
+    card.className = "topic-card";
+    card.innerHTML = `<h4>${t}</h4><p>Current: Stage ${stage} / 5</p>`;
+    card.onclick = () => startQuiz(t, stage);
+    container.appendChild(card);
+  });
+
+  updateLeaderboard();
+}
+
+function startQuiz(topic, stage) {
+  currentTopic = topic;
+  currentStage = stage;
+  currentQuestionIndex = 0;
+  currentScore = 0;
+
+  let stageBank = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : questionBank[topic][1];
+  let shuffledQuestions = shuffle([...stageBank]).slice(0, 20);
+  activeQuestions = shuffledQuestions.map(item => ({
+    text: item.q,
+    correct: item.a,
+    choices: shuffle([item.a, ...item.dist])
+  }));
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = activeQuestions[currentQuestionIndex];
+  document.getElementById('quiz-topic-title').innerText = `${currentTopic} — Stage ${currentStage} of 5`;
+  document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIndex + 1} / 20`;
+  document.getElementById('question-text').innerText = q.text;
+
+  const optionsBox = document.getElementById('options-container');
+  optionsBox.innerHTML = "";
+  q.choices.forEach(choice => {
+    let btn = document.createElement('button');
+    btn.className = "option-btn";
+    btn.innerText = choice;
+    btn.onclick = () => selectOption(choice);
+    optionsBox.appendChild(btn);
+  });
+}
+
+function selectOption(chosen) {
+  if (chosen === activeQuestions[currentQuestionIndex].correct) {
+    currentScore++;
+  }
+  currentQuestionIndex++;
+  if (currentQuestionIndex < activeQuestions.length) {
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+// Return to Main Menu mid-game
+function confirmQuitToMenu() {
+  const confirmQuit = confirm("Do you want to return to the Main Menu? Your progress in this attempt will not be saved.");
+  if (confirmQuit) {
+    returnToDashboard();
+  }
+}
+
+function finishQuiz() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-result').classList.add('active');
+  
+  let passed = currentScore >= 18;
+  document.getElementById('result-title').innerText = passed ? "🎉 Stage Cleared!" : "⚓ Try Again!";
+  document.getElementById('result-score').innerText = `Score: ${currentScore} / 20 (Requirement: 18/20)`;
+
+  let users = JSON.parse(localStorage.getItem('f6_users') || "{}");
+  if (!users[currentUser].progress[currentTopic]) users[currentUser].progress[currentTopic] = 1;
+
+  let rewardBox = document.getElementById('result-reward');
+  if (passed) {
+    if (currentStage < 5 && users[currentUser].progress[currentTopic] === currentStage) {
+      users[currentUser].progress[currentTopic]++;
+    }
+    let accessory = rewards[currentTopic][currentStage - 1];
+    rewardBox.style.display = "block";
+    rewardBox.innerHTML = `<strong>✨ Wardrobe Upgrade Unlocked:</strong><br>${accessory.icon} ${accessory.name} for ${users[currentUser].avatar.name}!`;
+  } else {
+    rewardBox.style.display = "none";
+  }
+
+  users[currentUser].totalScore = (users[currentUser].totalScore || 0) + currentScore;
+  localStorage.setItem('f6_users', JSON.stringify(users));
+
+  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
+  logs.push({
+    student: currentUser,
+    topic: currentTopic,
+    stage: currentStage,
+    score: currentScore,
+    passed: passed ? "YES" : "NO",
+    time: new Date().toLocaleString()
+  });
+  localStorage.setItem('f6_logs', JSON.stringify(logs));
+}
+
+function returnToDashboard() { showDashboard(); }
+
+function updateLeaderboard() {
+  const users = JSON.parse(localStorage.getItem('f6_users') || "{}");
+  let list = Object.keys(users).map(k => {
+    let cleared = Object.values(users[k].progress || {}).reduce((a, b) => a + (b - 1), 0);
+    return { name: k, avatar: users[k].avatar.icon, cleared: cleared, score: users[k].totalScore || 0 };
+  });
+  list.sort((a, b) => b.score - a.score);
+
+  const tbody = document.getElementById('leaderboard-body');
+  tbody.innerHTML = "";
+  list.slice(0, 10).forEach((entry, idx) => {
+    tbody.innerHTML += `<tr><td>${idx + 1}</td><td>${entry.name}</td><td>${entry.avatar}</td><td>${entry.cleared}</td><td>${entry.score}</td></tr>`;
+  });
+}
+
+function openTeacherLogin() {
+  let pin = prompt("Please enter Teacher Backdoor PIN:");
+  if (pin === TEACHER_PIN) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-admin').classList.add('active');
+    renderAdminTable();
+  } else if (pin !== null) {
+    alert("Incorrect PIN.");
+  }
+}
+
+function renderAdminTable() {
+  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
+  let tbody = document.getElementById('admin-records-body');
+  tbody.innerHTML = "";
+  logs.slice().reverse().forEach(log => {
+    tbody.innerHTML += `<tr><td>${log.student}</td><td>${log.topic}</td><td>${log.stage}</td><td>${log.score}/20</td><td>${log.passed}</td><td>${log.time}</td></tr>`;
+  });
+}
+
+function exportToExcel() {
+  let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
+  if (!logs.length) { alert("No student records available to export!"); return; }
+  let csvContent = "data:text/csv;charset=utf-8,Student Name,Grammar Topic,Stage,Score,Passed,Timestamp\\n";
+  logs.forEach(l => {
+    csvContent += `"${l.student}","${l.topic}",${l.stage},${l.score},"${l.passed}","${l.time}"\\n`;
+  });
+  let encodedUri = encodeURI(csvContent);
+  let link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `F6_Grammar_Quest_Records_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function shuffle(array) {
+  let arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+</script>
+</body>
+</html>

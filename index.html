@@ -20,25 +20,80 @@
   h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 15px; }
   .screen { display: none; }
   .active { display: block; }
+
+  /* Login / Profile Selection */
+  .profile-section { background: #E0F2F1; border: 2px solid #80CBC4; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; }
+  .profile-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+  .profile-chip { background: #FFFFFF; border: 2px solid var(--ocean-blue); border-radius: 20px; padding: 6px 14px; font-weight: bold; cursor: pointer; color: var(--deep-ocean); transition: 0.2s; }
+  .profile-chip:hover { background: var(--ocean-blue); color: #FFFFFF; }
+
   .avatar-picker { display: flex; justify-content: center; gap: 14px; margin: 15px 0; flex-wrap: wrap; }
   .avatar-card { border: 3px solid #CFD8DC; border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; font-weight: bold; }
   .avatar-card.selected { border-color: var(--coral-pink); background: #FBE9E7; transform: scale(1.05); }
-  .char-pedestal { position: relative; width: 150px; height: 190px; background: radial-gradient(circle, #FFFFFF 55%, #FFF8E1 100%); border: 3px solid #FFA000; border-radius: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255, 160, 0, 0.2); }
-  .doll-body { position: relative; width: 110px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .wear-slot { position: absolute; z-index: 10; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); transition: all 0.2s ease; user-select: none; }
-  .wear-head { top: -20px; font-size: 32px; left: 50%; transform: translateX(-50%); }
-  .wear-torso { top: 58px; font-size: 26px; left: 50%; transform: translateX(-50%); }
-  .wear-hand-left { top: 62px; left: -16px; font-size: 24px; }
-  .wear-hand-right { top: 62px; right: -16px; font-size: 24px; }
-  .doll-head { width: 60px; height: 52px; border-radius: 12px; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.12); z-index: 2; border: 2px solid rgba(0,0,0,0.15); }
+
+  /* PROPERLY ALIGNED CHARACTER DOLL & ACCESSORIES */
+  .dressing-card { background: #FFF8E1; border: 3px solid #FFE082; border-radius: 16px; padding: 16px; margin: 15px 0 20px 0; display: flex; align-items: center; gap: 24px; }
+  .char-pedestal {
+    position: relative;
+    width: 160px;
+    height: 200px;
+    background: radial-gradient(circle, #FFFFFF 55%, #FFF8E1 100%);
+    border: 3px solid #FFA000;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(255, 160, 0, 0.2);
+  }
+  .doll-body {
+    position: relative;
+    width: 110px;
+    height: 165px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Precise Wearable Item Alignment Slots */
+  .wear-slot {
+    position: absolute;
+    z-index: 10;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
+    user-select: none;
+    pointer-events: none;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wear-head { top: -22px; left: 50%; transform: translateX(-50%); font-size: 34px; }
+  .wear-torso { top: 52px; left: 50%; transform: translateX(-50%); font-size: 28px; }
+  .wear-hand-left { top: 58px; left: -22px; font-size: 26px; }
+  .wear-hand-right { top: 58px; right: -22px; font-size: 26px; }
+
+  .doll-head {
+    width: 62px; height: 54px; border-radius: 12px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12); z-index: 2; border: 2px solid rgba(0,0,0,0.15);
+  }
   .doll-face { font-size: 22px; }
-  .doll-torso { width: 52px; height: 46px; margin-top: -2px; border-radius: 6px; position: relative; display: flex; align-items: center; justify-content: center; z-index: 1; border: 2px solid rgba(0,0,0,0.15); }
-  .doll-arm-l, .doll-arm-r { position: absolute; top: 8px; width: 12px; height: 36px; border-radius: 6px; border: 2px solid rgba(0,0,0,0.15); }
+  .doll-torso {
+    width: 52px; height: 46px; margin-top: -2px; border-radius: 6px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+    z-index: 1; border: 2px solid rgba(0,0,0,0.15);
+  }
+  .doll-arm-l, .doll-arm-r {
+    position: absolute; top: 8px; width: 12px; height: 36px; border-radius: 6px;
+    border: 2px solid rgba(0,0,0,0.15);
+  }
   .doll-arm-l { left: -14px; transform: rotate(18deg); }
   .doll-arm-r { right: -14px; transform: rotate(-18deg); }
   .doll-legs { display: flex; gap: 10px; margin-top: -2px; }
   .doll-leg { width: 12px; height: 26px; border-radius: 4px; border: 2px solid rgba(0,0,0,0.15); position: relative; }
   .doll-leg::after { content: ''; position: absolute; bottom: -4px; left: -3px; width: 18px; height: 8px; background: #212121; border-radius: 4px; }
+
+  /* Character Skins */
   .skin-sponge .doll-head { background: #FFEE58; border-radius: 8px; width: 66px; height: 56px; }
   .skin-sponge .doll-torso { background: #FFFFFF; border-bottom: 12px solid #8D6E63; }
   .skin-sponge .doll-arm-l, .skin-sponge .doll-arm-r, .skin-sponge .doll-leg { background: #FFEE58; }
@@ -51,20 +106,24 @@
   .skin-squirrel .doll-head { background: #BCAAA4; border-radius: 50%; width: 56px; height: 54px; border: 3px solid #81D4FA; }
   .skin-squirrel .doll-torso { background: #ECEFF1; border-bottom: 8px solid #B0BEC5; }
   .skin-squirrel .doll-arm-l, .skin-squirrel .doll-arm-r, .skin-squirrel .doll-leg { background: #ECEFF1; }
-  .dressing-card { background: #FFF8E1; border: 3px solid #FFE082; border-radius: 16px; padding: 16px; margin: 15px 0 20px 0; display: flex; align-items: center; gap: 24px; }
+
   .wardrobe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .wardrobe-tag { background: #FFE082; color: #4E342E; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid #FFB300; }
+
   input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #78909C; border-radius: 10px; margin: 10px 0; font-weight: 600; }
   button.primary-btn { background: var(--coral-pink); color: #FFFFFF; border: none; border-radius: 10px; padding: 14px 20px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
   button.primary-btn:hover { background: #BF360C; }
   button.quit-btn { background: #78909C; color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: bold; cursor: pointer; }
   button.quit-btn:hover { background: #D32F2F; }
+
   .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 15px 0; }
   .topic-card { background: #E0F2F1; border-radius: 12px; padding: 15px; text-align: center; border: 2px solid #80CBC4; cursor: pointer; transition: 0.2s; }
   .topic-card:hover { background: #B2DFDB; transform: translateY(-2px); }
   .topic-card h4 { color: #004D40; font-size: 17px; margin-bottom: 5px; }
+
   .option-btn { display: block; width: 100%; text-align: left; margin: 10px 0; background: var(--choice-bg); border: 2px solid var(--choice-border); color: var(--dark-brown) !important; padding: 15px 18px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 700; box-shadow: 0 2px 4px rgba(62,39,35,0.12); transition: 0.2s; }
   .option-btn:hover { background: #D7CCC8; border-color: #3E2723; color: #27120B !important; transform: translateX(3px); }
+
   .review-section { display: none; margin-top: 20px; }
   .review-container { text-align: left; max-height: 400px; overflow-y: auto; border: 2px solid #CFD8DC; border-radius: 12px; background: #FAFAFA; padding: 15px; margin-top: 10px; }
   .review-item { padding: 12px; margin-bottom: 10px; border-radius: 8px; border-left: 6px solid #B0BEC5; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
@@ -72,6 +131,7 @@
   .review-item.wrong { border-left-color: #E53935; background: #FFEBEE; }
   .review-item .q-title { font-weight: bold; font-size: 15px; margin-bottom: 6px; color: #263238; }
   .review-item .ans-row { font-size: 14px; margin-top: 3px; }
+
   .hud-bar { display: flex; justify-content: space-between; align-items: center; background: #ECEFF1; padding: 10px 14px; border-radius: 10px; margin-bottom: 15px; }
   .leaderboard-table, .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
   .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 8px 10px; text-align: left; font-size: 14px; }
@@ -82,12 +142,20 @@
 </head>
 <body>
 <div class="container">
+  <!-- Screen 1: Registration / Login -->
   <div id="screen-auth" class="screen active">
     <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Score 16/20 to Advance & Unlock Answers!</p>
-    <div style="margin-top:20px;">
+    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Score 16/20 to Advance & Earn Gear!</p>
+    
+    <div id="existing-profiles-container" class="profile-section" style="display:none;">
+      <h3 style="margin-bottom:5px; font-size:15px;">👋 Login to Returning Account:</h3>
+      <div id="profile-list" class="profile-list"></div>
+    </div>
+
+    <div style="margin-top:15px;">
       <label style="font-weight:bold; color:#263238;">Enter Your Student Name or ID:</label>
       <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
+      
       <h3 style="margin-top:15px;">Choose Your Living Companion:</h3>
       <div class="avatar-picker">
         <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
@@ -103,19 +171,34 @@
           <div style="font-size:32px;">🐿️</div><div>Sandy-Squirrel</div>
         </div>
       </div>
-      <button class="primary-btn" onclick="registerUser()">Start Journey</button>
+      <button class="primary-btn" onclick="registerUser()">Start / Resume Journey</button>
     </div>
   </div>
 
+  <!-- Screen 2: Dashboard & Dressing Stage -->
   <div id="screen-dash" class="screen">
-    <h2>Welcome back, <span id="display-user-name"></span>!</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="text-align:left;">Welcome back, <span id="display-user-name"></span>!</h2>
+      <button class="quit-btn" onclick="switchUser()" style="background:#546E7A;">Switch User</button>
+    </div>
+    
     <div class="dressing-card">
       <div class="char-pedestal">
         <div id="companion-doll" class="doll-body skin-sponge">
+          <!-- Wearable Slots -->
           <span class="wear-slot wear-head" id="slot-head"></span>
-          <div class="doll-head"><div class="doll-face" id="char-face">👀</div></div>
-          <div class="doll-torso"><div class="doll-arm-l"></div><div class="doll-arm-r"></div><span class="wear-slot wear-torso" id="slot-torso"></span></div>
-          <div class="doll-legs"><div class="doll-leg"></div><div class="doll-leg"></div></div>
+          <div class="doll-head">
+            <div class="doll-face" id="char-face">👀</div>
+          </div>
+          <div class="doll-torso">
+            <div class="doll-arm-l"></div>
+            <div class="doll-arm-r"></div>
+            <span class="wear-slot wear-torso" id="slot-torso"></span>
+          </div>
+          <div class="doll-legs">
+            <div class="doll-leg"></div>
+            <div class="doll-leg"></div>
+          </div>
           <span class="wear-slot wear-hand-left" id="slot-hand-left"></span>
           <span class="wear-slot wear-hand-right" id="slot-hand-right"></span>
         </div>
@@ -126,8 +209,10 @@
         <div class="wardrobe-tags" id="wardrobe-tag-container"></div>
       </div>
     </div>
+
     <h3>Select Grammar Mission</h3>
     <div class="topic-grid" id="topics-container"></div>
+    
     <h3>🏆 Class Leaderboard</h3>
     <table class="leaderboard-table">
       <thead><tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>Total Score</th></tr></thead>
@@ -135,6 +220,7 @@
     </table>
   </div>
 
+  <!-- Screen 3: Quiz Screen -->
   <div id="screen-quiz" class="screen">
     <div class="hud-bar">
       <div>
@@ -147,6 +233,7 @@
     <div id="options-container"></div>
   </div>
 
+  <!-- Screen 4: Result Screen -->
   <div id="screen-result" class="screen" style="text-align:center;">
     <h2 id="result-title">Stage Complete!</h2>
     <p id="result-score" style="font-size:22px; font-weight:bold; margin:15px 0;"></p>
@@ -160,6 +247,7 @@
     <button class="primary-btn" style="max-width:280px; margin-top:20px;" onclick="returnToDashboard()">Return to Mission Hub</button>
   </div>
 
+  <!-- Screen 5: Teacher Admin Screen -->
   <div id="screen-admin" class="screen">
     <h2>🔒 Teacher Backdoor Management Console</h2>
     <div style="text-align:center; margin-bottom:15px;">
@@ -173,6 +261,7 @@
   </div>
 </div>
 <div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
+
 <script>
 const storage = {
   get: function(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return window['__mem_' + k] || d; } },
@@ -237,6 +326,7 @@ const rewards = {
   ]
 };
 
+// FULL UNIQUE QUESTION BANK (20 DISTINCT QUESTIONS PER STAGE, NO REPEATS)
 const questionBank = {
   "Prepositions": {
     1: [
@@ -260,9 +350,122 @@ const questionBank = {
       { q: "He has been revising continuously _____ three hours.", a: "for", dist: ["since", "during", "while"] },
       { q: "She succeeded _____ obtaining Level 5 in her mock paper.", a: "in", dist: ["on", "at", "to"] },
       { q: "Pay close attention _____ the examiner's instructions.", a: "to", dist: ["at", "for", "with"] }
+    ],
+    2: [
+      { q: "All secondary students must abide _____ the examination regulations.", a: "by", dist: ["with", "to", "on"] },
+      { q: "The candidate was accused _____ copying someone else's work.", a: "of", dist: ["with", "for", "about"] },
+      { q: "The revised syllabus caters _____ students of varying learning abilities.", a: "to", dist: ["for", "with", "at"] },
+      { q: "He refrained _____ making unverified claims during the debate.", a: "from", dist: ["to", "by", "against"] },
+      { q: "Her success can be attributed _____ systematic daily practice.", a: "to", dist: ["for", "with", "by"] },
+      { q: "The head prefect is responsible _____ coordinating the morning duty team.", a: "for", dist: ["to", "of", "in"] },
+      { q: "The committee agreed _____ the suggested timetable after deliberations.", a: "on", dist: ["with", "into", "for"] },
+      { q: "Smoking in public indoor areas is prohibited _____ law.", a: "by", dist: ["with", "from", "under"] },
+      { q: "The teacher advised us not to rely entirely _____ model answers.", a: "on", dist: ["to", "with", "at"] },
+      { q: "The youth centre caters _____ underprivileged teenagers in Kowloon.", a: "for", dist: ["with", "at", "of"] },
+      { q: "He was disqualified _____ entering the venue without his admission form.", a: "from", dist: ["to", "by", "of"] },
+      { q: "She is capable _____ handling high-pressure assessment situations.", a: "of", dist: ["to", "with", "for"] },
+      { q: "His opinion conflicts sharply _____ the statistical evidence.", a: "with", dist: ["against", "to", "at"] },
+      { q: "The prefect reminded students to adhere _____ the dress code.", a: "to", dist: ["with", "by", "on"] },
+      { q: "We must protect wildlife habitats _____ reckless commercial expansion.", a: "from", dist: ["against", "off", "away"] },
+      { q: "He takes great pride _____ his team's sportsmanship.", a: "in", dist: ["on", "with", "of"] },
+      { q: "The new youth initiative focuses _____ promoting mental well-being.", a: "on", dist: ["at", "towards", "into"] },
+      { q: "She insists _____ completing the past paper under real exam timing.", a: "on", dist: ["in", "to", "with"] },
+      { q: "The charity appeals _____ the public for generous contributions.", a: "to", dist: ["for", "at", "towards"] },
+      { q: "He was deeply absorbed _____ the English literary novel.", a: "in", dist: ["with", "at", "by"] }
+    ],
+    3: [
+      { q: "To all appearances, the candidate performed well in the speaking test.", a: "To", dist: ["By", "From", "In"] },
+      { q: "The policy was enacted _____ accordance with statutory guidelines.", a: "in", dist: ["on", "by", "at"] },
+      { q: "The youth club launched the program _____ behalf of underprivileged youth.", a: "on", dist: ["in", "at", "by"] },
+      { q: "The school building was renovated _____ expense to the alumni foundation.", a: "at", dist: ["with", "by", "for"] },
+      { q: "She remained composed _____ the face of severe adversity.", a: "in", dist: ["at", "on", "under"] },
+      { q: "The argument was dismissed as irrelevant _____ the matter in dispute.", a: "to", dist: ["with", "for", "at"] },
+      { q: "He acted _____ good faith when reporting the incident.", a: "in", dist: ["with", "on", "by"] },
+      { q: "The new regulation came into effect _____ midnight.", a: "at", dist: ["on", "in", "by"] },
+      { q: "In respect of post-secondary pathways, students have multiple choices.", a: "In", dist: ["With", "At", "On"] },
+      { q: "The speaker deviated _____ the main agenda during the Q&A session.", a: "from", dist: ["off", "out of", "away"] },
+      { q: "In light of recent findings, the council revised its recommendations.", a: "In", dist: ["Under", "With", "By"] },
+      { q: "She accomplished the synthesis task _____ great distinction.", a: "with", dist: ["in", "by", "at"] },
+      { q: "The sports venue was closed _____ account of adverse weather.", a: "on", dist: ["in", "by", "with"] },
+      { q: "The two universities collaborated _____ conjunction with the NGO.", a: "in", dist: ["on", "by", "with"] },
+      { q: "The proposal is _____ consideration by the academic review board.", a: "under", dist: ["in", "on", "at"] },
+      { q: "He accepted the verdict _____ protest, feeling treated unfairly.", a: "under", dist: ["with", "against", "in"] },
+      { q: "The debate centered _____ whether AI benefits secondary learning.", a: "on", dist: ["in", "with", "at"] },
+      { q: "She persevered _____ spite of physical exhaustion.", a: "in", dist: ["at", "with", "by"] },
+      { q: "The committee is _____ possession of confidential test data.", a: "in", dist: ["at", "with", "under"] },
+      { q: "His comments were interpreted as derogatory _____ nature.", a: "in", dist: ["by", "with", "of"] }
+    ],
+    4: [
+      { q: "The candidate's rationale is contingent _____ survey validation.", a: "upon", dist: ["with", "to", "at"] },
+      { q: "Public sentiment is largely incompatible _____ the proposed tariff hike.", a: "with", dist: ["to", "against", "for"] },
+      { q: "The educational reform culminated _____ a widespread revision of criteria.", a: "in", dist: ["to", "at", "into"] },
+      { q: "His critique is devoid _____ substantiated factual references.", a: "of", dist: ["from", "off", "with"] },
+      { q: "The author expresses deep indignation _____ socio-economic disparity.", a: "at", dist: ["for", "towards", "on"] },
+      { q: "The university degree is synonymous _____ prestige and academic rigour.", a: "with", dist: ["to", "for", "as"] },
+      { q: "The council must reconcile economic growth _____ conservation needs.", a: "with", dist: ["to", "against", "along"] },
+      { q: "The scholar demonstrated an aversion _____ sensationalist headlines.", a: "to", dist: ["against", "with", "from"] },
+      { q: "The candidate was oblivious _____ the strict time constraint.", a: "to", dist: ["of", "at", "about"] },
+      { q: "His research paper impinges _____ sensitive intellectual property issues.", a: "on", dist: ["to", "at", "into"] },
+      { q: "The committee voiced reservations _____ the proposed curriculum change.", a: "about", dist: ["to", "of", "with"] },
+      { q: "She is thoroughly conversant _____ local environmental legislation.", a: "with", dist: ["in", "about", "at"] },
+      { q: "The findings are commensurate _____ the extensive resources allocated.", a: "with", dist: ["to", "for", "in"] },
+      { q: "Such actions are derogatory _____ professional ethical standards.", a: "to", dist: ["with", "for", "at"] },
+      { q: "The new scheme is exempt _____ standard revenue duties.", a: "from", dist: ["of", "off", "with"] },
+      { q: "The panel was unanimous _____ endorsing the youth development initiative.", a: "in", dist: ["on", "with", "to"] },
+      { q: "The government should desist _____ implementing unfeasible curbs.", a: "from", dist: ["to", "off", "against"] },
+      { q: "The conclusion is derived _____ extensive qualitative field surveys.", a: "from", dist: ["by", "out", "of"] },
+      { q: "He remains indifferent _____ peer critique concerning his thesis.", a: "to", dist: ["with", "against", "from"] },
+      { q: "Her remarks were misconstrued as detrimental _____ team morale.", a: "to", dist: ["for", "against", "with"] }
+    ],
+    5: [
+      { q: "Far from being detrimental, the measure is conducive _____ sustainable youth growth.", a: "to", dist: ["for", "with", "towards"] },
+      { q: "He refused to acquiesce _____ the committee's controversial verdict.", a: "in", dist: ["to", "with", "on"] },
+      { q: "The ambassador spoke at the behest _____ the regional educational league.", a: "of", dist: ["to", "with", "for"] },
+      { q: "The school's history is inextricably bound up _____ the territory's evolution.", a: "with", dist: ["to", "in", "by"] },
+      { q: "The survey evidence does not corroborate _____ the journalist's claim.", a: "with", dist: ["to", "on", "at"] },
+      { q: "The politician's evasive statement bordered _____ blatant deception.", a: "on", dist: ["to", "with", "at"] },
+      { q: "Such arbitrary decisions run counter _____ fundamental fairness.", a: "to", dist: ["against", "with", "for"] },
+      { q: "He held fast to his beliefs at variance _____ orthodox doctrine.", a: "with", dist: ["to", "against", "from"] },
+      { q: "Her academic thesis is predicated _____ extensive longitudinal data.", a: "on", dist: ["to", "in", "with"] },
+      { q: "The administration acted in collusion _____ private developers.", a: "with", dist: ["by", "under", "to"] },
+      { q: "The candidate was exonerated _____ all allegations of misconduct.", a: "from", dist: ["of", "off", "with"] },
+      { q: "The initiative was launched with an eye _____ bridging the digital divide.", a: "to", dist: ["for", "at", "on"] },
+      { q: "The treaty was declared null and void by virtue _____ clause twelve.", a: "of", dist: ["with", "for", "in"] },
+      { q: "They remained steadfast _____ adversity, ensuring complete syllabus mastery.", a: "amid", dist: ["between", "within", "towards"] },
+      { q: "The newly instituted sanctions are aimed _____ deterring malpractice.", a: "at", dist: ["for", "to", "on"] },
+      { q: "Her personal statement was framed in terms _____ community empowerment.", a: "of", dist: ["with", "for", "by"] },
+      { q: "The researcher took umbrage _____ the reviewer's condescending tone.", a: "at", dist: ["with", "to", "for"] },
+      { q: "He resigned in protest _____ the curtailment of student rights.", a: "against", dist: ["to", "with", "at"] },
+      { q: "The candidate's demeanor was fraught _____ profound apprehension.", a: "with", dist: ["by", "of", "in"] },
+      { q: "His conclusions are tantamount _____ an admission of analytical error.", a: "to", dist: ["with", "as", "against"] }
     ]
   }
 };
+
+// INITIALIZATION & USER RESUME SYSTEM
+window.onload = function() {
+  loadProfilesList();
+};
+
+function loadProfilesList() {
+  const users = storage.get("registered_user_list", []);
+  const container = document.getElementById("existing-profiles-container");
+  const list = document.getElementById("profile-list");
+  list.innerHTML = "";
+
+  if (users.length > 0) {
+    container.style.display = "block";
+    users.forEach(u => {
+      const chip = document.createElement("span");
+      chip.className = "profile-chip";
+      chip.innerText = u;
+      chip.onclick = () => loginAsUser(u);
+      list.appendChild(chip);
+    });
+  } else {
+    container.style.display = "none";
+  }
+}
 
 function selectAvatar(name, skin, face, element) {
   currentAvatar = { name, skin, face };
@@ -272,11 +475,31 @@ function selectAvatar(name, skin, face, element) {
 
 function registerUser() {
   const nameInput = document.getElementById("student-name-input").value.trim();
-  if (!nameInput) return alert("Please enter your name!");
+  if (!nameInput) return alert("Please enter your name or student ID!");
+  
+  let users = storage.get("registered_user_list", []);
+  if (!users.includes(nameInput)) {
+    users.push(nameInput);
+    storage.set("registered_user_list", users);
+  }
+
   currentUser = nameInput;
   storage.set("user_avatar_" + currentUser, currentAvatar);
   updateDashboard();
   showScreen("screen-dash");
+}
+
+function loginAsUser(username) {
+  currentUser = username;
+  currentAvatar = storage.get("user_avatar_" + currentUser, currentAvatar);
+  updateDashboard();
+  showScreen("screen-dash");
+}
+
+function switchUser() {
+  currentUser = null;
+  loadProfilesList();
+  showScreen("screen-auth");
 }
 
 function updateDashboard() {
@@ -293,10 +516,12 @@ function updateDashboard() {
 }
 
 function updateWardrobeDisplay(gear) {
+  // Clear all slots first
   document.getElementById("slot-head").innerText = "";
   document.getElementById("slot-torso").innerText = "";
   document.getElementById("slot-hand-left").innerText = "";
   document.getElementById("slot-hand-right").innerText = "";
+
   const container = document.getElementById("wardrobe-tag-container");
   container.innerHTML = "";
 
@@ -305,10 +530,13 @@ function updateWardrobeDisplay(gear) {
     return;
   }
 
-  document.getElementById("display-wardrobe-summary").innerText = `Unlocked Gear (${gear.length} items):`;
+  document.getElementById("display-wardrobe-summary").innerText = `Unlocked & Equipped Gear (${gear.length} items):`;
+  
+  // Render wearable items properly into designated body slots
   gear.forEach(item => {
     const slotEl = document.getElementById("slot-" + item.slot);
-    if (slotEl) slotEl.innerText = item.icon;
+    if (slotEl) slotEl.innerText = item.icon; // Equips item to character doll
+
     const tag = document.createElement("span");
     tag.className = "wardrobe-tag";
     tag.innerText = item.icon + " " + item.name;
@@ -329,7 +557,7 @@ function renderTopicGrid() {
     card.innerHTML = `
       <h4>${topic}</h4>
       <p style="font-size:13px; color:#00695C; font-weight:bold;">Cleared: Stage ${stageCleared} / 5</p>
-      <p style="font-size:12px; color:#546E7A; margin-top:4px;">Next Stage: Stage ${Math.min(stageCleared + 1, 5)}</p>
+      <p style="font-size:12px; color:#546E7A; margin-top:4px;">Next Level: Stage ${Math.min(stageCleared + 1, 5)}</p>
     `;
     grid.appendChild(card);
   });
@@ -342,6 +570,7 @@ function startMission(topic, stage) {
   currentScore = 0;
   userAnswersLog = [];
 
+  // Load distinct stage questions without duplicates
   const rawQuestions = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : questionBank["Prepositions"][1];
   activeQuestions = [...rawQuestions].sort(() => Math.random() - 0.5);
   showScreen("screen-quiz");
@@ -385,7 +614,7 @@ function finishStage() {
   const passed = currentScore >= PASSING_THRESHOLD;
   const reviewSection = document.getElementById("review-section");
 
-  // Save Record
+  // Save attempt record
   const records = storage.get("admin_quiz_records", []);
   records.push({
     student: currentUser,
@@ -414,7 +643,7 @@ function finishStage() {
         }
       }
     }
-    // Show Answer Key Review ONLY if cleared
+    // Show Answer Key Review ONLY when stage is cleared (Score >= 16)
     reviewSection.style.display = "block";
     renderReviewBox();
   } else {
@@ -428,7 +657,7 @@ function finishStage() {
   const rewardBox = document.getElementById("result-reward");
   if (passed && newRewardEarned) {
     rewardBox.style.display = "block";
-    rewardBox.innerHTML = `<h3>🎁 New Gear Unlocked!</h3><p style="font-size:18px; font-weight:bold; color:#E65100;">${newRewardEarned.icon} ${newRewardEarned.name}</p>`;
+    rewardBox.innerHTML = `<h3>🎁 New Gear Unlocked & Equipped!</h3><p style="font-size:18px; font-weight:bold; color:#E65100;">${newRewardEarned.icon} ${newRewardEarned.name}</p>`;
   } else if (!passed) {
     rewardBox.style.display = "block";
     rewardBox.innerHTML = `<p style="color:#C62828; font-weight:bold;">You need at least 16/20 to clear this stage and unlock the answer key. Try again!</p>`;
@@ -456,7 +685,7 @@ function renderReviewBox() {
   });
 }
 
-function confirmQuitToMenu() { if (confirm("Quit game?")) returnToDashboard(); }
+function confirmQuitToMenu() { if (confirm("Quit current quiz and return to menu?")) returnToDashboard(); }
 function returnToDashboard() { updateDashboard(); showScreen("screen-dash"); }
 function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 

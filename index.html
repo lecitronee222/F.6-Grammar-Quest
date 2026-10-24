@@ -13,7 +13,7 @@
     --coral-pink: #FF7043;
     --card-white: #FFFFFF;
     --text-dark: #37474F;
-    --success-green: #66BB6A;
+    --success-green: #4CAF50;
   }
   * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
   body { background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 100%); color: var(--text-dark); min-height: 100vh; padding: 20px; }
@@ -155,44 +155,150 @@ const rewards = {
   "Synonyms": ["Pocket Glossary", "Word Pouch", "Chameleon Scarf", "Polyglot Tunic", "Iridescent Wings"]
 };
 
-// Scalable question bank template (20 questions per stage)
+// 20 Non-Repeating Questions per category for Stage 1
 const questionBank = {
   "Prepositions": {
     1: [
-      { q: "She has been studying in the library _____ 9 a.m.", a: "since", dist: ["for", "at", "during"] },
-      { q: "The concert will begin _____ Saturday afternoon.", a: "on", dist: ["in", "at", "by"] },
-      { q: "He placed his dictionary _____ the desk.", a: "on", dist: ["into", "onto", "with"] },
-      { q: "We walked _____ the corridor to reach the exam hall.", a: "through", dist: ["across", "between", "over"] }
+      { q: "She has lived in Hong Kong _____ 2018.", a: "since", dist: ["for", "in", "during"] },
+      { q: "The meeting is scheduled to begin _____ 9:30 a.m.", a: "at", dist: ["on", "in", "by"] },
+      { q: "Our DSE exam will be held _____ April.", a: "in", dist: ["on", "at", "to"] },
+      { q: "He placed his mobile phone _____ the desk.", a: "on", dist: ["in", "at", "into"] },
+      { q: "We walked _____ the tunnel to escape the rain.", a: "through", dist: ["across", "between", "over"] },
+      { q: "The teacher divided the prize money _____ the two winners.", a: "between", dist: ["among", "along", "within"] },
+      { q: "She shared her sweets _____ all her classmates.", a: "among", dist: ["between", "with", "into"] },
+      { q: "I am waiting _____ the bus at the bus stop.", a: "for", dist: ["to", "at", "of"] },
+      { q: "He jumped _____ the swimming pool to cool off.", a: "into", dist: ["onto", "in", "to"] },
+      { q: "The library is located _____ the second floor.", a: "on", dist: ["at", "in", "by"] },
+      { q: "She apologized _____ being late to assembly.", a: "for", dist: ["of", "about", "with"] },
+      { q: "He is interested _____ learning graphic design.", a: "in", dist: ["on", "at", "for"] },
+      { q: "Are you afraid _____ speaking in public?", a: "of", dist: ["with", "for", "at"] },
+      { q: "The cat was hiding _____ the wooden chair.", a: "under", dist: ["between", "through", "inside of"] },
+      { q: "They travelled to Tokyo _____ plane.", a: "by", dist: ["with", "on", "in"] },
+      { q: "She congratulated him _____ his outstanding results.", a: "on", dist: ["for", "about", "with"] },
+      { q: "The shop is closed _____ Sundays.", a: "on", dist: ["in", "at", "by"] },
+      { q: "She has been waiting here _____ two hours.", a: "for", dist: ["since", "during", "while"] },
+      { q: "He succeeded _____ passing the entrance exam.", a: "in", dist: ["on", "at", "to"] },
+      { q: "Listen carefully _____ what the teacher explains.", a: "to", dist: ["at", "for", "with"] }
     ]
   },
   "Word Formation": {
     1: [
       { q: "Her explanation was completely _____ (logic).", a: "logical", dist: ["logically", "logician", "logicize"] },
-      { q: "The company values hard work and _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] }
+      { q: "The company values employee _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] },
+      { q: "Regular exercise is _____ (benefit) to health.", a: "beneficial", dist: ["beneficiary", "beneficially", "benefit"] },
+      { q: "The children played _____ (happy) in the park.", a: "happily", dist: ["happiness", "happy", "unhappy"] },
+      { q: "She made a quick _____ (decide) under pressure.", a: "decision", dist: ["decisive", "decisiveness", "deciding"] },
+      { q: "Air pollution is a major _____ (environment) problem.", a: "environmental", dist: ["environmentally", "environmentalist", "environments"] },
+      { q: "He accepted full _____ (responsible) for the mistake.", a: "responsibility", dist: ["responsible", "responsibly", "irresponsible"] },
+      { q: "The magician gave an _____ (amaze) performance.", a: "amazing", dist: ["amazingly", "amazed", "amazement"] },
+      { q: "We need to find an effective _____ (solve) to this issue.", a: "solution", dist: ["solvable", "solver", "solving"] },
+      { q: "She spoke with great _____ (confident) during the interview.", a: "confidence", dist: ["confident", "confidently", "confiding"] },
+      { q: "Drinking enough water is _____ (necessity) for survival.", a: "necessary", dist: ["necessarily", "necessitate", "necessities"] },
+      { q: "He showed great _____ (kind) to the lost stray puppy.", a: "kindness", dist: ["kindly", "unkind", "kinder"] },
+      { q: "The weather today is quite _____ (predict).", a: "predictable", dist: ["prediction", "predictably", "predictor"] },
+      { q: "They celebrated their team's _____ (victor).", a: "victory", dist: ["victorious", "victoriously", "victim"] },
+      { q: "She works as a _____ (profession) translator.", a: "professional", dist: ["profession", "professionally", "profess"] },
+      { q: "Please handle this parcel with _____ (careful).", a: "care", dist: ["careless", "carefully", "caringly"] },
+      { q: "His sudden _____ (appear) surprised everyone.", a: "appearance", dist: ["appearing", "apparent", "apparently"] },
+      { q: "The lecture was informative and _____ (use).", a: "useful", dist: ["useless", "usefully", "usability"] },
+      { q: "He gained widespread _____ (popular) among his peers.", a: "popularity", dist: ["popularly", "popularize", "popular"] },
+      { q: "The school organized an _____ (educate) field trip.", a: "educational", dist: ["education", "educationally", "educator"] }
     ]
   },
   "Tenses": {
     1: [
       { q: "By the time the bell rang, the students _____ writing.", a: "had finished", dist: ["finish", "have finished", "will finish"] },
-      { q: "Listen! The principal _____ to the assembly.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] }
+      { q: "Listen! The principal _____ to the assembly right now.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] },
+      { q: "They _____ in Sha Tin since they arrived in Hong Kong.", a: "have lived", dist: ["live", "lived", "are living"] },
+      { q: "Water _____ at 100 degrees Celsius under normal pressure.", a: "boils", dist: ["is boiling", "boiled", "will boil"] },
+      { q: "Yesterday, she _____ her English revision notes on the bus.", a: "lost", dist: ["loses", "has lost", "was losing"] },
+      { q: "If it rains tomorrow, we _____ the sports carnival.", a: "will cancel", dist: ["cancelled", "would cancel", "cancel"] },
+      { q: "While he _____ home, he ran into his primary school tutor.", a: "was walking", dist: ["walks", "has walked", "walked"] },
+      { q: "I _____ the DSE past paper twice already this week.", a: "have completed", dist: ["complete", "completed", "had completed"] },
+      { q: "Next Monday, our school _____ its annual sports day.", a: "will hold", dist: ["held", "has held", "holds"] },
+      { q: "He usually _____ up at 6:30 a.m. on school days.", a: "wakes", dist: ["is waking", "woke", "has woken"] },
+      { q: "When I arrived at the cinema, the movie _____ already.", a: "had started", dist: ["starts", "has started", "will start"] },
+      { q: "Right now, my classmates _____ for the mock examinations.", a: "are preparing", dist: ["prepare", "prepared", "have prepared"] },
+      { q: "She _____ lunch before she left for tutoring.", a: "had eaten", dist: ["eats", "is eating", "has eaten"] },
+      { q: "The sun _____ in the east every morning.", a: "rises", dist: ["is rising", "rose", "has risen"] },
+      { q: "Last night, they _____ until midnight to finish the project.", a: "worked", dist: ["work", "are working", "have worked"] },
+      { q: "I promise I _____ you back as soon as I get home.", a: "will call", dist: ["call", "called", "have called"] },
+      { q: "Look! The bus _____ around the corner.", a: "is coming", dist: ["comes", "came", "has come"] },
+      { q: "She _____ in three speech festivals so far.", a: "has participated", dist: ["participates", "participated", "was participating"] },
+      { q: "When the phone rang, I _____ a shower.", a: "was taking", dist: ["took", "take", "am taking"] },
+      { q: "Every Saturday, he _____ football with his neighbours.", a: "plays", dist: ["is playing", "played", "has played"] }
     ]
   },
   "Articles": {
     1: [
-      { q: "Honesty is considered _____ virtue.", a: "a", dist: ["an", "the", "no article"] },
-      { q: "She plays _____ piano exceptionally well.", a: "the", dist: ["a", "an", "no article"] }
+      { q: "Honesty is considered _____ noble virtue.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "She plays _____ piano exceptionally well.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He wants to become _____ astronaut in the future.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "We visited _____ Hong Kong Museum of Art last weekend.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "Breakfast is _____ most important meal of the day.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "She bought _____ umbrella because of the sudden downpour.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Do you have _____ extra pen I could borrow?", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Mount Everest is _____ highest mountain in the world.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He drank a cold glass of _____ fresh milk.", a: "no article", dist: ["a", "an", "the"] },
+      { q: "They travelled across _____ United States last summer.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "She is _____ honest and hardworking student.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "I watched _____ interesting documentary on climate change.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "Can you turn off _____ light when you leave the room?", a: "the", dist: ["a", "an", "no article"] },
+      { q: "He loves playing _____ basketball after school.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "We had lunch at _____ Italian restaurant near our campus.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "The Earth moves around _____ Sun.", a: "the", dist: ["a", "an", "no article"] },
+      { q: "It took him nearly _____ hour to complete the essay.", a: "an", dist: ["a", "the", "no article"] },
+      { q: "She adopted _____ puppy from the animal shelter.", a: "a", dist: ["an", "the", "no article"] },
+      { q: "They go to _____ church every Sunday morning.", a: "no article", dist: ["the", "a", "an"] },
+      { q: "He is _____ European citizen residing in Asia.", a: "a", dist: ["an", "the", "no article"] }
     ]
   },
   "Plurals": {
     1: [
-      { q: "A group of _____ (crisis) struck the financial market.", a: "crises", dist: ["crisises", "crisi", "crisis"] },
-      { q: "The scientist examined multiple natural _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] }
+      { q: "A series of economic _____ (crisis) shocked the market.", a: "crises", dist: ["crisises", "crisi", "crisis"] },
+      { q: "Scientists observed multiple natural _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] },
+      { q: "The dentist examined all the patient's _____ (tooth).", a: "teeth", dist: ["tooths", "toothes", "teethes"] },
+      { q: "Several _____ (child) were playing on the lawn.", a: "children", dist: ["childs", "childrens", "childes"] },
+      { q: "We need to chop three large _____ (potato) for the soup.", a: "potatoes", dist: ["potatos", "potatoies", "potato"] },
+      { q: "The chef sharpened all the kitchen _____ (knife).", a: "knives", dist: ["knifes", "knifees", "knife"] },
+      { q: "A flock of _____ (goose) flew over Victoria Harbour.", a: "geese", dist: ["gooses", "geeses", "goosies"] },
+      { q: "The autumn winds shook dry _____ (leaf) from the trees.", a: "leaves", dist: ["leafs", "leafes", "leavies"] },
+      { q: "The farmers sheared wool from twenty _____ (sheep).", a: "sheep", dist: ["sheeps", "sheepes", "sheepies"] },
+      { q: "The research team gathered extensive statistical _____ (datum).", a: "data", dist: ["datums", "datas", "datae"] },
+      { q: "Two _____ (policeman) were patrolling the subway station.", a: "policemen", dist: ["policemans", "policemenes", "policeman"] },
+      { q: "The room was infested with tiny _____ (mouse).", a: "mice", dist: ["mouses", "mices", "mouse"] },
+      { q: "Both _____ (country) signed the peace treaty.", a: "countries", dist: ["countrys", "countries'", "countryes"] },
+      { q: "She bought two fresh _____ (loaf) of artisan bread.", a: "loaves", dist: ["loafs", "loafes", "loave"] },
+      { q: "Different _____ (species) of coral thrive in warm reefs.", a: "species", dist: ["specieses", "specie", "specis"] },
+      { q: "Both _____ (half) of the class agreed with the proposal.", a: "halves", dist: ["halfs", "halfes", "halve"] },
+      { q: "The pack of _____ (wolf) hunted together in winter.", a: "wolves", dist: ["wolfs", "wolfes", "wolve"] },
+      { q: "The students placed their notebooks on the _____ (shelf).", a: "shelves", dist: ["shelfs", "shelfes", "shelve"] },
+      { q: "He wore smart leather shoes on both _____ (foot).", a: "feet", dist: ["foots", "feets", "foot"] },
+      { q: "Many young _____ (woman) participated in the marathon.", a: "women", dist: ["womans", "womens", "woman"] }
     ]
   },
   "Synonyms": {
     1: [
       { q: "Select the word closest in meaning to 'ABUNDANT':", a: "plentiful", dist: ["scarce", "fragile", "modest"] },
-      { q: "Select the word closest in meaning to 'COMMENCE':", a: "initiate", dist: ["terminate", "hesitate", "postpone"] }
+      { q: "Select the word closest in meaning to 'COMMENCE':", a: "initiate", dist: ["terminate", "hesitate", "postpone"] },
+      { q: "Select the word closest in meaning to 'RELUCTANT':", a: "unwilling", dist: ["eager", "confident", "cheerful"] },
+      { q: "Select the word closest in meaning to 'HAZARDOUS':", a: "dangerous", dist: ["convenient", "beneficial", "harmless"] },
+      { q: "Select the word closest in meaning to 'ACCURATE':", a: "precise", dist: ["vague", "faulty", "approximate"] },
+      { q: "Select the word closest in meaning to 'DIMINISH':", a: "decrease", dist: ["expand", "amplify", "stabilize"] },
+      { q: "Select the word closest in meaning to 'CONCEAL':", a: "hide", dist: ["reveal", "display", "announce"] },
+      { q: "Select the word closest in meaning to 'PROSPEROUS':", a: "thriving", dist: ["struggling", "penniless", "fragile"] },
+      { q: "Select the word closest in meaning to 'OBVIOUS':", a: "evident", dist: ["hidden", "subtle", "complex"] },
+      { q: "Select the word closest in meaning to 'VITAL':", a: "crucial", dist: ["optional", "minor", "trivial"] },
+      { q: "Select the word closest in meaning to 'AUTHENTIC':", a: "genuine", dist: ["fake", "counterfeit", "artificial"] },
+      { q: "Select the word closest in meaning to 'TRANQUIL':", a: "peaceful", dist: ["chaotic", "turbulent", "noisy"] },
+      { q: "Select the word closest in meaning to 'IMPEDE':", a: "hinder", dist: ["assist", "accelerate", "promote"] },
+      { q: "Select the word closest in meaning to 'RIGID':", a: "stiff", dist: ["flexible", "elastic", "adaptable"] },
+      { q: "Select the word closest in meaning to 'FEEBLE':", a: "weak", dist: ["muscular", "sturdy", "robust"] },
+      { q: "Select the word closest in meaning to 'APPARENT':", a: "clear", dist: ["vague", "unseen", "doubtful"] },
+      { q: "Select the word closest in meaning to 'BENEFICIAL':", a: "advantageous", dist: ["harmful", "detrimental", "useless"] },
+      { q: "Select the word closest in meaning to 'CANDID':", a: "frank", dist: ["deceitful", "reserved", "sarcastic"] },
+      { q: "Select the word closest in meaning to 'DWINDLE':", a: "shrink", dist: ["increase", "multiply", "expand"] },
+      { q: "Select the word closest in meaning to 'EXHAUSTED':", a: "fatigued", dist: ["energized", "refreshed", "spirited"] }
     ]
   }
 };
@@ -254,23 +360,21 @@ function startQuiz(topic, stage) {
   currentQuestionIndex = 0;
   currentScore = 0;
 
-  // Retrieve or generate 20 randomized questions
-  let baseList = (questionBank[topic] && questionBank[topic][stage]) || [
-    { q: `Sample Stage ${stage} question for ${topic} #1`, a: "Correct Answer", dist: ["Distractor A", "Distractor B", "Distractor C"] },
-    { q: `Sample Stage ${stage} question for ${topic} #2`, a: "Correct Answer", dist: ["Distractor A", "Distractor B", "Distractor C"] }
-  ];
+  // Retrieve 20 non-repeating items from question bank
+  let stageBank = (questionBank[topic] && questionBank[topic][stage]) ? questionBank[topic][stage] : [];
   
-  activeQuestions = [];
-  for (let i = 0; i < 20; i++) {
-    let qTemplate = baseList[i % baseList.length];
-    let shuffledChoices = shuffle([qTemplate.a, ...qTemplate.dist]);
-    activeQuestions.push({
-      text: `${qTemplate.q} (Item ${i + 1})`,
-      correct: qTemplate.a,
-      choices: shuffledChoices
-    });
+  // Safety fallback if higher stage has not yet been populated
+  if (stageBank.length < 20) {
+    stageBank = questionBank[topic][1];
   }
-  activeQuestions = shuffle(activeQuestions);
+
+  // Shuffle question sequence and randomise choices
+  let shuffledQuestions = shuffle(stageBank).slice(0, 20);
+  activeQuestions = shuffledQuestions.map(item => ({
+    text: item.q,
+    correct: item.a,
+    choices: shuffle([item.a, ...item.dist])
+  }));
 
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-quiz').classList.add('active');
@@ -332,7 +436,6 @@ function finishQuiz() {
   users[currentUser].totalScore = (users[currentUser].totalScore || 0) + currentScore;
   localStorage.setItem('f6_users', JSON.stringify(users));
 
-  // Save log for teacher backdoor
   let logs = JSON.parse(localStorage.getItem('f6_logs') || "[]");
   logs.push({
     student: currentUser,

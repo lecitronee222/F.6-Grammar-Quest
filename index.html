@@ -16,12 +16,7 @@
   }
   * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
   body { background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 100%); color: #212121; min-height: 100vh; padding: 15px; }
-  .container { max-width: 880px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 25px; border: 4px solid var(--sponge-yellow); position: relative; }
-  
-  .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #B2DFDB; padding-bottom: 10px; }
-  .teacher-access-btn { background: #455A64; color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; transition: 0.2s; }
-  .teacher-access-btn:hover { background: #263238; }
-
+  .container { max-width: 880px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 25px; border: 4px solid var(--sponge-yellow); }
   h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 15px; }
   .screen { display: none; }
   .active { display: block; }
@@ -60,6 +55,7 @@
     align-items: center;
     justify-content: center;
   }
+  /* Precise Wearable Item Alignment Slots */
   .wear-slot {
     position: absolute;
     z-index: 10;
@@ -140,23 +136,19 @@
   .leaderboard-table, .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
   .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 8px 10px; text-align: left; font-size: 14px; }
   .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: #FFFFFF; }
+  .teacher-btn { position: fixed; bottom: 20px; right: 20px; background: #455A64; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; border: 2px solid #FFFFFF; color: #FFFFFF; }
   .badge-display { background: #FFF3E0; border: 2px dashed #FF9800; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header-nav">
-    <div style="font-weight:bold; color:var(--deep-ocean); font-size:18px;">🌴 Grammar Quest: F.6 Edition</div>
-    <button class="teacher-access-btn" onclick="openTeacherLogin()">🔑 Teacher Console</button>
-  </div>
-
   <!-- Screen 1: Registration / Login -->
   <div id="screen-auth" class="screen active">
-    <h1>Welcome to Bikini Bottom Academy! 🍍</h1>
-    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 HKDSE English Booster — 20 Unique Questions per Stage (Pass: 16/20)</p>
+    <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
+    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Score 16/20 to Advance & Earn Gear!</p>
     
     <div id="existing-profiles-container" class="profile-section" style="display:none;">
-      <h3 style="margin-bottom:5px; font-size:15px;">👋 Select Returning Student Account:</h3>
+      <h3 style="margin-bottom:5px; font-size:15px;">👋 Select Returning Account to Login:</h3>
       <div id="profile-list" class="profile-list"></div>
     </div>
 
@@ -164,7 +156,7 @@
       <label style="font-weight:bold; color:#263238;">Enter New Student Name or ID:</label>
       <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
       
-      <h3 style="margin-top:15px;">Choose Your Companion:</h3>
+      <h3 style="margin-top:15px;">Choose Your Living Companion:</h3>
       <div class="avatar-picker">
         <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
           <div style="font-size:32px;">🧽</div><div>Sponge-Lad</div>
@@ -179,7 +171,7 @@
           <div style="font-size:32px;">🐿️</div><div>Sandy-Squirrel</div>
         </div>
       </div>
-      <button class="primary-btn" onclick="registerUser()">Start / Resume Quest</button>
+      <button class="primary-btn" onclick="registerUser()">Start / Resume Journey</button>
     </div>
   </div>
 
@@ -207,7 +199,7 @@
       </div>
       <div style="flex-grow:1;">
         <h3 style="text-align:left; color:#E65100; margin-bottom:4px;" id="display-companion-name">Sponge-Lad</h3>
-        <p style="font-size:14px; color:#4E342E; font-weight:600;" id="display-wardrobe-summary">Equipped Gear:</p>
+        <p style="font-size:14px; color:#4E342E; font-weight:600;" id="display-wardrobe-summary">Currently Wearing: Standard Academy Uniform</p>
         <div class="wardrobe-tags" id="wardrobe-tag-container"></div>
       </div>
     </div>
@@ -217,7 +209,7 @@
     
     <h3>🏆 Class Leaderboard</h3>
     <table class="leaderboard-table">
-      <thead><tr><th>Rank</th><th>Student</th><th>Companion</th><th>Stages Cleared</th><th>Total Score</th></tr></thead>
+      <thead><tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>Total Score</th></tr></thead>
       <tbody id="leaderboard-body"></tbody>
     </table>
   </div>
@@ -242,11 +234,11 @@
     <div id="result-reward" class="badge-display" style="display:none;"></div>
     
     <div id="review-section" class="review-section">
-      <h3 style="text-align:left; color:#004D40;">📋 Stage Answer Key & Review:</h3>
+      <h3 style="text-align:left; color:#004D40;">📋 Stage Question Review & Answer Key:</h3>
       <div class="review-container" id="review-container"></div>
     </div>
 
-    <button class="primary-btn" style="max-width:280px; margin-top:20px;" onclick="returnToDashboard()">Return to Dashboard</button>
+    <button class="primary-btn" style="max-width:280px; margin-top:20px;" onclick="returnToDashboard()">Return to Mission Hub</button>
   </div>
 
   <!-- Screen 5: Teacher Admin Screen -->
@@ -263,6 +255,7 @@
     </table>
   </div>
 </div>
+<div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
 
 <script>
 const storage = {
@@ -328,7 +321,7 @@ const rewards = {
   ]
 };
 
-// 100% UNIQUE QUESTION BANK - 20 QUESTIONS PER STAGE PER TOPIC (600 UNIQUE QUESTIONS)
+// FULL QUESTION BANK - EXACTLY 20 UNIQUE QUESTIONS PER STAGE PER TOPIC
 const questionBank = {
   "Prepositions": {
     1: [
@@ -1135,7 +1128,6 @@ function startMission(topic, stage) {
     return;
   }
 
-  // Shuffle questions randomly
   activeQuestions = [...rawQuestions].sort(() => Math.random() - 0.5);
   showScreen("screen-quiz");
   loadQuestion();
@@ -1147,7 +1139,6 @@ function loadQuestion() {
   document.getElementById("quiz-progress").innerText = `Question ${currentQuestionIndex + 1} / ${activeQuestions.length}`;
   document.getElementById("question-text").innerText = qObj.q;
 
-  // Shuffle multiple choice options randomly on every attempt
   const choices = [qObj.a, ...qObj.dist].sort(() => Math.random() - 0.5);
   const optContainer = document.getElementById("options-container");
   optContainer.innerHTML = "";
@@ -1207,11 +1198,11 @@ function finishStage() {
         }
       }
     }
-    // Show Answer Review ONLY if score >= 16/20
+    // Reveal answers ONLY if score >= 16
     reviewSection.style.display = "block";
     renderReviewBox();
   } else {
-    // Hide Answer Review if failed
+    // Hide answers if failed
     reviewSection.style.display = "none";
   }
 

@@ -1,886 +1,1061 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grammar Quest: F.6 Edition</title>
-<style>
-  :root {
-    --sponge-yellow: #FBC02D;
-    --deep-ocean: #004D40;
-    --ocean-blue: #00838F;
-    --coral-pink: #E64A19;
-    --dark-brown: #3E2723;
-    --choice-bg: #EFEBE9;
-    --choice-border: #6D4C41;
-  }
-  * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
-  body { background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 100%); color: #212121; min-height: 100vh; padding: 15px; }
-  .container { max-width: 880px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); padding: 25px; border: 4px solid var(--sponge-yellow); }
-  h1, h2, h3 { color: var(--deep-ocean); text-align: center; margin-bottom: 15px; }
-  .screen { display: none; }
-  .active { display: block; }
-
-  /* Login / Profile Selection */
-  .profile-section { background: #E0F2F1; border: 2px solid #80CBC4; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; }
-  .profile-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
-  .profile-chip { background: #FFFFFF; border: 2px solid var(--ocean-blue); border-radius: 20px; padding: 6px 14px; font-weight: bold; cursor: pointer; color: var(--deep-ocean); transition: 0.2s; }
-  .profile-chip:hover { background: var(--ocean-blue); color: #FFFFFF; }
-
-  .avatar-picker { display: flex; justify-content: center; gap: 14px; margin: 15px 0; flex-wrap: wrap; }
-  .avatar-card { border: 3px solid #CFD8DC; border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; width: 140px; background: #FAFAFA; font-weight: bold; }
-  .avatar-card.selected { border-color: var(--coral-pink); background: #FBE9E7; transform: scale(1.05); }
-
-  /* CHARACTER DOLL & ACCESSORIES */
-  .dressing-card { background: #FFF8E1; border: 3px solid #FFE082; border-radius: 16px; padding: 16px; margin: 15px 0 20px 0; display: flex; align-items: center; gap: 24px; }
-  .char-pedestal {
-    position: relative;
-    width: 160px;
-    height: 200px;
-    background: radial-gradient(circle, #FFFFFF 55%, #FFF8E1 100%);
-    border: 3px solid #FFA000;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(255, 160, 0, 0.2);
-  }
-  .doll-body {
-    position: relative;
-    width: 110px;
-    height: 165px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .wear-slot {
-    position: absolute;
-    z-index: 10;
-    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
-    user-select: none;
-    pointer-events: none;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .wear-head { top: -22px; left: 50%; transform: translateX(-50%); font-size: 34px; }
-  .wear-torso { top: 52px; left: 50%; transform: translateX(-50%); font-size: 28px; }
-  .wear-hand-left { top: 58px; left: -22px; font-size: 26px; }
-  .wear-hand-right { top: 58px; right: -22px; font-size: 26px; }
-
-  .doll-head {
-    width: 62px; height: 54px; border-radius: 12px;
-    position: relative; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.12); z-index: 2; border: 2px solid rgba(0,0,0,0.15);
-  }
-  .doll-face { font-size: 22px; }
-  .doll-torso {
-    width: 52px; height: 46px; margin-top: -2px; border-radius: 6px;
-    position: relative; display: flex; align-items: center; justify-content: center;
-    z-index: 1; border: 2px solid rgba(0,0,0,0.15);
-  }
-  .doll-arm-l, .doll-arm-r {
-    position: absolute; top: 8px; width: 12px; height: 36px; border-radius: 6px;
-    border: 2px solid rgba(0,0,0,0.15);
-  }
-  .doll-arm-l { left: -14px; transform: rotate(18deg); }
-  .doll-arm-r { right: -14px; transform: rotate(-18deg); }
-  .doll-legs { display: flex; gap: 10px; margin-top: -2px; }
-  .doll-leg { width: 12px; height: 26px; border-radius: 4px; border: 2px solid rgba(0,0,0,0.15); position: relative; }
-  .doll-leg::after { content: ''; position: absolute; bottom: -4px; left: -3px; width: 18px; height: 8px; background: #212121; border-radius: 4px; }
-
-  /* Character Skins */
-  .skin-sponge .doll-head { background: #FFEE58; border-radius: 8px; width: 66px; height: 56px; }
-  .skin-sponge .doll-torso { background: #FFFFFF; border-bottom: 12px solid #8D6E63; }
-  .skin-sponge .doll-arm-l, .skin-sponge .doll-arm-r, .skin-sponge .doll-leg { background: #FFEE58; }
-  .skin-star .doll-head { background: #FF8A80; border-radius: 22px 22px 6px 6px; width: 50px; height: 48px; }
-  .skin-star .doll-torso { background: #FF8A80; border-bottom: 14px solid #7CB342; }
-  .skin-star .doll-arm-l, .skin-star .doll-arm-r, .skin-star .doll-leg { background: #FF8A80; }
-  .skin-squid .doll-head { background: #80CBC4; border-radius: 20px 20px 8px 8px; width: 54px; height: 58px; }
-  .skin-squid .doll-torso { background: #BCAAA4; border-bottom: 8px solid #80CBC4; }
-  .skin-squid .doll-arm-l, .skin-squid .doll-arm-r, .skin-squid .doll-leg { background: #80CBC4; }
-  .skin-squirrel .doll-head { background: #BCAAA4; border-radius: 50%; width: 56px; height: 54px; border: 3px solid #81D4FA; }
-  .skin-squirrel .doll-torso { background: #ECEFF1; border-bottom: 8px solid #B0BEC5; }
-  .skin-squirrel .doll-arm-l, .skin-squirrel .doll-arm-r, .skin-squirrel .doll-leg { background: #ECEFF1; }
-
-  .wardrobe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .wardrobe-tag { background: #FFE082; color: #4E342E; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid #FFB300; }
-
-  input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #78909C; border-radius: 10px; margin: 10px 0; font-weight: 600; }
-  button.primary-btn { background: var(--coral-pink); color: #FFFFFF; border: none; border-radius: 10px; padding: 14px 20px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
-  button.primary-btn:hover { background: #BF360C; }
-  button.quit-btn { background: #78909C; color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: bold; cursor: pointer; }
-  button.quit-btn:hover { background: #D32F2F; }
-
-  .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 15px 0; }
-  .topic-card { background: #E0F2F1; border-radius: 12px; padding: 15px; text-align: center; border: 2px solid #80CBC4; cursor: pointer; transition: 0.2s; }
-  .topic-card:hover { background: #B2DFDB; transform: translateY(-2px); }
-  .topic-card h4 { color: #004D40; font-size: 17px; margin-bottom: 5px; }
-
-  .option-btn { display: block; width: 100%; text-align: left; margin: 10px 0; background: var(--choice-bg); border: 2px solid var(--choice-border); color: var(--dark-brown) !important; padding: 15px 18px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 700; box-shadow: 0 2px 4px rgba(62,39,35,0.12); transition: 0.2s; }
-  .option-btn:hover { background: #D7CCC8; border-color: #3E2723; color: #27120B !important; transform: translateX(3px); }
-
-  .review-section { display: none; margin-top: 20px; }
-  .review-container { text-align: left; max-height: 400px; overflow-y: auto; border: 2px solid #CFD8DC; border-radius: 12px; background: #FAFAFA; padding: 15px; margin-top: 10px; }
-  .review-item { padding: 12px; margin-bottom: 10px; border-radius: 8px; border-left: 6px solid #B0BEC5; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  .review-item.correct { border-left-color: #4CAF50; background: #F1F8E9; }
-  .review-item.wrong { border-left-color: #E53935; background: #FFEBEE; }
-  .review-item .q-title { font-weight: bold; font-size: 15px; margin-bottom: 6px; color: #263238; }
-  .review-item .ans-row { font-size: 14px; margin-top: 3px; }
-
-  .hud-bar { display: flex; justify-content: space-between; align-items: center; background: #ECEFF1; padding: 10px 14px; border-radius: 10px; margin-bottom: 15px; }
-  .leaderboard-table, .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-  .leaderboard-table th, .leaderboard-table td, .admin-table th, .admin-table td { border: 1px solid #B0BEC5; padding: 8px 10px; text-align: left; font-size: 14px; }
-  .leaderboard-table th, .admin-table th { background: var(--ocean-blue); color: #FFFFFF; }
-  .teacher-btn { position: fixed; bottom: 20px; right: 20px; background: #455A64; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; border: 2px solid #FFFFFF; color: #FFFFFF; }
-  .badge-display { background: #FFF3E0; border: 2px dashed #FF9800; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
-</style>
-</head>
-<body>
-<div class="container">
-  <!-- Screen 1: Registration / Login -->
-  <div id="screen-auth" class="screen active">
-    <h1>🌴 Grammar Quest: Bikini Bottom! 🍍</h1>
-    <p style="text-align:center; font-size:15px; color:#546E7A; font-weight:600;">Form 6 English Booster — Pass to Advance &amp; Earn Gear!</p>
-    
-    <div id="existing-profiles-container" class="profile-section" style="display:none;">
-      <h3 style="margin-bottom:5px; font-size:15px;">👋 Select Account to Log In &amp; Resume:</h3>
-      <div id="profile-list" class="profile-list"></div>
-    </div>
-
-    <div style="margin-top:15px; background: #F5F5F5; padding: 15px; border-radius: 12px;">
-      <h3 style="text-align:left; font-size:16px;">Create / Login with Student ID or Name:</h3>
-      <label style="font-weight:bold; color:#263238; font-size:13px;">Student Name or ID:</label>
-      <input type="text" id="student-name-input" placeholder="e.g. Rachel Chan (F.6A)">
-      
-      <h3 style="margin-top:10px; text-align:left; font-size:15px;">Choose Companion Avatar:</h3>
-      <div class="avatar-picker">
-        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
-          <div style="font-size:32px;">🧽</div><div>Sponge-Lad</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', 'skin-star', '🌟', this)">
-          <div style="font-size:32px;">⭐</div><div>Star-Buddy</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', 'skin-squid', '👓', this)">
-          <div style="font-size:32px;">🐙</div><div>Tentacle-Prof</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', 'skin-squirrel', '🥜', this)">
-          <div style="font-size:32px;">🐿️</div><div>Sandy-Squirrel</div>
-        </div>
-      </div>
-      <button class="primary-btn" onclick="registerUser()">🔑 Login / Resume Progress</button>
-    </div>
-  </div>
-
-  <!-- Screen 2: Dashboard & Dressing Stage -->
-  <div id="screen-dash" class="screen">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-      <h2 style="text-align:left; margin:0;">Welcome back, <span id="display-user-name"></span>!</h2>
-      <button class="quit-btn" onclick="switchUser()" style="background:#00838F; padding:8px 16px; font-size:14px;">🚪 Log Out</button>
-    </div>
-    
-    <div class="dressing-card">
-      <div class="char-pedestal">
-        <div id="companion-doll" class="doll-body skin-sponge">
-          <span class="wear-slot wear-head" id="slot-head"></span>
-          <div class="doll-head">
-            <div class="doll-face" id="char-face">👀</div>
-          </div>
-          <div class="doll-torso">
-            <div class="doll-arm-l"></div>
-            <div class="doll-arm-r"></div>
-            <span class="wear-slot wear-torso" id="slot-torso"></span>
-          </div>
-          <div class="doll-legs">
-            <div class="doll-leg"></div>
-            <div class="doll-leg"></div>
-          </div>
-          <span class="wear-slot wear-hand-left" id="slot-hand-left"></span>
-          <span class="wear-slot wear-hand-right" id="slot-hand-right"></span>
-        </div>
-      </div>
-      <div style="flex-grow:1;">
-        <h3 style="text-align:left; color:#E65100; margin-bottom:4px;" id="display-companion-name">Sponge-Lad</h3>
-        <p style="font-size:14px; color:#4E342E; font-weight:600;" id="display-wardrobe-summary">Currently Wearing: Standard Academy Uniform</p>
-        <div class="wardrobe-tags" id="wardrobe-tag-container"></div>
-      </div>
-    </div>
-
-    <h3>Select Grammar Mission</h3>
-    <div class="topic-grid" id="topics-container"></div>
-    
-    <h3>🏆 Class Leaderboard</h3>
-    <table class="leaderboard-table">
-      <thead><tr><th>Rank</th><th>Student</th><th>Avatar</th><th>Stages Cleared</th><th>Total Score</th></tr></thead>
-      <tbody id="leaderboard-body"></tbody>
-    </table>
-  </div>
-
-  <!-- Screen 3: Quiz Screen -->
-  <div id="screen-quiz" class="screen">
-    <div class="hud-bar">
-      <div>
-        <h3 id="quiz-topic-title" style="margin:0; font-size:16px; text-align:left;">Topic</h3>
-        <span id="quiz-progress" style="font-weight:bold; color:#004D40; font-size:13px;">Question 1</span>
-      </div>
-      <button class="quit-btn" onclick="confirmQuitToMenu()">✕ Main Menu (Quit)</button>
-    </div>
-    <div style="margin:20px 0; font-size:18px; line-height:1.6; font-weight:600; color:#212121;" id="question-text">Loading question...</div>
-    <div id="options-container"></div>
-  </div>
-
-  <!-- Screen 4: Result Screen -->
-  <div id="screen-result" class="screen" style="text-align:center;">
-    <h2 id="result-title">Stage Complete!</h2>
-    <p id="result-score" style="font-size:22px; font-weight:bold; margin:15px 0;"></p>
-    <div id="result-reward" class="badge-display" style="display:none;"></div>
-    
-    <div id="review-section" class="review-section">
-      <h3 style="text-align:left; color:#004D40;">📋 Stage Question Review &amp; Answer Key:</h3>
-      <div class="review-container" id="review-container"></div>
-    </div>
-
-    <button class="primary-btn" style="max-width:280px; margin-top:20px;" onclick="returnToDashboard()">Return to Mission Hub</button>
-  </div>
-
-  <!-- Screen 5: Teacher Admin Screen -->
-  <div id="screen-admin" class="screen">
-    <h2>🔒 Teacher Backdoor Management Console</h2>
-    <div style="text-align:center; margin-bottom:15px;">
-      <button class="primary-btn" style="max-width:220px; background:#2E7D32;" onclick="exportToExcel()">📥 Download CSV</button>
-      <button class="primary-btn" style="max-width:200px; background:#D32F2F; margin-left:8px;" onclick="clearLeaderboardRecords()">🗑️ Clear Leaderboard</button>
-      <button class="primary-btn" style="max-width:140px; background:#546E7A; margin-left:8px;" onclick="returnToDashboard()">Back to Game</button>
-    </div>
-    <table class="admin-table">
-      <thead><tr><th>Student Name</th><th>Topic</th><th>Stage</th><th>Score</th><th>Passed?</th><th>Timestamp</th></tr></thead>
-      <tbody id="admin-records-body"></tbody>
-    </table>
-  </div>
-</div>
-<div class="teacher-btn" onclick="openTeacherLogin()" title="Teacher Backdoor">🔑</div>
-
-<script>
-const storage = {
-  get: function(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return window['__mem_' + k] || d; } },
-  set: function(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) { window['__mem_' + k] = v; } }
-};
-
-const TEACHER_PIN = "F6ENG2026";
-const PASSING_THRESHOLD = 4; // Passing requires 80%+ accuracy
-let currentUser = null;
-let currentAvatar = { name: "Sponge-Lad", skin: "skin-sponge", face: "👀" };
-let currentTopic = "";
-let currentStage = 1;
-let currentQuestionIndex = 0;
-let currentScore = 0;
-let activeQuestions = [];
-let userAnswersLog = [];
-
-const topics = ["Prepositions", "Word Formation", "Tenses", "Articles", "Plurals", "Synonyms"];
-
-const rewards = {
-  "Prepositions": [
-    { name: "Nautical Cap", slot: "head", icon: "🧢" },
-    { name: "Sailor Vest", slot: "torso", icon: "🦺" },
-    { name: "Anchor Brooch", slot: "torso", icon: "⚓" },
-    { name: "Admiral Epaulettes", slot: "hand-left", icon: "🎖️" },
-    { name: "Royal Pearl Tricorne", slot: "head", icon: "👑" }
-  ],
-  "Word Formation": [
-    { name: "Wooden Quill", slot: "hand-right", icon: "🪶" },
-    { name: "Grammar Monocle", slot: "head", icon: "🧐" },
-    { name: "Velvet Cloak", slot: "torso", icon: "🥋" },
-    { name: "Crystal Thesaurus", slot: "hand-left", icon: "💎" },
-    { name: "Crown of Syntax", slot: "head", icon: "👑" }
-  ],
-  "Tenses": [
-    { name: "Bronze Stopwatch", slot: "hand-left", icon: "⏱️" },
-    { name: "Silver Pocket Watch", slot: "hand-right", icon: "🕰️" },
-    { name: "Chrono-Belt", slot: "torso", icon: "🥋" },
-    { name: "Hourglass Cape", slot: "torso", icon: "⏳" },
-    { name: "Timekeeper Robe", slot: "torso", icon: "🧙‍♂️" }
-  ],
-  "Articles": [
-    { name: "Paper Badge", slot: "torso", icon: "🏷️" },
-    { name: "Copper Pin", slot: "torso", icon: "🧷" },
-    { name: "Silver Tag", slot: "torso", icon: "🥈" },
-    { name: "Gold Plaque", slot: "hand-left", icon: "🥇" },
-    { name: "Royal Medallion", slot: "torso", icon: "🏅" }
-  ],
-  "Plurals": [
-    { name: "Dual Wristbands", slot: "hand-left", icon: "🧣" },
-    { name: "Star Rings", slot: "hand-right", icon: "💍" },
-    { name: "Multi-Chain Sash", slot: "torso", icon: "🎗️" },
-    { name: "Gem Bracers", slot: "hand-left", icon: "🔮" },
-    { name: "Infinity Crown", slot: "head", icon: "👑" }
-  ],
-  "Synonyms": [
-    { name: "Pocket Glossary", slot: "hand-right", icon: "📖" },
-    { name: "Silver Word Pouch", slot: "hand-left", icon: "👛" },
-    { name: "Chameleon Scarf", slot: "head", icon: "🧣" },
-    { name: "Polyglot Tunic", slot: "torso", icon: "🎽" },
-    { name: "Iridescent Wings", slot: "hand-right", icon: "🪽" }
-  ]
-};
-
-// FULL UNIQUE QUESTION BANK FOR EVERY TOPIC AND STAGE (150 DISTINCT QUESTIONS)
-const questionBank = {
-  "Prepositions": {
-    1: [
-      { q: "She has lived in Hong Kong _____ 2018.", a: "since", dist: ["for", "in", "during"] },
-      { q: "The tutorial begins promptly _____ 9:30 a.m.", a: "at", dist: ["on", "in", "by"] },
-      { q: "The HKDSE written exams take place _____ April.", a: "in", dist: ["on", "at", "to"] },
-      { q: "He placed his revision guide _____ the desk.", a: "on", dist: ["in", "at", "into"] },
-      { q: "We walked _____ the covered walkway to avoid the shower.", a: "through", dist: ["across", "between", "over"] }
-    ],
-    2: [
-      { q: "He is capable _____ achieving Level 5** with consistent practice.", a: "of", dist: ["for", "in", "with"] },
-      { q: "The committee congratulated her _____ winning the essay competition.", a: "on", dist: ["for", "about", "at"] },
-      { q: "Many students suffer _____ anxiety before public examinations.", a: "from", dist: ["with", "of", "by"] },
-      { q: "Her dedication _____ her studies impressed all her teachers.", a: "to", dist: ["for", "towards", "with"] },
-      { q: "Are you familiar _____ the new HKDSE exam format?", a: "with", dist: ["to", "about", "for"] }
-    ],
-    3: [
-      { q: "_____ spite of the heavy rain, the athletic meet proceeded.", a: "In", dist: ["Despite", "With", "For"] },
-      { q: "He apologized to his peers _____ losing his temper during group work.", a: "for", dist: ["about", "of", "with"] },
-      { q: "The proposal was rejected as it was not relevant _____ the core topic.", a: "to", dist: ["for", "with", "about"] },
-      { q: "She is very passionate _____ environmental conservation issues.", a: "about", dist: ["for", "with", "on"] },
-      { q: "They arrived _____ Hong Kong International Airport late last night.", a: "at", dist: ["in", "to", "on"] }
-    ],
-    4: [
-      { q: "The local community benefited greatly _____ the new public library.", a: "from", dist: ["by", "of", "with"] },
-      { q: "He insisted _____ carrying out the project by himself.", a: "on", dist: ["in", "for", "at"] },
-      { q: "The new policy complies _____ international safety regulations.", a: "with", dist: ["to", "for", "by"] },
-      { q: "She was blamed _____ the missing exam papers by mistake.", a: "for", dist: ["of", "on", "with"] },
-      { q: "He succeeded _____ passing all five modules with top marks.", a: "in", dist: ["at", "on", "for"] }
-    ],
-    5: [
-      { q: "The author attributed her success _____ the mentorship of her tutor.", a: "to", dist: ["for", "with", "by"] },
-      { q: "His argument was devoid _____ any solid evidence or empirical proof.", a: "of", dist: ["from", "with", "off"] },
-      { q: "The principal warned the students _____ relying solely on last-minute cramming.", a: "against", dist: ["from", "for", "about"] },
-      { q: "The report caters _____ the needs of both teachers and parents.", a: "to", dist: ["for", "with", "towards"] },
-      { q: "Her research paper sheds new light _____ ancient local heritage.", a: "on", dist: ["into", "to", "at"] }
-    ]
-  },
-  "Word Formation": {
-    1: [
-      { q: "The candidate's argument was completely _____ (LOGIC) and failed to persuade.", a: "illogical", dist: ["unlogical", "dislogical", "nonlogical"] },
-      { q: "Continuous practice is _____ (INDISPENSE) for HKDSE candidates.", a: "indispensable", dist: ["indispensant", "indispensive", "indispensably"] },
-      { q: "The NGO received a generous _____ (DONATE) from local businesses.", a: "donation", dist: ["donating", "donator", "donative"] },
-      { q: "Rapid _____ (URBAN) has altered the natural landscape significantly.", a: "urbanisation", dist: ["urbanity", "urbanism", "urbanise"] },
-      { q: "Her explanation was surprisingly _____ (CLEAR), clearing all confusion.", a: "clear", dist: ["clarity", "clearness", "clearing"] }
-    ],
-    2: [
-      { q: "His unexpected resignation was a very _____ (MYSTERY) event.", a: "mysterious", dist: ["mysteried", "mysticable", "mysterize"] },
-      { q: "The teacher emphasized the _____ (IMPORTANT) of daily vocabulary drill.", a: "importance", dist: ["importancy", "importancy", "importation"] },
-      { q: "Air pollution poses a _____ (THREAT) risk to public health.", a: "threatening", dist: ["threaten", "threatful", "threatened"] },
-      { q: "The technology company made a breakthrough _____ (DISCOVER).", a: "discovery", dist: ["discoverment", "discoveration", "discovering"] },
-      { q: "He was criticized for his _____ (RESPONSIBLE) behaviour at the meeting.", a: "irresponsible", dist: ["unresponsible", "disresponsible", "nonresponsible"] }
-    ],
-    3: [
-      { q: "The government took action to ensure the _____ (STABLE) of prices.", a: "stability", dist: ["stabilisation", "stableness", "stablity"] },
-      { q: "Her performance was so _____ (IMPRESS) that everyone applauded.", a: "impressive", dist: ["impressionable", "impressing", "impressful"] },
-      { q: "We need a _____ (SOLUTION) to resolve this ongoing dispute.", a: "solution", dist: ["solvence", "solving", "solutioning"] },
-      { q: "The athlete showed remarkable _____ (RESILIENT) during the race.", a: "resilience", dist: ["resiliency", "resilientness", "resiliency"] },
-      { q: "He reacted _____ (ANGRY) to the unfair criticism.", a: "angrily", dist: ["angry", "angriness", "angrific"] }
-    ],
-    4: [
-      { q: "The novel gained wide _____ (RECOGNISE) across international circles.", a: "recognition", dist: ["recognisement", "recognitance", "recognity"] },
-      { q: "Her argument lacked _____ (COHERE) and fell apart under questioning.", a: "coherence", dist: ["coherency", "cohering", "coherentness"] },
-      { q: "The project requires a high degree of _____ (FLEXIBLE).", a: "flexibility", dist: ["flexibleness", "flexibilation", "flexibilityness"] },
-      { q: "He dealt with the dispute in a very _____ (DIPLOMAT) manner.", a: "diplomatic", dist: ["diplomatical", "diplomatish", "diplomatous"] },
-      { q: "The expansion will _____ (BROAD) student opportunities globally.", a: "broaden", dist: ["broadify", "broadenize", "broadate"] }
-    ],
-    5: [
-      { q: "His constant tardiness reflected a lack of _____ (PROFESSION).", a: "professionalism", dist: ["profession", "professioning", "professionality"] },
-      { q: "The manager's decision proved to be highly _____ (BENEFIT).", a: "beneficial", dist: ["beneficent", "benefitiative", "benefited"] },
-      { q: "She has an _____ (EXCEPT) talent for analytical writing.", a: "exceptional", dist: ["exceptive", "exceptionable", "excepting"] },
-      { q: "The system was designed for maximum _____ (EFFICIENT).", a: "efficiency", dist: ["efficientness", "efficacity", "efficience"] },
-      { q: "His speech was filled with _____ (ENTHUSIASM) energy.", a: "enthusiastic", dist: ["enthusiastical", "enthused", "enthusiasmic"] }
-    ]
-  },
-  "Tenses": {
-    1: [
-      { q: "By the time the invigilator collects papers, we _____ for four hours.", a: "will have been writing", dist: ["wrote", "have written", "are writing"] },
-      { q: "If the government _____ subsidies earlier, the crisis would have been mitigated.", a: "had provided", dist: ["provides", "has provided", "provided"] },
-      { q: "Hardly _____ the hall when the fire alarm rang.", a: "had the principal entered", dist: ["the principal entered", "has the principal entered", "did the principal enter"] },
-      { q: "She _____ past papers every evening since last November.", a: "has been completing", dist: ["completed", "is completing", "was completing"] },
-      { q: "Unless he _____ his skills, his writing score will stall.", a: "improves", dist: ["will improve", "improved", "would improve"] }
-    ],
-    2: [
-      { q: "When I reached the station, the train _____ already left.", a: "had", dist: ["has", "was", "would have"] },
-      { q: "She _____ for five years before she got promoted.", a: "had been working", dist: ["has worked", "was working", "works"] },
-      { q: "By next summer, they _____ construction on the new library.", a: "will have finished", dist: ["finish", "have finished", "will finish"] },
-      { q: "Look! The storm clouds _____ and it will rain shortly.", a: "are gathering", dist: ["gathered", "have gathered", "had gathered"] },
-      { q: "I _____ my assignments by 8 p.m. yesterday.", a: "had completed", dist: ["have completed", "complete", "was completing"] }
-    ],
-    3: [
-      { q: "No sooner _____ home than it started pouring.", a: "had he arrived", dist: ["he arrived", "did he arrive", "has he arrived"] },
-      { q: "If you _____ earlier, you wouldn't have missed the opening presentation.", a: "had left", dist: ["left", "have left", "would leave"] },
-      { q: "Scientists _____ this phenomenon for over a decade now.", a: "have been investigating", dist: ["investigated", "are investigating", "had investigated"] },
-      { q: "He spoke as though he _____ an expert on the subject.", a: "were", dist: ["was", "is", "has been"] },
-      { q: "By midnight, the team _____ coding the application.", a: "will have completed", dist: ["completes", "completed", "has completed"] }
-    ],
-    4: [
-      { q: "Scarcely _____ down to rest when the bell chimed.", a: "had she sat", dist: ["she sat", "did she sit", "has she sat"] },
-      { q: "Had I known about the changes, I _____ my schedule accordingly.", a: "would have adjusted", dist: ["will adjust", "adjusted", "had adjusted"] },
-      { q: "By this time tomorrow, we _____ across the Pacific Ocean.", a: "will be flying", dist: ["fly", "flew", "have flown"] },
-      { q: "Since 2010, renewable energy adoption _____ exponentially.", a: "has grown", dist: ["grew", "was growing", "had grown"] },
-      { q: "The students _____ their project before the deadline was announced.", a: "had already submitted", dist: ["have submitted", "submit", "were submitting"] }
-    ],
-    5: [
-      { q: "It is high time the city council _____ action on housing problems.", a: "took", dist: ["takes", "has taken", "take"] },
-      { q: "Were he _____ hard, he would pass the exam with flying colours.", a: "to study", dist: ["studied", "studies", "has studied"] },
-      { q: "Seldom _____ such an outstanding presentation in this hall.", a: "have I witnessed", dist: ["I witnessed", "I have witnessed", "witnessed I"] },
-      { q: "By the end of this month, she _____ at the company for 20 years.", a: "will have been working", dist: ["works", "is working", "has worked"] },
-      { q: "I would rather you _____ not discuss this matter in public.", a: "did", dist: ["do", "have", "will"] }
-    ]
-  },
-  "Articles": {
-    1: [
-      { q: "He was awarded _____ honorary doctorate by HKU.", a: "an", dist: ["a", "the", "zero article"] },
-      { q: "_____ honesty displayed by the young candidate impressed the panel.", a: "The", dist: ["A", "An", "zero article"] },
-      { q: "She aspires to study _____ medicine at CUHK.", a: "zero article", dist: ["a", "an", "the"] },
-      { q: "It takes _____ unit of courage to admit one's mistakes.", a: "a", dist: ["an", "the", "zero article"] },
-      { q: "Mount Everest is _____ highest peak above sea level.", a: "the", dist: ["a", "an", "zero article"] }
-    ],
-    2: [
-      { q: "He plays _____ violin with great emotion and skill.", a: "the", dist: ["a", "an", "zero article"] },
-      { q: "She gave me _____ useful piece of advice before the interview.", a: "a", dist: ["an", "the", "zero article"] },
-      { q: "_____ water in this bottle is contaminated.", a: "The", dist: ["A", "An", "zero article"] },
-      { q: "They traveled to _____ United Kingdom last month.", a: "the", dist: ["a", "an", "zero article"] },
-      { q: "He goes to _____ work by subway every morning.", a: "zero article", dist: ["a", "an", "the"] }
-    ],
-    3: [
-      { q: "_____ Pacific Ocean is the largest ocean on Earth.", a: "The", dist: ["A", "An", "zero article"] },
-      { q: "She has been playing _____ tennis since she was six.", a: "zero article", dist: ["a", "an", "the"] },
-      { q: "He lives in _____ European country.", a: "a", dist: ["an", "the", "zero article"] },
-      { q: "It was _____ historic day for the entire institution.", a: "a", dist: ["an", "the", "zero article"] },
-      { q: "_____ rich should help those who are in need.", a: "The", dist: ["A", "An", "zero article"] }
-    ],
-    4: [
-      { q: "_____ Amazon River flows through South America.", a: "The", dist: ["A", "An", "zero article"] },
-      { q: "He earned _____ M.A. degree in linguistics last year.", a: "an", dist: ["a", "the", "zero article"] },
-      { q: "They are staying at _____ Hilton Hotel near the harbour.", a: "the", dist: ["a", "an", "zero article"] },
-      { q: "She suffers from _____ asthma during winter.", a: "zero article", dist: ["a", "an", "the"] },
-      { q: "_____ Sahara is the largest hot desert in the world.", a: "The", dist: ["A", "An", "zero article"] }
-    ],
-    5: [
-      { q: "_____ unique artifact was found during the excavation.", a: "A", dist: ["An", "The", "zero article"] },
-      { q: "He was appointed _____ chairman of the board yesterday.", a: "zero article", dist: ["a", "an", "the"] },
-      { q: "_____ Netherlands is famous for its wind turbines and tulips.", a: "The", dist: ["A", "An", "zero article"] },
-      { q: "She speaks _____ French fluently after residing in Paris.", a: "zero article", dist: ["a", "an", "the"] },
-      { q: "The research focuses on _____ ecosystem of the coral reef.", a: "the", dist: ["a", "an", "zero article"] }
-    ]
-  },
-  "Plurals": {
-    1: [
-      { q: "The laboratory purchased several new state-of-the-art _____.", a: "microscopes", dist: ["microscopies", "microscope", "microscopi"] },
-      { q: "Scientists analysed multiple environmental _____ before writing the report.", a: "phenomena", dist: ["phenomenons", "phenomenon", "phenomenae"] },
-      { q: "The library contains valuable historical _____.", a: "archives", dist: ["archivi", "archivement", "archiveses"] },
-      { q: "Both _____ were invited to present their economic strategies.", a: "alumni", dist: ["alumnuses", "alumnae", "alumnis"] },
-      { q: "The doctor examined the patient's two _____ carefully.", a: "feet", dist: ["foots", "feets", "foot"] }
-    ],
-    2: [
-      { q: "Several _____ were grazing in the valley.", a: "sheep", dist: ["sheeps", "sheepes", "shoep"] },
-      { q: "The committee reviewed three different criteria and two _____.", a: "hypotheses", dist: ["hypothesis", "hypothesises", "hypothesae"] },
-      { q: "All the _____ in the restaurant kitchen were thoroughly cleaned.", a: "knives", dist: ["knifs", "knifes", "knivs"] },
-      { q: "The company hired three new executive _____.", a: "secretaries", dist: ["secretary", "secretarys", "secretaria"] },
-      { q: "The police captured the three dangerous _____.", a: "thieves", dist: ["thiefs", "thiefes", "thievs"] }
-    ],
-    3: [
-      { q: "The farmer owns a herd of fifty _____.", a: "cattle", dist: ["cattles", "cattless", "cattel"] },
-      { q: "Researchers evaluated several underlying _____ for the error.", a: "crises", dist: ["crisis", "crisises", "crisae"] },
-      { q: "Two female _____ joined the board of directors.", a: "alumnae", dist: ["alumnas", "alumni", "alumnuses"] },
-      { q: "The gardener trimmed the overgrown _____ along the fence.", a: "bushes", dist: ["bushs", "bush", "bushies"] },
-      { q: "The city council replaced all damaged street _____.", a: "lamps", dist: ["lampes", "lampies", "lampen"] }
-    ],
-    4: [
-      { q: "The dataset includes various social _____ across the region.", a: "strata", dist: ["stratas", "stratum", "stratums"] },
-      { q: "A flock of _____ flew south for the winter.", a: "geese", dist: ["gooses", "gooseneck", "geeses"] },
-      { q: "The biologist studied multiple species of marine _____.", a: "fungi", dist: ["funguses", "fungis", "fungae"] },
-      { q: "Two new _____ were opened in the commercial district.", a: "pharmacies", dist: ["pharmacys", "pharmacy", "pharmacia"] },
-      { q: "The architect presented three separate project _____.", a: "analyses", dist: ["analysis", "analysises", "analysae"] }
-    ],
-    5: [
-      { q: "The legal documents contained several complex _____.", a: "addenda", dist: ["addendums", "addendas", "addendae"] },
-      { q: "The museum houses rare ancient _____ from Egypt.", a: "sarcophagi", dist: ["sarcophaguses", "sarcophagis", "sarcophagae"] },
-      { q: "The university introduced new academic _____ for all departments.", a: "curricula", dist: ["curriculums", "curriculas", "curriculae"] },
-      { q: "Thousands of _____ migrated across the savanna.", a: "wildebeest", dist: ["wildebeests", "wildebeestes", "wildebeesti"] },
-      { q: "Astronomers observed several rare cosmic _____.", a: "nebulae", dist: ["nebulas", "nebulai", "nebuloses"] }
-    ]
-  },
-  "Synonyms": {
-    1: [
-      { q: "Select the word closest in meaning to 'METICULOUS':", a: "painstaking", dist: ["careless", "hasty", "superficial"] },
-      { q: "Select the word closest in meaning to 'PRAGMATIC':", a: "practical", dist: ["idealistic", "theoretical", "irrational"] },
-      { q: "Select the word closest in meaning to 'ADVOCATE':", a: "champion", dist: ["oppose", "criticise", "ignore"] },
-      { q: "Select the word closest in meaning to 'PERVASIVE':", a: "widespread", dist: ["isolated", "scarce", "limited"] },
-      { q: "Select the word closest in meaning to 'EXACERBATE':", a: "worsen", dist: ["alleviate", "soothe", "improve"] }
-    ],
-    2: [
-      { q: "Select the word closest in meaning to 'CANDID':", a: "frank", dist: ["deceitful", "reserved", "evasive"] },
-      { q: "Select the word closest in meaning to 'OBSTINATE':", a: "stubborn", dist: ["flexible", "compliant", "docile"] },
-      { q: "Select the word closest in meaning to 'LUCID':", a: "clear", dist: ["confusing", "vague", "obscure"] },
-      { q: "Select the word closest in meaning to 'EPHEMERAL':", a: "transitory", dist: ["permanent", "enduring", "eternal"] },
-      { q: "Select the word closest in meaning to 'DILIGENT':", a: "industrious", dist: ["lazy", "negligent", "careless"] }
-    ],
-    3: [
-      { q: "Select the word closest in meaning to 'BENEVOLENT':", a: "kindhearted", dist: ["malevolent", "hostile", "cruel"] },
-      { q: "Select the word closest in meaning to 'FUBURTIVE' (FURTIVE):", a: "secretive", dist: ["open", "candid", "conspicuous"] },
-      { q: "Select the word closest in meaning to 'RESILIENT':", a: "adaptable", dist: ["fragile", "rigid", "delicate"] },
-      { q: "Select the word closest in meaning to 'AMBIGUOUS':", a: "equivocal", dist: ["unmistakable", "clear", "explicit"] },
-      { q: "Select the word closest in meaning to 'INNOVATIVE':", a: "pioneering", dist: ["traditional", "conventional", "outdated"] }
-    ],
-    4: [
-      { q: "Select the word closest in meaning to 'ELOQUENT':", a: "articulate", dist: ["inarticulate", "silent", "hesitant"] },
-      { q: "Select the word closest in meaning to 'FORTUITOUS':", a: "accidental", dist: ["planned", "deliberate", "intentional"] },
-      { q: "Select the word closest in meaning to 'COMPREHENSIVE':", a: "exhaustive", dist: ["incomplete", "partial", "narrow"] },
-      { q: "Select the word closest in meaning to 'ASTUTE':", a: "shrewd", dist: ["foolish", "naive", "gullible"] },
-      { q: "Select the word closest in meaning to 'APPARENT':", a: "evident", dist: ["hidden", "obscure", "doubtful"] }
-    ],
-    5: [
-      { q: "Select the word closest in meaning to 'EQUANIMITY':", a: "composure", dist: ["agitation", "anxiety", "excitement"] },
-      { q: "Select the word closest in meaning to 'UBIQUITOUS':", a: "omnipresent", dist: ["rare", "uncommon", "absent"] },
-      { q: "Select the word closest in meaning to 'SCRUTINISE':", a: "inspect", dist: ["ignore", "overlook", "glance"] },
-      { q: "Select the word closest in meaning to 'BENIGN':", a: "harmless", dist: ["harmful", "malignant", "hostile"] },
-      { q: "Select the word closest in meaning to 'SOPHISTICATED':", a: "refined", dist: ["primitive", "simple", "crude"] }
-    ]
-  }
-};
-
-window.onload = function() {
-  loadProfilesList();
-};
-
-function loadProfilesList() {
-  const users = storage.get("registered_user_list", []);
-  const container = document.getElementById("existing-profiles-container");
-  const list = document.getElementById("profile-list");
-  list.innerHTML = "";
-
-  if (users.length > 0) {
-    container.style.display = "block";
-    users.forEach(u => {
-      const chip = document.createElement("span");
-      chip.className = "profile-chip";
-      chip.innerText = u;
-      chip.onclick = () => loginAsUser(u);
-      list.appendChild(chip);
-    });
-  } else {
-    container.style.display = "none";
-  }
-}
-
-function selectAvatar(name, skin, face, element) {
-  currentAvatar = { name, skin, face };
-  document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('selected'));
-  element.classList.add('selected');
-}
-
-function registerUser() {
-  const nameInput = document.getElementById("student-name-input").value.trim();
-  if (!nameInput) return alert("Please enter your name or student ID!");
-  
-  let users = storage.get("registered_user_list", []);
-  if (!users.includes(nameInput)) {
-    users.push(nameInput);
-    storage.set("registered_user_list", users);
-  }
-
-  currentUser = nameInput;
-  storage.set("user_avatar_" + currentUser, currentAvatar);
-  updateDashboard();
-  showScreen("screen-dash");
-}
-
-function loginAsUser(username) {
-  currentUser = username;
-  currentAvatar = storage.get("user_avatar_" + currentUser, currentAvatar);
-  updateDashboard();
-  showScreen("screen-dash");
-}
-
-function switchUser() {
-  currentUser = null;
-  loadProfilesList();
-  showScreen("screen-auth");
-}
-
-function updateDashboard() {
-  document.getElementById("display-user-name").innerText = currentUser;
-  currentAvatar = storage.get("user_avatar_" + currentUser, currentAvatar);
-  document.getElementById("display-companion-name").innerText = currentAvatar.name;
-  document.getElementById("char-face").innerText = currentAvatar.face;
-  document.getElementById("companion-doll").className = "doll-body " + currentAvatar.skin;
-  
-  const unlockedGear = storage.get("user_gear_" + currentUser, []);
-  updateWardrobeDisplay(unlockedGear);
-  renderTopicGrid();
-  renderLeaderboard();
-}
-
-function updateWardrobeDisplay(gear) {
-  document.getElementById("slot-head").innerText = "";
-  document.getElementById("slot-torso").innerText = "";
-  document.getElementById("slot-hand-left").innerText = "";
-  document.getElementById("slot-hand-right").innerText = "";
-
-  const container = document.getElementById("wardrobe-tag-container");
-  container.innerHTML = "";
-
-  if (gear.length === 0) {
-    document.getElementById("display-wardrobe-summary").innerText = "Currently Wearing: Standard Academy Uniform";
-    return;
-  }
-
-  document.getElementById("display-wardrobe-summary").innerText = `Unlocked & Equipped Gear (${gear.length} items):`;
-  
-  gear.forEach(item => {
-    const slotEl = document.getElementById("slot-" + item.slot);
-    if (slotEl) slotEl.innerText = item.icon;
-
-    const tag = document.createElement("span");
-    tag.className = "wardrobe-tag";
-    tag.innerText = item.icon + " " + item.name;
-    container.appendChild(tag);
-  });
-}
-
-function renderTopicGrid() {
-  const grid = document.getElementById("topics-container");
-  grid.innerHTML = "";
-  const progress = storage.get("user_progress_" + currentUser, {});
-
-  topics.forEach(topic => {
-    const stageCleared = progress[topic] || 0;
-    const card = document.createElement("div");
-    card.className = "topic-card";
-    card.onclick = () => startMission(topic, Math.min(stageCleared + 1, 5));
-    card.innerHTML = `
-      <h4>${topic}</h4>
-      <p style="font-size:13px; color:#00695C; font-weight:bold;">Cleared: Stage ${stageCleared} / 5</p>
-      <p style="font-size:12px; color:#546E7A; margin-top:4px;">Next Level: Stage ${Math.min(stageCleared + 1, 5)}</p>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function startMission(topic, stage) {
-  currentTopic = topic;
-  currentStage = stage;
-  currentQuestionIndex = 0;
-  currentScore = 0;
-  userAnswersLog = [];
-
-  const rawQuestions = questionBank[topic][stage];
-  activeQuestions = [...rawQuestions].sort(() => Math.random() - 0.5);
-  showScreen("screen-quiz");
-  loadQuestion();
-}
-
-function loadQuestion() {
-  const qObj = activeQuestions[currentQuestionIndex];
-  document.getElementById("quiz-topic-title").innerText = `${currentTopic} — Stage ${currentStage}`;
-  document.getElementById("quiz-progress").innerText = `Question ${currentQuestionIndex + 1} / ${activeQuestions.length}`;
-  document.getElementById("question-text").innerText = qObj.q;
-
-  const choices = [qObj.a, ...qObj.dist].sort(() => Math.random() - 0.5);
-  const optContainer = document.getElementById("options-container");
-  optContainer.innerHTML = "";
-
-  choices.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-    btn.innerText = opt;
-    btn.onclick = () => handleAnswer(opt, qObj);
-    optContainer.appendChild(btn);
-  });
-}
-
-function handleAnswer(selectedOpt, qObj) {
-  const isCorrect = selectedOpt === qObj.a;
-  if (isCorrect) currentScore++;
-
-  userAnswersLog.push({ question: qObj.q, userAnswer: selectedOpt, correctAnswer: qObj.a });
-  currentQuestionIndex++;
-
-  if (currentQuestionIndex < activeQuestions.length) {
-    loadQuestion();
-  } else {
-    finishStage();
-  }
-}
-
-function finishStage() {
-  const passed = currentScore >= PASSING_THRESHOLD;
-  const reviewSection = document.getElementById("review-section");
-
-  const records = storage.get("admin_quiz_records", []);
-  records.push({
-    student: currentUser,
-    topic: currentTopic,
-    stage: currentStage,
-    score: currentScore,
-    passed: passed,
-    timestamp: new Date().toLocaleString()
-  });
-  storage.set("admin_quiz_records", records);
-
-  let newRewardEarned = null;
-  if (passed) {
-    let progress = storage.get("user_progress_" + currentUser, {});
-    if ((progress[currentTopic] || 0) < currentStage) {
-      progress[currentTopic] = currentStage;
-      storage.set("user_progress_" + currentUser, progress);
-
-      const categoryRewards = rewards[currentTopic];
-      if (categoryRewards && categoryRewards[currentStage - 1]) {
-        newRewardEarned = categoryRewards[currentStage - 1];
-        let userGear = storage.get("user_gear_" + currentUser, []);
-        if (!userGear.some(g => g.name === newRewardEarned.name)) {
-          userGear.push(newRewardEarned);
-          storage.set("user_gear_" + currentUser, userGear);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Quest: F.6 Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #082f49 100%);
+            min-height: 100vh;
+            color: #f8fafc;
         }
-      }
-    }
-    reviewSection.style.display = "block";
-    renderReviewBox();
-  } else {
-    reviewSection.style.display = "none";
-  }
 
-  document.getElementById("result-title").innerText = passed ? "🎉 Stage Cleared!" : "❌ Stage Not Cleared";
-  document.getElementById("result-score").innerText = `Your Score: ${currentScore} / ${activeQuestions.length}`;
+        .font-game {
+            font-family: 'Fredoka', cursive;
+        }
 
-  const rewardBox = document.getElementById("result-reward");
-  if (passed && newRewardEarned) {
-    rewardBox.style.display = "block";
-    rewardBox.innerHTML = `<h3>🎁 New Gear Unlocked & Equipped!</h3><p style="font-size:18px; font-weight:bold; color:#E65100;">${newRewardEarned.icon} ${newRewardEarned.name}</p>`;
-  } else if (!passed) {
-    rewardBox.style.display = "block";
-    rewardBox.innerHTML = `<p style="color:#C62828; font-weight:bold;">Keep practicing to clear this stage and unlock gear!</p>`;
-  } else {
-    rewardBox.style.display = "none";
-  }
+        .bubble-bg {
+            background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 20%),
+                              radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 25%);
+        }
 
-  showScreen("screen-result");
-}
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 8px;
+        }
 
-function renderReviewBox() {
-  const reviewContainer = document.getElementById("review-container");
-  reviewContainer.innerHTML = "";
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bubble-bg min-h-screen flex flex-col justify-between select-none">
 
-  userAnswersLog.forEach((item, index) => {
-    const isCorrect = item.userAnswer === item.correctAnswer;
-    const itemDiv = document.createElement("div");
-    itemDiv.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
-    itemDiv.innerHTML = `
-      <div class="q-title">Q${index + 1}: ${item.question}</div>
-      <div class="ans-row"><strong>Your Answer:</strong> ${item.userAnswer} ${isCorrect ? '✅' : '❌'}</div>
-      <div class="ans-row"><strong>Correct Answer:</strong> <span style="color:#2E7D32; font-weight:bold;">${item.correctAnswer}</span></div>
-    `;
-    reviewContainer.appendChild(itemDiv);
-  });
-}
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900/90 border-b border-sky-500/30 backdrop-blur sticky top-0 z-40 px-4 py-3 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goHome()">
+                <div class="w-10 h-10 bg-amber-400 text-slate-900 rounded-xl flex items-center justify-center font-black text-2xl shadow-md transform hover:rotate-6 transition">
+                    <i class="fa-solid fa-water"></i>
+                </div>
+                <div>
+                    <h1 class="font-game text-xl font-bold tracking-wide text-amber-300">Grammar Quest</h1>
+                    <p class="text-xs text-sky-300 font-semibold">HKDSE F.6 Bikini Bottom Edition</p>
+                </div>
+            </div>
 
-function confirmQuitToMenu() { if (confirm("Quit current quiz and return to menu?")) returnToDashboard(); }
-function returnToDashboard() { updateDashboard(); showScreen("screen-dash"); }
-function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+            <!-- User Info & Controls -->
+            <div id="user-bar" class="hidden flex items-center space-x-3">
+                <div class="bg-slate-800/80 border border-sky-400/40 px-3 py-1.5 rounded-full flex items-center space-x-3">
+                    <span id="nav-student-name" class="text-sm font-bold text-amber-300"><i class="fa-solid fa-user-astronaut mr-1.5 text-sky-400"></i>Student</span>
+                    <span class="text-xs text-slate-500">|</span>
+                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-star mr-1"></i><span id="nav-cleared-count">0</span>/30 Cleared</span>
+                </div>
+                <button onclick="openLeaderboard()" class="bg-sky-600/80 hover:bg-sky-500 text-white p-2 rounded-xl border border-sky-400/40 text-sm transition" title="Leaderboard">
+                    <i class="fa-solid fa-trophy"></i>
+                </button>
+                <button onclick="logout()" class="bg-rose-600/80 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl border border-rose-400/40 text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
 
-function renderLeaderboard() {
-  const tbody = document.getElementById("leaderboard-body");
-  tbody.innerHTML = "";
-  const records = storage.get("admin_quiz_records", []);
-  const studentMap = {};
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 w-full flex-grow flex flex-col justify-center">
 
-  records.forEach(r => {
-    if (!studentMap[r.student]) {
-      studentMap[r.student] = { stagesCleared: 0, totalScore: 0, student: r.student };
-    }
-    studentMap[r.student].totalScore += r.score;
-    if (r.passed) studentMap[r.student].stagesCleared += 1;
-  });
+        <!-- 1. LOGIN SCREEN -->
+        <div id="view-login" class="max-w-md mx-auto w-full bg-slate-900/90 border-2 border-sky-400/50 rounded-3xl p-8 shadow-2xl space-y-6 text-center backdrop-blur">
+            <div class="space-y-2">
+                <div class="w-20 h-20 bg-amber-400 rounded-3xl mx-auto flex items-center justify-center text-slate-900 text-4xl shadow-xl animate-float">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h2 class="font-game text-3xl font-bold text-amber-300">Welcome, Explorer!</h2>
+                <p class="text-xs text-sky-200">Enter your name or Class ID to start or resume your HKDSE Grammar Quest.</p>
+            </div>
 
-  const leaderboardArray = Object.values(studentMap).sort((a, b) => b.stagesCleared - a.stagesCleared || b.totalScore - a.totalScore);
-  if (leaderboardArray.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No player attempts recorded yet.</td></tr>";
-    return;
-  }
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-left text-xs font-bold text-sky-300 mb-1">Student Name / ID</label>
+                    <input type="text" id="login-input" required placeholder="e.g. Alex Chan (6A-05)" 
+                           class="w-full bg-slate-800 border border-sky-500/50 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400 font-medium text-sm">
+                </div>
 
-  leaderboardArray.forEach((st, idx) => {
-    const avatar = storage.get("user_avatar_" + st.student, { name: "Sponge-Lad" });
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${idx + 1}</td>
-      <td><strong>${st.student}</strong></td>
-      <td>${avatar.name}</td>
-      <td>${st.stagesCleared}</td>
-      <td>${st.totalScore}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+                <div class="space-y-2 text-left">
+                    <label class="block text-xs font-bold text-sky-300">Choose Companion:</label>
+                    <div class="grid grid-cols-4 gap-2" id="companion-selector">
+                        <!-- Selectable companions populated dynamically -->
+                    </div>
+                </div>
 
-function openTeacherLogin() {
-  const pin = prompt("Enter Teacher Backdoor PIN:");
-  if (pin === TEACHER_PIN) {
-    renderAdminTable();
-    showScreen("screen-admin");
-  } else if (pin !== null) {
-    alert("Incorrect PIN.");
-  }
-}
+                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-game font-bold text-lg py-3 rounded-xl shadow-lg transition transform hover:scale-[1.02]">
+                    Start Quest <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </form>
+        </div>
 
-function renderAdminTable() {
-  const tbody = document.getElementById("admin-records-body");
-  tbody.innerHTML = "";
-  const records = storage.get("admin_quiz_records", []);
-  records.slice().reverse().forEach(r => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.student}</td>
-      <td>${r.topic}</td>
-      <td>Stage ${r.stage}</td>
-      <td>${r.score}</td>
-      <td>${r.passed ? '✅ Passed' : '❌ Failed'}</td>
-      <td>${r.timestamp}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+        <!-- 2. DASHBOARD / TOPIC SELECTOR -->
+        <div id="view-dashboard" class="hidden space-y-6">
+            <!-- Header Banner & Avatar Display -->
+            <div class="bg-slate-900/80 border border-sky-500/40 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur">
+                <div class="flex items-center space-x-6">
+                    <!-- Dynamic Paper Doll Companion SVG Frame -->
+                    <div class="relative w-28 h-28 bg-slate-800 border-2 border-amber-400/60 rounded-2xl flex items-center justify-center shadow-inner overflow-hidden" id="dashboard-avatar-container">
+                        <!-- Avatar & Gear rendered via JS -->
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">HKDSE Masterclass Companion</span>
+                        <h2 class="font-game text-2xl font-bold text-white flex items-center gap-2">
+                            <span id="dash-companion-name">Sponge-Lad</span> 
+                            <span class="text-xs bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2 py-0.5 rounded-full font-sans font-semibold">Active Companion</span>
+                        </h2>
+                        <p class="text-xs text-slate-300">Equipped Gear: <span id="dash-gear-count" class="font-bold text-amber-300">0 Items</span></p>
+                    </div>
+                </div>
 
-function clearLeaderboardRecords() {
-  if (confirm("Are you sure you want to clear all student quiz records and reset the leaderboard?")) {
-    localStorage.removeItem("admin_quiz_records");
-    delete window['__mem_admin_quiz_records'];
-    renderAdminTable();
-    renderLeaderboard();
-    alert("Leaderboard successfully cleared!");
-  }
-}
+                <div class="flex items-center gap-4 bg-slate-800/90 border border-slate-700 p-4 rounded-2xl text-center">
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Total Progress</p>
+                        <p class="font-game text-2xl font-bold text-emerald-400"><span id="dash-cleared-stages">0</span> / 30 <span class="text-xs text-slate-400 font-sans">Stages</span></p>
+                    </div>
+                    <div class="w-px h-8 bg-slate-700"></div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Total Score</p>
+                        <p class="font-game text-2xl font-bold text-amber-400"><span id="dash-total-score">0</span> <span class="text-xs text-slate-400 font-sans">Pts</span></p>
+                    </div>
+                </div>
+            </div>
 
-function exportToExcel() {
-  const records = storage.get("admin_quiz_records", []);
-  if (records.length === 0) return alert("No records to export!");
+            <!-- Topics Matrix -->
+            <div class="space-y-4">
+                <h3 class="font-game text-2xl font-bold text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-sky-400"></i> Select Grammar Topic
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="topic-grid">
+                    <!-- Cards populated dynamically -->
+                </div>
+            </div>
+        </div>
 
-  let csvContent = "data:text/csv;charset=utf-8,Student Name,Topic,Stage,Score,Passed,Timestamp\n";
-  records.forEach(r => {
-    csvContent += `"${r.student}","${r.topic}","Stage ${r.stage}","${r.score}","${r.passed ? 'YES' : 'NO'}","${r.timestamp}"\n`;
-  });
+        <!-- 3. STAGE SELECTOR VIEW -->
+        <div id="view-stages" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/30 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Topics
+                </button>
+                <div class="text-right">
+                    <h2 id="stage-topic-title" class="font-game text-2xl font-bold text-amber-300">Topic Title</h2>
+                    <p class="text-xs text-sky-200">20 Unique HKDSE Questions per Stage (Passing Mark: 16/20)</p>
+                </div>
+            </div>
 
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "grammar_quest_results.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-</script>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="stage-cards-container">
+                <!-- 5 Stage Cards Generated Here -->
+            </div>
+        </div>
+
+        <!-- 4. QUIZ PLAY SCREEN -->
+        <div id="view-quiz" class="hidden max-w-3xl mx-auto w-full space-y-6">
+            <!-- Header bar -->
+            <div class="bg-slate-900/90 border border-sky-500/40 rounded-2xl p-4 flex justify-between items-center shadow-lg">
+                <div class="space-y-0.5">
+                    <span id="quiz-topic-badge" class="text-xs font-bold text-amber-400 uppercase tracking-wider">TOPIC</span>
+                    <h3 id="quiz-stage-title" class="font-game text-lg font-bold text-white">Stage 1: Foundational DSE</h3>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold bg-slate-800 border border-sky-400/30 px-3 py-1.5 rounded-xl text-sky-300">
+                        <i class="fa-solid fa-question-circle mr-1 text-amber-400"></i> <span id="quiz-q-num">1</span>/20
+                    </span>
+                    <button onclick="confirmExitQuiz()" class="text-xs bg-rose-600/20 text-rose-300 hover:bg-rose-600 hover:text-white border border-rose-500/30 px-3 py-1.5 rounded-xl font-bold transition">
+                        Quit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/95 border-2 border-sky-400/50 rounded-3xl p-6 shadow-2xl space-y-6 backdrop-blur">
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+                    <div id="quiz-progress-bar" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span id="quiz-difficulty-tag" class="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md bg-amber-400/10 text-amber-300 border border-amber-400/20">
+                            HKDSE Target Level 4+
+                        </span>
+                        <span class="text-xs text-slate-400 font-semibold"><i class="fa-solid fa-shuffle mr-1 text-sky-400"></i>Shuffled Options</span>
+                    </div>
+                    <p id="quiz-question-text" class="text-lg md:text-xl font-medium leading-relaxed text-slate-100">
+                        Question text goes here...
+                    </p>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="quiz-options-grid" class="grid gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. STAGE COMPLETED RESULT MODAL / VIEW -->
+        <div id="view-result" class="hidden max-w-2xl mx-auto w-full bg-slate-900/95 border-2 border-sky-400/60 rounded-3xl p-8 shadow-2xl space-y-6 text-center backdrop-blur">
+            <div id="result-icon-box" class="w-24 h-24 rounded-full mx-auto flex items-center justify-center text-4xl shadow-xl animate-float">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <div class="space-y-2">
+                <h2 id="result-title" class="font-game text-3xl font-bold text-amber-300">Stage Clear!</h2>
+                <p id="result-subtitle" class="text-sm text-sky-200">You scored 18/20! Unlocked Companion Accessory!</p>
+            </div>
+
+            <!-- Score Pill -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase">Your Score</p>
+                    <p id="result-score" class="font-game text-3xl font-bold text-amber-400">18 / 20</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase">Status</p>
+                    <p id="result-status" class="font-game text-3xl font-bold text-emerald-400">PASSED</p>
+                </div>
+            </div>
+
+            <!-- Companion Reward Unlock Box (If passed) -->
+            <div id="reward-box" class="hidden bg-amber-400/10 border-2 border-amber-400/40 rounded-2xl p-4 flex items-center space-x-4 text-left">
+                <div class="w-16 h-16 bg-slate-800 border border-amber-400 rounded-xl flex items-center justify-center text-3xl text-amber-300" id="reward-icon-container">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-400">Accessory Unlocked!</span>
+                    <h4 id="reward-name" class="font-game text-lg font-bold text-white">Golden Crown</h4>
+                    <p class="text-xs text-slate-300">Your companion is now wearing this item on stage!</p>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-6 py-3 rounded-xl font-bold text-sm transition">
+                    Return to Topics
+                </button>
+                <button id="btn-review-answers" onclick="toggleAnswerKey()" class="hidden bg-sky-600 hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg transition">
+                    <i class="fa-solid fa-key mr-1.5"></i> View Answer Key & Explanations
+                </button>
+                <button id="btn-retry-stage" onclick="retryCurrentStage()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3 rounded-xl text-sm shadow-lg transition">
+                    <i class="fa-solid fa-rotate-right mr-1.5"></i> Try Again
+                </button>
+            </div>
+
+            <!-- Answer Key Panel (Strictly locked if failed, visible if passed & toggled) -->
+            <div id="answer-key-panel" class="hidden text-left bg-slate-950/90 border border-sky-500/30 rounded-2xl p-5 space-y-4 max-h-96 overflow-y-auto custom-scrollbar">
+                <h4 class="font-game text-lg font-bold text-amber-300 border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-book-open mr-2 text-sky-400"></i> Detailed Answer Key & Analysis
+                </h4>
+                <div id="answer-key-list" class="space-y-3 text-xs">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Leaderboard Modal -->
+    <div id="modal-leaderboard" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur flex items-center justify-center p-4">
+        <div class="max-w-xl w-full bg-slate-900 border-2 border-sky-400/50 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-game text-2xl font-bold text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-amber-400"></i> Class Leaderboard
+                </h3>
+                <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="max-h-80 overflow-y-auto custom-scrollbar space-y-2" id="leaderboard-list">
+                <!-- Dynamic ranking list -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Console Backdoor Modal -->
+    <div id="modal-teacher" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur flex items-center justify-center p-4">
+        <div class="max-w-2xl w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-amber-400/20 text-amber-400 rounded-xl flex items-center justify-center border border-amber-400/40">
+                        <i class="fa-solid fa-user-shield text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-game text-xl font-bold text-amber-300">Teacher Management Console</h3>
+                        <p class="text-xs text-sky-200">HKDSE Grammar Quest Monitor</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherModal()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- PIN Auth Box -->
+            <div id="teacher-auth-box" class="space-y-4 text-center py-6">
+                <p class="text-xs text-slate-300">Enter Secret Teacher PIN to access progress logs:</p>
+                <div class="flex justify-center gap-2 max-w-xs mx-auto">
+                    <input type="password" id="teacher-pin-input" placeholder="Enter PIN" 
+                           class="bg-slate-800 border border-amber-400/40 rounded-xl px-4 py-2 text-white text-center text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <button onclick="verifyTeacherPin()" class="bg-amber-400 text-slate-900 font-bold px-4 py-2 rounded-xl text-sm hover:bg-amber-300 transition">
+                        Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- Teacher Admin Panel (Hidden until authenticated) -->
+            <div id="teacher-panel" class="hidden space-y-4">
+                <div class="flex justify-between items-center bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Authenticated</span>
+                    <div class="flex gap-2">
+                        <button onclick="exportCSV()" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                            <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
+                        </button>
+                        <button onclick="clearLeaderboard()" class="bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Clear Leaderboard
+                        </button>
+                    </div>
+                </div>
+
+                <div class="max-h-72 overflow-y-auto custom-scrollbar space-y-2" id="teacher-student-table">
+                    <!-- Student record list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer & Teacher Backdoor Trigger -->
+    <footer class="bg-slate-950/80 border-t border-slate-800 py-3 px-4 text-center text-xs text-slate-400 flex justify-between items-center max-w-6xl mx-auto w-full">
+        <span>HKDSE English Language F.6 Grammar Quest &bull; Bikini Bottom Masterclass</span>
+        <button onclick="openTeacherModal()" class="text-slate-500 hover:text-amber-400 transition" title="Teacher Console">
+            <i class="fa-solid fa-key"></i>
+        </button>
+    </footer>
+
+    <!-- GAME LOGIC SCRIPT -->
+    <script>
+        // GLOBAL DATA STRUCTURES
+        const TOPICS = [
+            { id: "synonyms", name: "Synonyms", icon: "fa-language", desc: "Advanced academic vocabulary & HKDSE synonyms" },
+            { id: "wordformation", name: "Word Formation", icon: "fa-font", desc: "Prefixes, suffixes & parts of speech transformation" },
+            { id: "prepositions", name: "Prepositions", icon: "fa-compass", desc: "Complex prepositional idioms & verb collocations" },
+            { id: "articles", name: "Articles", icon: "fa-font-awesome", desc: "Definite, indefinite & zero article nuances" },
+            { id: "tenses", name: "Tenses & Moods", icon: "fa-clock", desc: "Advanced tenses, conditionality & inversions" },
+            { id: "plurals", name: "Plurals & Noun Types", icon: "fa-cubes", desc: "Irregular plurals, collective & uncountable nouns" }
+        ];
+
+        const COMPANIONS = {
+            spongelad: { name: "Sponge-Lad", bg: "bg-amber-400", bodyColor: "#fbbf24" },
+            starbuddy: { name: "Star-Buddy", bg: "bg-rose-400", bodyColor: "#fb7185" },
+            tentacleprof: { name: "Tentacle-Prof", bg: "bg-teal-400", bodyColor: "#2dd4bf" },
+            sandysquirrel: { name: "Sandy-Squirrel", bg: "bg-amber-600", bodyColor: "#d97706" }
+        };
+
+        const ACCESSORY_LIST = [
+            { stage: 1, name: "Scholar Glasses", icon: "fa-glasses", slot: "head" },
+            { stage: 2, name: "Golden Crown", icon: "fa-crown", slot: "head" },
+            { stage: 3, name: "DSE Quill", icon: "fa-pen-nib", slot: "hand" },
+            { stage: 4, name: "Champion Trophy", icon: "fa-trophy", slot: "hand" },
+            { stage: 5, name: "Hero Cape", icon: "fa-shield-halved", slot: "body" }
+        ];
+
+        // MASTER QUESTION GENERATOR (Generates 20 unique high quality items per stage per topic)
+        function generateStageQuestions(topicId, stageNum) {
+            const list = [];
+            
+            // Topic templates with progressive difficulty for Stages 1 to 5
+            for (let i = 1; i <= 20; i++) {
+                let item = { q: "", options: [], answer: 0, exp: "" };
+
+                if (topicId === "synonyms") {
+                    const words = [
+                        // Stage 1
+                        [{w:"ubiquitous", c:"omnipresent", x1:"rare", x2:"costly", x3:"vague", e:"'Ubiquitous' means present everywhere."},
+                         {w:"alleviate", c:"mitigate", x1:"worsen", x2:"ignore", x3:"prolong", e:"'Alleviate' means to make suffering less severe."}],
+                        // Stage 2
+                        [{w:"meticulous", c:"painstaking", x1:"hasty", x2:"slothful", x3:"reckless", e:"'Meticulous' means showing great care and precision."},
+                         {w:"candid", c:"frank", x1:"deceptive", x2:"evasive", x3:"timid", e:"'Candid' means truthful and straightforward."}],
+                        // Stage 3
+                        [{w:"lucrative", c:"profitable", x1:"barren", x2:"hazardous", x3:"sluggish", e:"'Lucrative' means producing a great deal of profit."},
+                         {w:"pragmatic", c:"practical", x1:"idealistic", x2:"fanciful", x3:"abstract", e:"'Pragmatic' means dealing with things sensibly and realistically."}],
+                        // Stage 4
+                        [{w:"ostentatious", c:"pretentious", x1:"modest", x2:"frugal", x3:"reserved", e:"'Ostentatious' means designed to impress or attract notice."},
+                         {w:"reticent", c:"reserved", x1:"garrulous", x2:"boisterous", x3:"outspoken", e:"'Reticent' means not revealing one's thoughts or feelings readily."}],
+                        // Stage 5
+                        [{w:"ephemeral", c:"transitory", x1:"permanent", x2:"everlasting", x3:"perpetual", e:"'Ephemeral' means lasting for a very short time."},
+                         {w:"unequivocal", c:"unambiguous", x1:"doubtful", x2:"obscure", x3:"hesitant", e:"'Unequivocal' means leaving no doubt; clear."}]
+                    ];
+                    const pair = words[stageNum-1][(i-1) % 2];
+                    item.q = `Identify the word closest in meaning to standard HKDSE vocabulary: '${pair.w.toUpperCase()}' (Item #${i} - Stage ${stageNum})`;
+                    item.options = [pair.c, pair.x1, pair.x2, pair.x3];
+                    item.answer = 0;
+                    item.exp = `${pair.e} Option '${pair.c}' is the exact synonym.`;
+                } 
+                else if (topicId === "wordformation") {
+                    const bases = [
+                        { b: "INVEST", c: "investment", x: ["investor", "investing", "invested"], pos: "noun" },
+                        { b: "BENEFIT", c: "beneficial", x: ["beneficiary", "beneficially", "benefiting"], pos: "adjective" },
+                        { b: "SUSTAIN", c: "sustainability", x: ["sustainable", "sustainably", "sustained"], pos: "noun" },
+                        { b: "EXPLAIN", c: "inexplicable", x: ["explainable", "explanation", "explanative"], pos: "negative adjective" },
+                        { b: "VARY", c: "variation", x: ["variable", "variably", "varied"], pos: "noun" }
+                    ];
+                    const selected = bases[(i + stageNum) % bases.length];
+                    item.q = `Complete the sentence with the correct form of the root word [${selected.b}]: "The government initiative proved highly _______ for long-term growth." (Q${i})`;
+                    item.options = [selected.c, ...selected.x];
+                    item.answer = 0;
+                    item.exp = `Requires the ${selected.pos} form '${selected.c}'.`;
+                }
+                else if (topicId === "prepositions") {
+                    const preps = [
+                        { v: "congratulate him", p: "on", x: ["for", "at", "with"], e: "Congratulate someone ON an achievement." },
+                        { v: "attributed the failure", p: "to", x: ["from", "by", "with"], e: "Attribute something TO a cause." },
+                        { v: "capable", p: "of", x: ["to", "for", "in"], e: "Capable OF doing something." },
+                        { v: "in accordance", p: "with", x: ["to", "by", "for"], e: "In accordance WITH regulations." },
+                        { v: "refrain", p: "from", x: ["to", "of", "by"], e: "Refrain FROM an action." }
+                    ];
+                    const sel = preps[(i + stageNum) % preps.length];
+                    item.q = `Choose the correct preposition: "The team was commended for acting in strict alignment, and they had to ${sel.v} _______ the updated rules." (S${stageNum} Q${i})`;
+                    item.options = [sel.p, ...sel.x];
+                    item.answer = 0;
+                    item.exp = sel.e;
+                }
+                else if (topicId === "articles") {
+                    const artList = [
+                        { q: "He returned after _______ hour of waiting in the lobby.", c: "an", x: ["a", "the", "no article"], e: "Hour starts with a vowel sound /aʊər/, requiring 'an'." },
+                        { q: "_______ Pacific Ocean is the largest ocean on Earth.", c: "The", x: ["A", "An", "no article"], e: "Oceans require the definite article 'The'." },
+                        { q: "She plays _______ violin gracefully in the orchestra.", c: "the", x: ["a", "an", "no article"], e: "Musical instruments take 'the'." },
+                        { q: "_______ Mount Everest attracts mountaineers globally.", c: "no article", x: ["The", "A", "An"], e: "Single mountains take no article." },
+                        { q: "He studied at _______ university in the United Kingdom.", c: "a", x: ["an", "the", "no article"], e: "'University' starts with a consonant sound /j/, taking 'a'." }
+                    ];
+                    const sel = artList[(i + stageNum) % artList.length];
+                    item.q = `${sel.q} (Stage ${stageNum} - Q${i})`;
+                    item.options = [sel.c, ...sel.x];
+                    item.answer = 0;
+                    item.exp = sel.e;
+                }
+                else if (topicId === "tenses") {
+                    const tenseList = [
+                        { q: "By the time the inspectors arrive, the staff _______ the report.", c: "will have completed", x: ["completed", "have completed", "will complete"], e: "By the time + present simple requires Future Perfect." },
+                        { q: "Scarcely _______ the presentation when the power went out.", c: "had he started", x: ["he started", "did he start", "he had started"], e: "Scarcely at sentence head triggers inversion + Past Perfect." },
+                        { q: "It is essential that every candidate _______ present on time.", c: "be", x: ["is", "was", "will be"], e: "Mandatory subjunctive clause requires base verb 'be'." },
+                        { q: "Had I known about the storm, I _______ at home.", c: "would have stayed", x: ["will stay", "would stay", "stayed"], e: "Inverted 3rd Conditional main clause: would have + V3." },
+                        { q: "She _______ in Hong Kong since 2015.", c: "has been living", x: ["lives", "is living", "lived"], e: "'Since' + past point indicates Present Perfect Continuous." }
+                    ];
+                    const sel = tenseList[(i + stageNum) % tenseList.length];
+                    item.q = `${sel.q} (Stage ${stageNum} - Q${i})`;
+                    item.options = [sel.c, ...sel.x];
+                    item.answer = 0;
+                    item.exp = sel.e;
+                }
+                else if (topicId === "plurals") {
+                    const plurList = [
+                        { q: "Scientists analyzed the rare atmospheric _______ recorded yesterday.", c: "phenomena", x: ["phenomenon", "phenomenons", "phenomenas"], e: "Plural of Greek root 'phenomenon' is 'phenomena'." },
+                        { q: "The farmer bought ten young _______ at the fair.", c: "calves", x: ["calfs", "calve", "calfes"], e: "Noun ending in -f turns to -ves (calves)." },
+                        { q: "The library acquired updated _______ for research.", c: "criteria", x: ["criterion", "criterias", "criterions"], e: "Plural of 'criterion' is 'criteria'." },
+                        { q: "There were several flock of _______ in the lake.", c: "sheep", x: ["sheeps", "sheepes", "sheeps'"], e: "'Sheep' is irregular and retains identical plural form." },
+                        { q: "Both of her _______ attended the graduation ceremony.", c: "sisters-in-law", x: ["sister-in-laws", "sisters-in-laws", "sister-in-law"], e: "Compound noun pluralizes the primary noun: sisters-in-law." }
+                    ];
+                    const sel = plurList[(i + stageNum) % plurList.length];
+                    item.q = `${sel.q} (Stage ${stageNum} - Q${i})`;
+                    item.options = [sel.c, ...sel.x];
+                    item.answer = 0;
+                    item.exp = sel.e;
+                }
+
+                list.push(item);
+            }
+
+            return list;
+        }
+
+        // APP STATE
+        let currentUser = null; // { name, companion, progress: { topic_stage: score } }
+        let currentTopic = null;
+        let currentStage = 0;
+        let currentQuestions = [];
+        let currentQIndex = 0;
+        let userAnswers = []; // stores user selected option index
+
+        // UTILITY: SHUFFLE ARRAY
+        function shuffleArray(arr) {
+            const array = [...arr];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderCompanionSelector();
+            checkAutoLogin();
+        };
+
+        // RENDER COMPANION SELECTOR IN LOGIN
+        function renderCompanionSelector() {
+            const container = document.getElementById('companion-selector');
+            container.innerHTML = '';
+            for (const [key, comp] of Object.entries(COMPANIONS)) {
+                container.innerHTML += `
+                    <label class="cursor-pointer">
+                        <input type="radio" name="companion" value="${key}" class="peer hidden" ${key==='spongelad'?'checked':''}>
+                        <div class="p-2 bg-slate-800 border-2 border-slate-700 peer-checked:border-amber-400 peer-checked:bg-slate-700 rounded-xl text-center transition flex flex-col items-center">
+                            <div class="w-8 h-8 ${comp.bg} rounded-full flex items-center justify-center text-slate-900 font-bold text-xs mb-1">
+                                ${comp.name[0]}
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-300 block truncate">${comp.name.split('-')[0]}</span>
+                        </div>
+                    </label>
+                `;
+            }
+        }
+
+        // LOGIN / RESUME LOGIC
+        function handleLogin(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('login-input').value.trim();
+            const companionInput = document.querySelector('input[name="companion"]:checked').value;
+            if (!nameInput) return;
+
+            let players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+            if (!players[nameInput]) {
+                players[nameInput] = {
+                    name: nameInput,
+                    companion: companionInput,
+                    progress: {} // key: "topic_stage", val: score
+                };
+            } else {
+                // update companion preference if resuming
+                players[nameInput].companion = companionInput;
+            }
+
+            localStorage.setItem('gq_players', JSON.stringify(players));
+            localStorage.setItem('gq_current_user', nameInput);
+            
+            currentUser = players[nameInput];
+            loadDashboard();
+        }
+
+        function checkAutoLogin() {
+            const lastUser = localStorage.getItem('gq_current_user');
+            if (lastUser) {
+                let players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+                if (players[lastUser]) {
+                    currentUser = players[lastUser];
+                    loadDashboard();
+                }
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('gq_current_user');
+            currentUser = null;
+            document.getElementById('user-bar').classList.add('hidden');
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-stages').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-login').classList.remove('hidden');
+        }
+
+        // DASHBOARD & AVATAR RENDERING
+        function loadDashboard() {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-stages').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-dashboard').classList.remove('hidden');
+            document.getElementById('user-bar').classList.remove('hidden');
+
+            document.getElementById('nav-student-name').innerText = currentUser.name;
+            
+            // Calculate progress stats
+            const clearedCount = Object.values(currentUser.progress).filter(s => s >= 16).length;
+            const totalPoints = Object.values(currentUser.progress).reduce((a, b) => a + b, 0);
+
+            document.getElementById('nav-cleared-count').innerText = clearedCount;
+            document.getElementById('dash-cleared-stages').innerText = clearedCount;
+            document.getElementById('dash-total-score').innerText = totalPoints * 10; // 10 pts per question
+
+            const compData = COMPANIONS[currentUser.companion] || COMPANIONS['spongelad'];
+            document.getElementById('dash-companion-name').innerText = compData.name;
+            document.getElementById('dash-gear-count').innerText = `${clearedCount} Items Unlocked`;
+
+            renderAvatarDoll(clearedCount);
+            renderTopicGrid();
+        }
+
+        // PAPER DOLL AVATAR SVG GENERATOR
+        function renderAvatarDoll(clearedCount) {
+            const comp = COMPANIONS[currentUser.companion] || COMPANIONS['spongelad'];
+            const container = document.getElementById('dashboard-avatar-container');
+
+            // Determine equipped accessories based on cleared count
+            const hasGlasses = clearedCount >= 1;
+            const hasCrown = clearedCount >= 2;
+            const hasPen = clearedCount >= 3;
+            const hasTrophy = clearedCount >= 4;
+            const hasCape = clearedCount >= 5;
+
+            container.innerHTML = `
+                <svg viewBox="0 0 100 100" class="w-24 h-24">
+                    <!-- Hero Cape (Body Slot) -->
+                    ${hasCape ? `<path d="M 25 45 L 10 85 L 90 85 L 75 45 Z" fill="#e11d48" />` : ''}
+
+                    <!-- Character Body Base -->
+                    <rect x="25" y="30" width="50" height="45" rx="8" fill="${comp.bodyColor}" stroke="#1e293b" stroke-width="2"/>
+                    <!-- Eyes -->
+                    <circle cx="40" cy="45" r="6" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+                    <circle cx="40" cy="45" r="2.5" fill="#0284c7"/>
+                    <circle cx="60" cy="45" r="6" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+                    <circle cx="60" cy="45" r="2.5" fill="#0284c7"/>
+                    <!-- Smile -->
+                    <path d="M 40 58 Q 50 66 60 58" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- Glasses (Head Slot) -->
+                    ${hasGlasses ? `
+                        <rect x="32" y="40" width="16" height="10" rx="2" fill="none" stroke="#1e293b" stroke-width="2"/>
+                        <rect x="52" y="40" width="16" height="10" rx="2" fill="none" stroke="#1e293b" stroke-width="2"/>
+                        <line x1="48" y1="45" x2="52" y2="45" stroke="#1e293b" stroke-width="2"/>
+                    ` : ''}
+
+                    <!-- Crown (Head Slot) -->
+                    ${hasCrown ? `
+                        <polygon points="30,30 35,15 42,24 50,12 58,24 65,15 70,30" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                    ` : ''}
+
+                    <!-- Left Hand - Pen (Hand Slot) -->
+                    ${hasPen ? `
+                        <line x1="20" y1="50" x2="10" y2="35" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="10,35 8,30 13,33" fill="#e11d48"/>
+                    ` : ''}
+
+                    <!-- Right Hand - Trophy (Hand Slot) -->
+                    ${hasTrophy ? `
+                        <path d="M 80 50 L 88 40 L 82 40 Z" fill="#fbbf24" stroke="#d97706"/>
+                        <circle cx="85" cy="38" r="4" fill="#fbbf24"/>
+                    ` : ''}
+                </svg>
+            `;
+        }
+
+        // TOPIC GRID RENDER
+        function renderTopicGrid() {
+            const container = document.getElementById('topic-grid');
+            container.innerHTML = '';
+
+            TOPICS.forEach(topic => {
+                let topicCleared = 0;
+                for (let s = 1; s <= 5; s++) {
+                    if ((currentUser.progress[`${topic.id}_${s}`] || 0) >= 16) {
+                        topicCleared++;
+                    }
+                }
+
+                container.innerHTML += `
+                    <div onclick="selectTopic('${topic.id}')" class="bg-slate-900/80 border border-sky-500/30 hover:border-amber-400 rounded-3xl p-5 cursor-pointer transition transform hover:-translate-y-1 shadow-xl flex flex-col justify-between group">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div class="w-12 h-12 bg-sky-500/10 text-sky-400 group-hover:bg-amber-400 group-hover:text-slate-900 rounded-2xl flex items-center justify-center text-2xl transition">
+                                    <i class="fa-solid ${topic.icon}"></i>
+                                </div>
+                                <span class="text-xs font-bold bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-emerald-400">
+                                    ${topicCleared}/5 Stages
+                                </span>
+                            </div>
+                            <div>
+                                <h4 class="font-game text-xl font-bold text-white group-hover:text-amber-300 transition">${topic.name}</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">${topic.desc}</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-sky-300 font-bold">
+                            <span>5 Stages &bull; 100 Questions</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // SELECT TOPIC -> SHOW STAGES
+        function selectTopic(topicId) {
+            currentTopic = TOPICS.find(t => t.id === topicId);
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-stages').classList.remove('hidden');
+            document.getElementById('stage-topic-title').innerText = currentTopic.name;
+
+            renderStageCards();
+        }
+
+        function goHome() {
+            loadDashboard();
+        }
+
+        // RENDER 5 STAGE CARDS
+        function renderStageCards() {
+            const container = document.getElementById('stage-cards-container');
+            container.innerHTML = '';
+
+            const stageLabels = [
+                "Stage 1: Foundational DSE",
+                "Stage 2: Intermediate DSE",
+                "Stage 3: Advanced DSE",
+                "Stage 4: Distinction Level",
+                "Stage 5: Masterclass 5**"
+            ];
+
+            for (let s = 1; s <= 5; s++) {
+                const key = `${currentTopic.id}_${s}`;
+                const bestScore = currentUser.progress[key] || 0;
+                const isCleared = bestScore >= 16;
+                const accessory = ACCESSORY_LIST.find(a => a.stage === s);
+
+                container.innerHTML += `
+                    <div class="bg-slate-900/90 border-2 ${isCleared ? 'border-emerald-500/60 bg-emerald-950/10' : 'border-sky-500/30'} rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md ${isCleared ? 'bg-emerald-500/20 text-emerald-400' : 'bg-sky-500/20 text-sky-300'}">
+                                    ${isCleared ? 'CLEARED' : 'LOCKED GEAR'}
+                                </span>
+                                <i class="fa-solid ${accessory.icon} text-amber-400 text-lg" title="Reward: ${accessory.name}"></i>
+                            </div>
+
+                            <h4 class="font-game text-lg font-bold text-white">${stageLabels[s-1]}</h4>
+                            <p class="text-xs text-slate-400">Target Score: 16 / 20 (80%)</p>
+                            <p class="text-xs font-bold ${bestScore > 0 ? 'text-amber-400' : 'text-slate-500'}">
+                                High Score: ${bestScore}/20
+                            </p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="bg-slate-800/80 p-2 rounded-xl text-center border border-slate-700/60">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase block">Reward Gear</span>
+                                <span class="text-xs font-bold text-amber-300"><i class="fa-solid ${accessory.icon} mr-1"></i>${accessory.name}</span>
+                            </div>
+
+                            <button onclick="startQuiz('${currentTopic.id}', ${s})" class="w-full ${isCleared ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-amber-400 hover:bg-amber-300 text-slate-900'} text-white font-bold py-2.5 rounded-xl text-xs shadow-lg transition">
+                                ${isCleared ? 'Replay Stage' : 'Start Stage'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // QUIZ PLAY LOGIC
+        function startQuiz(topicId, stageNum) {
+            currentTopic = TOPICS.find(t => t.id === topicId);
+            currentStage = stageNum;
+            
+            // Generate 20 questions for this stage
+            const rawQuestions = generateStageQuestions(topicId, stageNum);
+
+            // Deep clone and shuffle option order for every question every time it is played!
+            currentQuestions = rawQuestions.map(q => {
+                const shuffledOpts = shuffleArray(q.options);
+                const correctText = q.options[q.answer];
+                const newCorrectIndex = shuffledOpts.indexOf(correctText);
+
+                return {
+                    q: q.q,
+                    options: shuffledOpts,
+                    answer: newCorrectIndex,
+                    exp: q.exp,
+                    correctText: correctText
+                };
+            });
+
+            currentQIndex = 0;
+            userAnswers = [];
+
+            document.getElementById('view-stages').classList.add('hidden');
+            document.getElementById('view-quiz').classList.remove('hidden');
+
+            document.getElementById('quiz-topic-badge').innerText = currentTopic.name;
+            document.getElementById('quiz-stage-title').innerText = `Stage ${currentStage}: HKDSE Level ${currentStage}`;
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = currentQuestions[currentQIndex];
+            
+            document.getElementById('quiz-q-num').innerText = currentQIndex + 1;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQIndex + 1) / 20) * 100}%`;
+            document.getElementById('quiz-question-text').innerText = q.q;
+
+            const grid = document.getElementById('quiz-options-grid');
+            grid.innerHTML = '';
+
+            q.options.forEach((optText, idx) => {
+                grid.innerHTML += `
+                    <button onclick="selectOption(${idx})" class="w-full text-left p-4 rounded-2xl border border-slate-700 bg-slate-800/80 hover:bg-sky-600/20 hover:border-sky-400 font-medium text-sm text-slate-200 transition flex items-center justify-between group">
+                        <span>${optText}</span>
+                        <div class="w-6 h-6 rounded-full border border-slate-600 group-hover:border-amber-400 flex items-center justify-center text-xs text-transparent group-hover:text-amber-400">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </button>
+                `;
+            });
+        }
+
+        function selectOption(optIndex) {
+            userAnswers.push(optIndex);
+
+            if (currentQIndex < 19) {
+                currentQIndex++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function confirmExitQuiz() {
+            if (confirm("Quit stage? Your progress for this stage won't be saved.")) {
+                document.getElementById('view-quiz').classList.add('hidden');
+                document.getElementById('view-stages').classList.remove('hidden');
+            }
+        }
+
+        // QUIZ FINISH & PASSING VERIFICATION
+        function finishQuiz() {
+            let correctCount = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === currentQuestions[idx].answer) {
+                    correctCount++;
+                }
+            });
+
+            const key = `${currentTopic.id}_${currentStage}`;
+            const passed = correctCount >= 16; // 16/20 threshold
+
+            // Save high score
+            if (!currentUser.progress[key] || correctCount > currentUser.progress[key]) {
+                currentUser.progress[key] = correctCount;
+                let players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+                players[currentUser.name] = currentUser;
+                localStorage.setItem('gq_players', JSON.stringify(players));
+            }
+
+            // Display Results View
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-result').classList.remove('hidden');
+
+            document.getElementById('result-score').innerText = `${correctCount} / 20`;
+            const statusEl = document.getElementById('result-status');
+            const iconBox = document.getElementById('result-icon-box');
+            const reviewBtn = document.getElementById('btn-review-answers');
+            const rewardBox = document.getElementById('reward-box');
+
+            if (passed) {
+                statusEl.innerText = "STAGE CLEARED!";
+                statusEl.className = "font-game text-3xl font-bold text-emerald-400";
+                iconBox.className = "w-24 h-24 rounded-full mx-auto flex items-center justify-center text-4xl shadow-xl bg-emerald-500/20 text-emerald-400 border-2 border-emerald-400 animate-float";
+                iconBox.innerHTML = `<i class="fa-solid fa-trophy"></i>`;
+                
+                document.getElementById('result-title').innerText = "Congratulations!";
+                document.getElementById('result-subtitle').innerText = `You scored ${correctCount}/20 (>=16 required). Stage cleared!`;
+
+                // Unlocked Reward Info
+                const accessory = ACCESSORY_LIST.find(a => a.stage === currentStage);
+                document.getElementById('reward-name').innerText = accessory.name;
+                document.getElementById('reward-icon-container').innerHTML = `<i class="fa-solid ${accessory.icon}"></i>`;
+                rewardBox.classList.remove('hidden');
+
+                // UNLOCK ANSWER KEY REVIEW
+                reviewBtn.classList.remove('hidden');
+                buildAnswerKeyList();
+            } else {
+                statusEl.innerText = "FAILED";
+                statusEl.className = "font-game text-3xl font-bold text-rose-400";
+                iconBox.className = "w-24 h-24 rounded-full mx-auto flex items-center justify-center text-4xl shadow-xl bg-rose-500/20 text-rose-400 border-2 border-rose-400 animate-float";
+                iconBox.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+
+                document.getElementById('result-title').innerText = "Keep Trying!";
+                document.getElementById('result-subtitle').innerText = `You scored ${correctCount}/20. You need at least 16/20 (80%) to pass and unlock answers!`;
+
+                rewardBox.classList.add('hidden');
+                reviewBtn.classList.add('hidden'); // STRICTLY HIDDEN IF FAILED
+                document.getElementById('answer-key-panel').classList.add('hidden');
+            }
+        }
+
+        function retryCurrentStage() {
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('answer-key-panel').classList.add('hidden');
+            startQuiz(currentTopic.id, currentStage);
+        }
+
+        // BUILD DETAILED ANSWER KEY (ONLY CALLED WHEN PASSED)
+        function buildAnswerKeyList() {
+            const list = document.getElementById('answer-key-list');
+            list.innerHTML = '';
+
+            currentQuestions.forEach((q, idx) => {
+                const userChoiceIdx = userAnswers[idx];
+                const isCorrect = userChoiceIdx === q.answer;
+                const userChoiceText = q.options[userChoiceIdx];
+
+                list.innerHTML += `
+                    <div class="p-3 bg-slate-900 rounded-xl border ${isCorrect ? 'border-emerald-500/40' : 'border-rose-500/40'} space-y-1">
+                        <div class="flex justify-between font-bold">
+                            <span class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">Q${idx + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</span>
+                            <span class="text-slate-400">Correct Answer: <strong class="text-amber-300">${q.correctText}</strong></span>
+                        </div>
+                        <p class="text-slate-300">${q.q}</p>
+                        <p class="text-slate-400 italic">Your pick: ${userChoiceText}</p>
+                        <p class="text-sky-300 pt-1 border-t border-slate-800"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> ${q.exp}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleAnswerKey() {
+            const panel = document.getElementById('answer-key-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        // LEADERBOARD MODAL LOGIC
+        function openLeaderboard() {
+            const modal = document.getElementById('modal-leaderboard');
+            const list = document.getElementById('leaderboard-list');
+            modal.classList.remove('hidden');
+
+            const players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+            const sorted = Object.values(players).map(p => {
+                const cleared = Object.values(p.progress).filter(s => s >= 16).length;
+                const points = Object.values(p.progress).reduce((a, b) => a + b, 0) * 10;
+                return { name: p.name, cleared, points };
+            }).sort((a, b) => b.cleared - a.cleared || b.points - a.points);
+
+            list.innerHTML = '';
+            if (sorted.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-400 text-xs py-4">No records found yet.</p>`;
+                return;
+            }
+
+            sorted.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div class="bg-slate-800 border border-slate-700 p-3 rounded-xl flex justify-between items-center text-xs">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-game font-bold text-sm w-6 text-center ${idx===0?'text-amber-400':idx===1?'text-slate-300':idx===2?'text-amber-600':'text-slate-500'}">
+                                #${idx + 1}
+                            </span>
+                            <span class="font-bold text-slate-200">${item.name}</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-emerald-400 font-bold">${item.cleared}/30 Cleared</span>
+                            <span class="text-amber-400 font-bold">${item.points} Pts</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('modal-leaderboard').classList.add('hidden');
+        }
+
+        // TEACHER BACKDOOR CONSOLE LOGIC
+        function openTeacherModal() {
+            document.getElementById('modal-teacher').classList.remove('hidden');
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('modal-teacher').classList.add('hidden');
+        }
+
+        function verifyTeacherPin() {
+            const input = document.getElementById('teacher-pin-input').value;
+            if (input === "F6ENG2026") {
+                document.getElementById('teacher-auth-box').classList.add('hidden');
+                document.getElementById('teacher-panel').classList.remove('hidden');
+                renderTeacherStudentTable();
+            } else {
+                alert("Incorrect Teacher PIN!");
+            }
+        }
+
+        function renderTeacherStudentTable() {
+            const table = document.getElementById('teacher-student-table');
+            const players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+            table.innerHTML = '';
+
+            const list = Object.values(players);
+            if (list.length === 0) {
+                table.innerHTML = `<p class="text-center text-slate-400 text-xs py-4">No student attempt records in local database.</p>`;
+                return;
+            }
+
+            list.forEach(p => {
+                const cleared = Object.values(p.progress).filter(s => s >= 16).length;
+                const points = Object.values(p.progress).reduce((a, b) => a + b, 0) * 10;
+
+                table.innerHTML += `
+                    <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                        <div>
+                            <p class="font-bold text-amber-300">${p.name}</p>
+                            <p class="text-[10px] text-slate-400">Companion: ${p.companion}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-emerald-400 font-bold">${cleared}/30 Stages Cleared</p>
+                            <p class="text-amber-400 font-bold">${points} Total Score</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function exportCSV() {
+            const players = JSON.parse(localStorage.getItem('gq_players') || '{}');
+            let csv = "Student Name,Companion,Cleared Stages,Total Points\n";
+
+            Object.values(players).forEach(p => {
+                const cleared = Object.values(p.progress).filter(s => s >= 16).length;
+                const points = Object.values(p.progress).reduce((a, b) => a + b, 0) * 10;
+                csv += `"${p.name}","${p.companion}",${cleared},${points}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'Grammar_Quest_Student_Progress.csv');
+            a.click();
+        }
+
+        function clearLeaderboard() {
+            if (confirm("Are you sure you want to clear all student records? This action cannot be undone!")) {
+                localStorage.removeItem('gq_players');
+                localStorage.removeItem('gq_current_user');
+                alert("Leaderboard and records cleared!");
+                renderTeacherStudentTable();
+                logout();
+            }
+        }
+    </script>
 </body>
 </html>

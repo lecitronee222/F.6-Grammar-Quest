@@ -17,7 +17,7 @@
       --text: #1e293b;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -104,7 +104,7 @@
       display: none;
     }
     .view-panel.active {
-      display: block;
+      display: block !important;
     }
 
     .card {
@@ -116,7 +116,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Avatar Grid Selection on First Page */
+    /* Avatar Grid Selection */
     .avatar-selection-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -138,37 +138,18 @@
       padding: 1rem 0.5rem;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s ease;
       position: relative;
     }
 
     .avatar-card:hover {
       border-color: var(--secondary);
       background: #f0f9ff;
-      transform: translateY(-2px);
     }
 
     .avatar-card.active {
       border-color: var(--primary);
       background: #eff6ff;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    }
-
-    .avatar-card-icon {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: 0.4rem;
-    }
-
-    .avatar-card-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .avatar-card-tag {
-      font-size: 0.75rem;
-      color: var(--text-muted);
     }
 
     .avatar-card.active::after {
@@ -188,7 +169,22 @@
       font-weight: 700;
     }
 
-    /* Live Preview Banner on Login Page */
+    .avatar-card-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .avatar-card-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .avatar-card-tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
     .avatar-live-preview {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
@@ -196,13 +192,10 @@
       padding: 0.75rem;
       margin-bottom: 1.25rem;
       font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      text-align: center;
     }
 
-    /* Dashboard Companion Box */
+    /* Dashboard Avatar Showcase */
     .avatar-showcase {
       display: flex;
       align-items: center;
@@ -215,15 +208,15 @@
     }
 
     .avatar-frame {
-      width: 85px;
-      height: 85px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2.8rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: relative;
     }
 
@@ -262,7 +255,7 @@
       gap: 0.4rem;
     }
 
-    /* Grid for Topics & Stages */
+    /* Topics Grid */
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -292,7 +285,7 @@
     .btn-stage {
       flex: 1;
       min-width: 48px;
-      padding: 0.5rem 0.2rem;
+      padding: 0.6rem 0.3rem;
       font-size: 0.85rem;
       text-align: center;
       border-radius: 6px;
@@ -306,6 +299,7 @@
       color: var(--primary-dark);
       border-color: #93c5fd;
       cursor: pointer;
+      font-weight: 600;
     }
 
     .btn-stage.cleared {
@@ -313,9 +307,10 @@
       color: #15803d;
       border-color: #86efac;
       cursor: pointer;
+      font-weight: 700;
     }
 
-    /* Quiz Screen */
+    /* Quiz Area */
     .quiz-header {
       display: flex;
       justify-content: space-between;
@@ -326,7 +321,7 @@
     }
 
     .q-box {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 600;
       margin-bottom: 1.5rem;
       color: #0f172a;
@@ -381,7 +376,7 @@
       transition: width 0.3s ease;
     }
 
-    /* Review Table */
+    /* Tables */
     .table-container {
       overflow-x: auto;
       margin: 1rem 0;
@@ -426,7 +421,7 @@
     }
 
     .modal-overlay.active {
-      display: flex;
+      display: flex !important;
     }
 
     .modal-content {
@@ -452,7 +447,7 @@
   </header>
 
   <main>
-    <!-- USER LOGIN / FIRST PAGE VIEW -->
+    <!-- LOGIN VIEW -->
     <section id="login-view" class="view-panel active">
       <div class="card" style="max-width: 520px; margin: 1.5rem auto;">
         <h2 style="margin-bottom: 0.5rem; text-align: center;">Candidate Registration</h2>
@@ -462,11 +457,11 @@
 
         <div style="margin-bottom: 1.25rem;">
           <label style="font-weight: 600; font-size: 0.9rem;">Student Full Name</label>
-          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem; font-size: 1rem;">
+          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" value="Candidate 1" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem; font-size: 1rem;">
         </div>
 
         <div>
-          <label style="font-weight: 600; font-size: 0.9rem;">Choose Your Companion Avatar</label>
+          <label style="font-weight: 600; font-size: 0.9rem;">Choose Companion Avatar</label>
           <div class="avatar-selection-grid">
             <div class="avatar-card active" onclick="pickAvatar('🦁 Leo the Lion', '🦁', this)">
               <span class="avatar-card-icon">🦁</span>
@@ -478,4 +473,783 @@
               <div class="avatar-card-name">Athena</div>
               <div class="avatar-card-tag">Wise Owl</div>
             </div>
-            <div class="avatar-card" onclick="pickAvatar('🐬 Echo Dolphin
+            <div class="avatar-card" onclick="pickAvatar('🐬 Echo Dolphin', '🐬', this)">
+              <span class="avatar-card-icon">🐬</span>
+              <div class="avatar-card-name">Echo</div>
+              <div class="avatar-card-tag">Swift Dolphin</div>
+            </div>
+            <div class="avatar-card" onclick="pickAvatar('🦊 Felix Fox', '🦊', this)">
+              <span class="avatar-card-icon">🦊</span>
+              <div class="avatar-card-name">Felix</div>
+              <div class="avatar-card-tag">Clever Fox</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="avatar-live-preview" id="login-companion-preview">
+          Selected Companion: <strong>🦁 Leo the Lion</strong>
+        </div>
+
+        <button class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;" onclick="handleLogin()">Start Learning &rarr;</button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboard-view" class="view-panel">
+      <!-- Companion Showcase -->
+      <div class="avatar-showcase">
+        <div class="avatar-frame">
+          <span id="avatar-icon">🦁</span>
+          <span class="avatar-gear-badge" id="avatar-badge-count">0</span>
+        </div>
+        <div style="flex: 1;">
+          <h3 id="avatar-name-display" style="font-size: 1.15rem; color: #1e3a8a;">Companion: Leo the Lion</h3>
+          <p id="student-welcome-msg" style="color: var(--text-muted); font-size: 0.9rem;">Pass mark required: 16 / 20 to clear a stage and unlock gear!</p>
+          <div class="wardrobe-grid" id="wardrobe-items">
+            <!-- Equipped accessories render here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" id="topics-container">
+        <!-- Topics & 5 Stages render here -->
+      </div>
+    </section>
+
+    <!-- QUIZ VIEW -->
+    <section id="quiz-view" class="view-panel">
+      <div class="card">
+        <div class="quiz-header">
+          <div>
+            <h2 id="quiz-topic-title">Grammar Item</h2>
+            <span id="quiz-stage-subtitle" style="color: var(--text-muted); font-weight: 600;">Stage 1 &bull; Question 1 of 20</span>
+          </div>
+          <div>
+            <span style="font-weight: 700; color: var(--primary);" id="live-score-display">Score: 0 / 20</span>
+          </div>
+        </div>
+
+        <div class="q-box" id="question-text">
+          Question loading...
+        </div>
+
+        <div class="options-grid" id="options-container">
+          <!-- Options -->
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+          <button class="btn-secondary" onclick="abortQuiz()">Quit to Dashboard</button>
+          <button class="btn-primary" id="btn-next-question" onclick="submitCurrentQuestion()" disabled>Next Question &rarr;</button>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULT & REVIEW VIEW -->
+    <section id="result-view" class="view-panel">
+      <div class="card">
+        <div style="text-align: center; margin-bottom: 1.5rem;" id="result-banner">
+          <!-- Result banner -->
+        </div>
+
+        <h3 style="margin-bottom: 0.75rem;">Stage Answer Key & Detailed Review</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Review all 20 questions below. Explanations and correct options are highlighted for exam preparation.
+        </p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 45%;">Question Prompt</th>
+                <th style="width: 20%;">Your Answer</th>
+                <th style="width: 20%;">Correct Answer</th>
+                <th style="width: 10%;">Result</th>
+              </tr>
+            </thead>
+            <tbody id="review-table-body">
+              <!-- Questions and answers -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;" id="result-action-buttons">
+          <!-- Actions -->
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD VIEW -->
+    <section id="leaderboard-view" class="view-panel">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2>🏆 Academy Leaderboard</h2>
+          <button class="btn-secondary" onclick="showDashboard()">Back to Dashboard</button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          Rankings are calculated by total stages cleared (≥16/20) and overall cumulative scores.
+        </p>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 10%;">Rank</th>
+                <th style="width: 35%;">Student Name</th>
+                <th style="width: 25%;">Companion Avatar</th>
+                <th style="width: 15%;">Stages Cleared</th>
+                <th style="width: 15%;">Total Points</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <!-- Leaderboard rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- TEACHER BACKDOOR MODAL -->
+  <div class="modal-overlay" id="teacher-modal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3>🔒 Teacher Administration Backdoor</h3>
+        <button class="btn-secondary" style="padding: 0.3rem 0.6rem;" onclick="closeTeacherModal()">&times;</button>
+      </div>
+
+      <div id="teacher-auth-box">
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">Enter the administrative PIN to access student records:</p>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="password" id="teacher-pin-input" placeholder="Enter Teacher PIN" style="flex: 1; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+          <button class="btn-primary" onclick="verifyTeacherPin()">Unlock</button>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">Master Teacher PIN: <strong>F6ENG2026</strong></p>
+      </div>
+
+      <div id="teacher-portal-body" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h4>Student Progress Reports</h4>
+          <button class="btn-danger" onclick="clearLeaderboardData()">⚠️ Clear Leaderboard & Reset Data</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Stages Cleared</th>
+                <th>Avg. Score</th>
+                <th>Accessories Unlocked</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-student-progress-tbody">
+              <!-- Reports -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Safe Storage Memory Fallback */
+    let inMemoryStore = {};
+    const safeStorage = {
+      getItem: function(key) {
+        try {
+          return localStorage.getItem(key) || inMemoryStore[key] || null;
+        } catch(e) {
+          return inMemoryStore[key] || null;
+        }
+      },
+      setItem: function(key, val) {
+        try {
+          localStorage.setItem(key, val);
+        } catch(e) {}
+        inMemoryStore[key] = val;
+      },
+      removeItem: function(key) {
+        try {
+          localStorage.removeItem(key);
+        } catch(e) {}
+        delete inMemoryStore[key];
+      }
+    };
+
+    const PASSING_THRESHOLD = 16;
+    const TEACHER_MASTER_PIN = "F6ENG2026";
+    const TOPICS = ["Prepositions", "Word Formation", "Tenses", "Articles", "Plurals"];
+
+    let state = {
+      currentUser: null,
+      selectedAvatar: "🦁 Leo the Lion",
+      avatarIcon: "🦁",
+      currentTopic: null,
+      currentStage: 1,
+      currentQuestionIdx: 0,
+      currentScore: 0,
+      selectedOption: null,
+      activeQuestionSet: [],
+      stageAnswerLog: []
+    };
+
+    const stageAccessories = {
+      1: { name: "Cadet Cap", icon: "🧢" },
+      2: { name: "Scholar Monocle", icon: "🧐" },
+      3: { name: "Guild Medallion", icon: "🎖️" },
+      4: { name: "Sovereign Mantle", icon: "🥋" },
+      5: { name: "Grand Laureate Crown", icon: "👑" }
+    };
+
+    function pickAvatar(avatarFullName, icon, cardElement) {
+      state.selectedAvatar = avatarFullName;
+      state.avatarIcon = icon;
+      document.querySelectorAll(".avatar-card").forEach(c => c.classList.remove("active"));
+      if (cardElement) cardElement.classList.add("active");
+      const preview = document.getElementById("login-companion-preview");
+      if (preview) {
+        preview.innerHTML = `Selected Companion: <strong>${avatarFullName}</strong>`;
+      }
+    }
+
+    /* 5 Topics x 5 Stages x 20 Questions */
+    const questionRepository = {};
+
+    function initRepository() {
+      const qData = {
+        "Prepositions": [
+          { q: "Far from being detrimental, the measure is conducive _____ sustainable growth.", a: "to", dist: ["for", "with", "towards"] },
+          { q: "He refused to acquiesce _____ the committee's controversial verdict.", a: "in", dist: ["to", "with", "on"] },
+          { q: "The ambassador spoke at the behest _____ the regional educational council.", a: "of", dist: ["to", "with", "for"] },
+          { q: "The school's history is inextricably bound up _____ the territory's evolution.", a: "with", dist: ["to", "in", "by"] },
+          { q: "The survey evidence does not corroborate _____ the journalist's claim.", a: "with", dist: ["to", "on", "at"] },
+          { q: "The politician's evasive statement bordered _____ blatant deception.", a: "on", dist: ["to", "with", "at"] },
+          { q: "Such arbitrary decisions run counter _____ fundamental fairness.", a: "to", dist: ["against", "with", "for"] },
+          { q: "He held fast to his beliefs at variance _____ orthodox doctrine.", a: "with", dist: ["to", "against", "from"] },
+          { q: "Her academic thesis is predicated _____ extensive longitudinal data.", a: "on", dist: ["to", "in", "with"] },
+          { q: "The administration acted in collusion _____ private developers.", a: "with", dist: ["by", "under", "to"] },
+          { q: "The candidate was exonerated _____ all allegations of misconduct.", a: "from", dist: ["of", "off", "with"] },
+          { q: "The initiative was launched with an eye _____ bridging the digital divide.", a: "to", dist: ["for", "at", "on"] },
+          { q: "The treaty was declared null and void by virtue _____ clause twelve.", a: "of", dist: ["with", "for", "in"] },
+          { q: "They remained steadfast _____ adversity, ensuring complete syllabus mastery.", a: "amid", dist: ["between", "within", "towards"] },
+          { q: "The newly instituted sanctions are aimed _____ deterring malpractice.", a: "at", dist: ["for", "to", "on"] },
+          { q: "Her personal statement was framed in terms _____ community empowerment.", a: "of", dist: ["with", "for", "by"] },
+          { q: "The researcher took umbrage _____ the reviewer's condescending tone.", a: "at", dist: ["with", "to", "for"] },
+          { q: "He resigned in protest _____ the curtailment of student rights.", a: "against", dist: ["to", "with", "at"] },
+          { q: "The candidate's demeanor was fraught _____ profound apprehension.", a: "with", dist: ["by", "of", "in"] },
+          { q: "His conclusions are tantamount _____ an admission of analytical error.", a: "to", dist: ["with", "as", "against"] }
+        ],
+        "Word Formation": [
+          { q: "Her explanation was completely _____ (logic).", a: "logical", dist: ["logically", "logician", "logicize"] },
+          { q: "Our school values academic honesty and student _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] },
+          { q: "Regular physical activity is _____ (benefit) to adolescents.", a: "beneficial", dist: ["beneficiary", "beneficially", "benefit"] },
+          { q: "The children participated _____ (happy) in the activity.", a: "happily", dist: ["happiness", "happy", "unhappy"] },
+          { q: "Making an informed _____ (decide) about JUPAS requires research.", a: "decision", dist: ["decisive", "decisiveness", "deciding"] },
+          { q: "Global warming is a critical _____ (environment) challenge.", a: "environmental", dist: ["environmentally", "environmentalist", "environments"] },
+          { q: "The class representative took full _____ (responsible) for the event.", a: "responsibility", dist: ["responsible", "responsibly", "irresponsible"] },
+          { q: "The drama club gave an _____ (amaze) performance.", a: "amazing", dist: ["amazingly", "amazed", "amazement"] },
+          { q: "We must brainstorm a viable _____ (solve) to reduce waste.", a: "solution", dist: ["solvable", "solver", "solving"] },
+          { q: "She answered the interviewers with poise and _____ (confident).", a: "confidence", dist: ["confident", "confidently", "confiding"] },
+          { q: "Getting adequate sleep is _____ (necessity) for exam performance.", a: "necessary", dist: ["necessarily", "necessitate", "necessities"] },
+          { q: "The volunteer displayed immense _____ (kind) towards elderly residents.", a: "kindness", dist: ["kindly", "unkind", "kinder"] },
+          { q: "Tropical weather in July is often _____ (predict).", a: "predictable", dist: ["prediction", "predictably", "predictor"] },
+          { q: "The basketball team celebrated their thrilling championship _____ (victor).", a: "victory", dist: ["victorious", "victoriously", "victim"] },
+          { q: "He is seeking advice from a _____ (profession) career counsellor.", a: "professional", dist: ["profession", "professionally", "profess"] },
+          { q: "Please handle the laboratory glassware with extreme _____ (careful).", a: "care", dist: ["careless", "carefully", "caringly"] },
+          { q: "His unexpected _____ (appear) at the alumni dinner delighted everyone.", a: "appearance", dist: ["appearing", "apparent", "apparently"] },
+          { q: "The teacher provided a list of highly _____ (use) exam tips.", a: "useful", dist: ["useless", "usefully", "usability"] },
+          { q: "The game has surged in _____ (popular) among local teenagers.", a: "popularity", dist: ["popularly", "popularize", "popular"] },
+          { q: "The museum trip was a memorable _____ (educate) experience.", a: "educational", dist: ["education", "educationally", "educator"] }
+        ],
+        "Tenses": [
+          { q: "By the time the bell rang, all candidates _____ writing.", a: "had finished", dist: ["finish", "have finished", "will finish"] },
+          { q: "Listen! The guest speaker _____ in the school hall right now.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] },
+          { q: "They _____ in Kowloon Tong since they moved to Hong Kong.", a: "have lived", dist: ["live", "lived", "are living"] },
+          { q: "Pure water _____ at 100 degrees Celsius at sea level.", a: "boils", dist: ["is boiling", "boiled", "will boil"] },
+          { q: "Yesterday after school, she _____ her vocabulary notebook on the train.", a: "lost", dist: ["loses", "has lost", "was losing"] },
+          { q: "If the typhoon signal is raised tomorrow morning, classes _____ cancelled.", a: "will be", dist: ["were", "would be", "are being"] },
+          { q: "While he _____ home, he ran into his primary school classmate.", a: "was walking", dist: ["walks", "has walked", "walked"] },
+          { q: "I _____ the past paper analysis twice already.", a: "have completed", dist: ["complete", "completed", "had completed"] },
+          { q: "Next Thursday, our school _____ its annual athletics meet.", a: "will hold", dist: ["held", "has held", "holds"] },
+          { q: "He usually _____ up at 6:30 a.m. to review vocabulary.", a: "wakes", dist: ["is waking", "woke", "has woken"] },
+          { q: "When we reached the auditorium, the ceremony _____ already.", a: "had started", dist: ["starts", "has started", "will start"] },
+          { q: "At the moment, the candidates _____ for the mock interview.", a: "are preparing", dist: ["prepare", "prepared", "have prepared"] },
+          { q: "She _____ lunch before she rushed to the tutorial centre.", a: "had eaten", dist: ["eats", "is eating", "has eaten"] },
+          { q: "The sun _____ in the east every morning without fail.", a: "rises", dist: ["is rising", "rose", "has risen"] },
+          { q: "Last night, the debate team _____ past midnight on their speech.", a: "worked", dist: ["work", "are working", "have worked"] },
+          { q: "I promise I _____ you as soon as the results are announced.", a: "will call", dist: ["call", "called", "have called"] },
+          { q: "Look! The school bus _____ around the bend.", a: "is coming", dist: ["comes", "came", "has come"] },
+          { q: "She _____ in several speech competitions so far.", a: "has participated", dist: ["participates", "participated", "was participating"] },
+          { q: "When the announcement came over the PA system, we _____ our quiz.", a: "were taking", dist: ["took", "take", "are taking"] },
+          { q: "Every weekend, he _____ badminton with his siblings.", a: "plays", dist: ["is playing", "played", "has played"] }
+        ],
+        "Articles": [
+          { q: "Honesty is widely recognized as _____ noble quality.", a: "a", dist: ["an", "the", "no article"] },
+          { q: "She has learned to play _____ piano since childhood.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "His dream is to become _____ aerospace engineer.", a: "an", dist: ["a", "the", "no article"] },
+          { q: "We visited _____ Hong Kong Palace Museum during our study trip.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "Consistent sleep is _____ most effective remedy for exam stress.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "She took _____ umbrella in case of an afternoon thunderstorm.", a: "an", dist: ["a", "the", "no article"] },
+          { q: "Could you spare _____ extra ballpoint pen for the exam?", a: "an", dist: ["a", "the", "no article"] },
+          { q: "Mount Everest is _____ highest peak on Earth.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "Many doctors recommend drinking _____ fresh water upon waking.", a: "no article", dist: ["a", "an", "the"] },
+          { q: "They spent three weeks touring _____ United Kingdom.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "She was awarded a scholarship for being _____ honest and diligent student.", a: "an", dist: ["a", "the", "no article"] },
+          { q: "We listened to _____ inspiring lecture on environmental conservation.", a: "an", dist: ["a", "the", "no article"] },
+          { q: "Please turn off _____ projector before leaving the classroom.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "He enjoys playing _____ volleyball with teammates after school.", a: "no article", dist: ["the", "a", "an"] },
+          { q: "Our class attended a talk by _____ European diplomat.", a: "a", dist: ["an", "the", "no article"] },
+          { q: "The Earth revolves around _____ Sun.", a: "the", dist: ["a", "an", "no article"] },
+          { q: "It took almost _____ hour to proofread the entire passage.", a: "an", dist: ["a", "the", "no article"] },
+          { q: "They adopted _____ stray kitten rescued near the school playground.", a: "a", dist: ["an", "the", "no article"] },
+          { q: "Many believers go to _____ church every Sunday morning.", a: "no article", dist: ["the", "a", "an"] },
+          { q: "He demonstrated _____ unique approach to tackling synthesis tasks.", a: "a", dist: ["an", "the", "no article"] }
+        ],
+        "Plurals": [
+          { q: "The region successfully navigated multiple financial _____ (crisis).", a: "crises", dist: ["crisises", "crisi", "crisis"] },
+          { q: "Scientists have documented various atmospheric _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] },
+          { q: "The dentist recommended brushing all your _____ (tooth) twice daily.", a: "teeth", dist: ["tooths", "toothes", "teethes"] },
+          { q: "Several young _____ (child) took part in the community clean-up.", a: "children", dist: ["childs", "childrens", "childes"] },
+          { q: "The chef purchased five kilograms of fresh _____ (potato).", a: "potatoes", dist: ["potatos", "potatoies", "potato"] },
+          { q: "All the kitchen _____ (knife) must be stored safely in the drawer.", a: "knives", dist: ["knifes", "knifees", "knife"] },
+          { q: "A formation of wild _____ (goose) migrated across the coastline.", a: "geese", dist: ["gooses", "geeses", "goosies"] },
+          { q: "In autumn, dry _____ (leaf) flutter from the trees in the courtyard.", a: "leaves", dist: ["leafs", "leafes", "leavies"] },
+          { q: "The rural farm is home to fifty _____ (sheep).", a: "sheep", dist: ["sheeps", "sheepes", "sheepies"] },
+          { q: "The research thesis was supported by concrete empirical _____ (datum).", a: "data", dist: ["datums", "datas", "datae"] },
+          { q: "Two courteous _____ (policeman) guided the crowd during the marathon.", a: "policemen", dist: ["policemans", "policemenes", "policeman"] },
+          { q: "Laboratory researchers observed nocturnal _____ (mouse) in trials.", a: "mice", dist: ["mouses", "mices", "mouse"] },
+          { q: "Delegates from both _____ (country) signed the cross-border pact.", a: "countries", dist: ["countrys", "countries'", "countryes"] },
+          { q: "The bakery sold thirty fresh _____ (loaf) of sourdough bread.", a: "loaves", dist: ["loafs", "loafes", "loave"] },
+          { q: "Hundreds of rare marine _____ (species) reside in deep trenches.", a: "species", dist: ["specieses", "specie", "specis"] },
+          { q: "Both _____ (half) of the student body supported the recycling campaign.", a: "halves", dist: ["halfs", "halfes", "halve"] },
+          { q: "A pack of wild _____ (wolf) was tracked across the snowy forest.", a: "wolves", dist: ["wolfs", "wolfes", "wolve"] },
+          { q: "The library assistant restocked all the reference _____ (shelf).", a: "shelves", dist: ["shelfs", "shelfes", "shelve"] },
+          { q: "After the long cross-country hike, both his _____ (foot) were sore.", a: "feet", dist: ["foots", "feets", "foot"] },
+          { q: "Many accomplished _____ (woman) hold leadership roles in the school.", a: "women", dist: ["womans", "womens", "woman"] }
+        ]
+      };
+
+      TOPICS.forEach(topic => {
+        questionRepository[topic] = {};
+        const baseSet = qData[topic];
+        for (let s = 1; s <= 5; s++) {
+          questionRepository[topic][s] = [];
+          for (let i = 0; i < 20; i++) {
+            const item = baseSet[i];
+            const opts = [item.a, ...item.dist];
+            // Shuffle
+            for (let k = opts.length - 1; k > 0; k--) {
+              const j = Math.floor(Math.random() * (k + 1));
+              [opts[k], opts[j]] = [opts[j], opts[k]];
+            }
+            questionRepository[topic][s].push({
+              prompt: `[Stage ${s} • Q${i + 1}] ${item.q}`,
+              correct: item.a,
+              options: opts
+            });
+          }
+        }
+      });
+    }
+
+    initRepository();
+
+    /* User Profile Data Handler */
+    function getStoredUserData(name) {
+      let raw = safeStorage.getItem("f6_student_records");
+      let records = {};
+      try {
+        records = raw ? JSON.parse(raw) : {};
+      } catch(e) { records = {}; }
+
+      if (!records[name]) {
+        records[name] = {
+          name: name,
+          avatar: state.selectedAvatar,
+          unlockedStages: { "Prepositions": 1, "Word Formation": 1, "Tenses": 1, "Articles": 1, "Plurals": 1 },
+          stageScores: {},
+          clearedCount: 0,
+          totalScore: 0,
+          accessories: []
+        };
+        safeStorage.setItem("f6_student_records", JSON.stringify(records));
+      }
+      return records[name];
+    }
+
+    function saveUserData(userData) {
+      let raw = safeStorage.getItem("f6_student_records");
+      let records = {};
+      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
+      records[userData.name] = userData;
+      safeStorage.setItem("f6_student_records", JSON.stringify(records));
+    }
+
+    /* Screen Navigation */
+    function switchView(viewId) {
+      const views = ["login-view", "dashboard-view", "quiz-view", "result-view", "leaderboard-view"];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.remove("active");
+      });
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add("active");
+    }
+
+    /* Auth & Login */
+    function handleLogin() {
+      const nameInput = document.getElementById("student-name-input");
+      const name = nameInput ? nameInput.value.trim() : "";
+      if (!name) {
+        alert("Please enter student name.");
+        return;
+      }
+      state.currentUser = name;
+      showDashboard();
+    }
+
+    function showDashboard() {
+      if (!state.currentUser) {
+        switchView("login-view");
+        return;
+      }
+
+      const data = getStoredUserData(state.currentUser);
+
+      // Render Avatar
+      const icon = (data.avatar || "🦁").split(" ")[0];
+      document.getElementById("avatar-icon").textContent = icon;
+      document.getElementById("avatar-name-display").textContent = `Companion: ${data.avatar}`;
+      document.getElementById("student-welcome-msg").textContent = `Student: ${data.name} | Cleared: ${data.clearedCount} stages (Passing: ${PASSING_THRESHOLD}/20)`;
+      document.getElementById("avatar-badge-count").textContent = data.accessories.length;
+
+      // Render Wardrobe
+      const wardrobeEl = document.getElementById("wardrobe-items");
+      wardrobeEl.innerHTML = "";
+      if (data.accessories.length === 0) {
+        wardrobeEl.innerHTML = "<span style='font-size: 0.85rem; color: #64748b;'>No accessories unlocked yet. Clear any stage with 16+ to earn gear!</span>";
+      } else {
+        data.accessories.forEach(acc => {
+          const chip = document.createElement("div");
+          chip.className = "accessory-chip";
+          chip.innerHTML = `${acc.icon} ${acc.name}`;
+          wardrobeEl.appendChild(chip);
+        });
+      }
+
+      // Render Topics & 5 Stages
+      const container = document.getElementById("topics-container");
+      container.innerHTML = "";
+
+      TOPICS.forEach(topic => {
+        const card = document.createElement("div");
+        card.className = "topic-card";
+        const highestUnlocked = data.unlockedStages[topic] || 1;
+
+        let stageBtnsHtml = "";
+        for (let s = 1; s <= 5; s++) {
+          const key = `${topic}-${s}`;
+          const score = data.stageScores[key];
+          const isCleared = score !== undefined && score >= PASSING_THRESHOLD;
+          const isUnlocked = s <= highestUnlocked;
+
+          let btnClass = "btn-stage";
+          let label = `Stage ${s}`;
+
+          if (isCleared) {
+            btnClass += " cleared";
+            label = `S${s} (✔ ${score}/20)`;
+          } else if (isUnlocked) {
+            btnClass += " unlocked";
+            label = score !== undefined ? `S${s} (${score}/20)` : `Stage ${s}`;
+          } else {
+            label = `🔒 S${s}`;
+          }
+
+          stageBtnsHtml += `
+            <button class="${btnClass}" ${isUnlocked ? `onclick="startStage('${topic}', ${s})"` : "disabled"}>
+              ${label}
+            </button>
+          `;
+        }
+
+        card.innerHTML = `
+          <h3>📘 ${topic}</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">5 Progressive Stages &bull; 20 Questions Each</p>
+          <div class="stage-buttons">${stageBtnsHtml}</div>
+        `;
+        container.appendChild(card);
+      });
+
+      switchView("dashboard-view");
+    }
+
+    /* Start Quiz */
+    function startStage(topic, stageNum) {
+      state.currentTopic = topic;
+      state.currentStage = stageNum;
+      state.currentQuestionIdx = 0;
+      state.currentScore = 0;
+      state.stageAnswerLog = [];
+      state.selectedOption = null;
+
+      state.activeQuestionSet = questionRepository[topic][stageNum];
+      switchView("quiz-view");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const qData = state.activeQuestionSet[state.currentQuestionIdx];
+      state.selectedOption = null;
+
+      document.getElementById("quiz-topic-title").textContent = `${state.currentTopic} - Stage ${state.currentStage}`;
+      document.getElementById("quiz-stage-subtitle").textContent = `Question ${state.currentQuestionIdx + 1} of 20`;
+      document.getElementById("live-score-display").textContent = `Score: ${state.currentScore} / 20`;
+      document.getElementById("question-text").textContent = qData.prompt;
+
+      const progressPercent = (state.currentQuestionIdx / 20) * 100;
+      document.getElementById("quiz-progress-fill").style.width = `${progressPercent}%`;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      qData.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          document.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          state.selectedOption = opt;
+          document.getElementById("btn-next-question").disabled = false;
+        };
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("btn-next-question").disabled = true;
+      document.getElementById("btn-next-question").textContent =
+        (state.currentQuestionIdx === 19) ? "Finish Stage & Review Answers" : "Next Question →";
+    }
+
+    function submitCurrentQuestion() {
+      if (!state.selectedOption) return;
+
+      const qData = state.activeQuestionSet[state.currentQuestionIdx];
+      const isCorrect = (state.selectedOption === qData.correct);
+
+      if (isCorrect) state.currentScore++;
+
+      state.stageAnswerLog.push({
+        num: state.currentQuestionIdx + 1,
+        prompt: qData.prompt,
+        userAnswer: state.selectedOption,
+        correctAnswer: qData.correct,
+        isCorrect: isCorrect
+      });
+
+      state.currentQuestionIdx++;
+
+      if (state.currentQuestionIdx < 20) {
+        renderQuestion();
+      } else {
+        finalizeStageResults();
+      }
+    }
+
+    function abortQuiz() {
+      if (confirm("Return to Dashboard? Unsubmitted questions in this stage will not be recorded.")) {
+        showDashboard();
+      }
+    }
+
+    /* Finalize Stage */
+    function finalizeStageResults() {
+      const isCleared = state.currentScore >= PASSING_THRESHOLD;
+      const data = getStoredUserData(state.currentUser);
+      const stageKey = `${state.currentTopic}-${state.currentStage}`;
+
+      // Save high score
+      const prevScore = data.stageScores[stageKey] || 0;
+      if (state.currentScore > prevScore) {
+        data.stageScores[stageKey] = state.currentScore;
+      }
+
+      let unlockedAccessory = null;
+
+      if (isCleared) {
+        if (state.currentStage < 5 && (data.unlockedStages[state.currentTopic] || 1) <= state.currentStage) {
+          data.unlockedStages[state.currentTopic] = state.currentStage + 1;
+        }
+
+        const reward = stageAccessories[state.currentStage];
+        const alreadyHas = data.accessories.some(a => a.name === reward.name);
+        if (!alreadyHas) {
+          data.accessories.push(reward);
+          unlockedAccessory = reward;
+        }
+      }
+
+      let totalPts = 0;
+      let clearedStages = 0;
+      Object.keys(data.stageScores).forEach(k => {
+        totalPts += data.stageScores[k];
+        if (data.stageScores[k] >= PASSING_THRESHOLD) clearedStages++;
+      });
+      data.totalScore = totalPts;
+      data.clearedCount = clearedStages;
+
+      saveUserData(data);
+
+      const banner = document.getElementById("result-banner");
+      if (isCleared) {
+        banner.innerHTML = `
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+          <h2 style="color: var(--success);">STAGE CLEARED! (${state.currentScore} / 20)</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">
+            Congratulations! You passed the 16/20 threshold. The next stage is unlocked!
+          </p>
+          ${unlockedAccessory ? `
+            <div style="background: #fef3c7; border: 2px dashed #f59e0b; padding: 0.75rem; border-radius: 8px; margin-top: 1rem; display: inline-block;">
+              <strong>New Avatar Gear Unlocked:</strong> ${unlockedAccessory.icon} ${unlockedAccessory.name} is now equipped!
+            </div>
+          ` : ''}
+        `;
+      } else {
+        banner.innerHTML = `
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">💪</div>
+          <h2 style="color: var(--danger);">TRY AGAIN (${state.currentScore} / 20)</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">
+            You scored ${state.currentScore}/20. You need at least <strong>16 / 20</strong> to clear this stage.
+          </p>
+        `;
+      }
+
+      const tbody = document.getElementById("review-table-body");
+      tbody.innerHTML = "";
+      state.stageAnswerLog.forEach(log => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${log.num}</td>
+          <td>${log.prompt}</td>
+          <td class="${log.isCorrect ? 'badge-correct' : 'badge-wrong'}">${log.userAnswer}</td>
+          <td style="font-weight: 600; color: #1e3a8a;">${log.correctAnswer}</td>
+          <td>${log.isCorrect ? '<span class="badge-correct">✔ Correct</span>' : '<span class="badge-wrong">✘ Incorrect</span>'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const actionBtns = document.getElementById("result-action-buttons");
+      actionBtns.innerHTML = `
+        <button class="btn-secondary" onclick="showDashboard()">Back to Dashboard</button>
+        <button class="btn-primary" onclick="startStage('${state.currentTopic}', ${state.currentStage})">Retry Stage</button>
+        ${(isCleared && state.currentStage < 5) ? `
+          <button class="btn-primary" style="background-color: var(--success);" onclick="startStage('${state.currentTopic}', ${state.currentStage + 1})">Next Stage &rarr;</button>
+        ` : ''}
+      `;
+
+      switchView("result-view");
+    }
+
+    /* Leaderboard */
+    function showLeaderboard() {
+      let raw = safeStorage.getItem("f6_student_records");
+      let records = {};
+      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
+      const list = Object.values(records);
+
+      list.sort((a, b) => (b.clearedCount - a.clearedCount) || (b.totalScore - a.totalScore));
+
+      const tbody = document.getElementById("leaderboard-tbody");
+      tbody.innerHTML = "";
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No student records found.</td></tr>`;
+      } else {
+        list.forEach((st, idx) => {
+          const rankDisplay = idx === 0 ? "🥇 1st" : (idx === 1 ? "🥈 2nd" : (idx === 2 ? "🥉 3rd" : `#${idx + 1}`));
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="font-weight: 700;">${rankDisplay}</td>
+            <td style="font-weight: 600;">${st.name}</td>
+            <td>${st.avatar}</td>
+            <td style="color: var(--success); font-weight: 700;">${st.clearedCount} / 25</td>
+            <td style="font-weight: 700;">${st.totalScore} pts</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      switchView("leaderboard-view");
+    }
+
+    /* Teacher Backdoor */
+    function openTeacherModal() {
+      document.getElementById("teacher-pin-input").value = "";
+      document.getElementById("teacher-auth-box").style.display = "block";
+      document.getElementById("teacher-portal-body").style.display = "none";
+      document.getElementById("teacher-modal").classList.add("active");
+    }
+
+    function closeTeacherModal() {
+      document.getElementById("teacher-modal").classList.remove("active");
+    }
+
+    function verifyTeacherPin() {
+      const pin = document.getElementById("teacher-pin-input").value.trim();
+      if (pin === TEACHER_MASTER_PIN) {
+        document.getElementById("teacher-auth-box").style.display = "none";
+        document.getElementById("teacher-portal-body").style.display = "block";
+        loadTeacherStudentReports();
+      } else {
+        alert("Incorrect Teacher PIN. Access denied.");
+      }
+    }
+
+    function loadTeacherStudentReports() {
+      let raw = safeStorage.getItem("f6_student_records");
+      let records = {};
+      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
+      const list = Object.values(records);
+      const tbody = document.getElementById("teacher-student-progress-tbody");
+      tbody.innerHTML = "";
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No student data found.</td></tr>`;
+        return;
+      }
+
+      list.forEach(st => {
+        const attemptedStages = Object.keys(st.stageScores).length;
+        const avgScore = attemptedStages > 0 ? (st.totalScore / attemptedStages).toFixed(1) : "N/A";
+        const gearList = st.accessories.map(a => `${a.icon} ${a.name}`).join(", ") || "None";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${st.name}</strong> (${(st.avatar || "").split(' ')[0]})</td>
+          <td>${st.clearedCount} stages cleared</td>
+          <td>${avgScore} / 20</td>
+          <td style="font-size: 0.85rem;">${gearList}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function clearLeaderboardData() {
+      if (confirm("DANGER: Are you sure you want to clear the entire leaderboard and all student records? This action cannot be undone.")) {
+        safeStorage.removeItem("f6_student_records");
+        alert("All student records and leaderboard entries have been wiped clean.");
+        loadTeacherStudentReports();
+        if (document.getElementById("leaderboard-view").classList.contains("active")) {
+          showLeaderboard();
+        } else if (document.getElementById("dashboard-view").classList.contains("active")) {
+          showDashboard();
+        }
+      }
+    }
+  </script>
+</body>
+</html>

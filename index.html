@@ -3,124 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grammar Quest: F.6 Edition</title>
+  <title>F.6 DSE English Grammar Mastery Academy</title>
   <style>
     :root {
-      --primary: #1976D2;
-      --primary-dark: #0D47A1;
-      --secondary: #FFB300;
-      --success: #2E7D32;
-      --danger: #C62828;
-      --bg: #F4F6F9;
-      --card-bg: #FFFFFF;
-      --text: #263238;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #0ea5e9;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 50px; }
-    header { background: var(--primary); color: white; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
-    .container { max-width: 1050px; margin: 24px auto; padding: 0 16px; }
-    .screen { display: none; }
-    .screen.active { display: block; animation: fadeIn 0.25s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    .card { background: var(--card-bg); border-radius: 14px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 24px; }
-    .primary-btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .primary-btn:hover { background: var(--primary-dark); }
-    .danger-btn { background: var(--danger); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .danger-btn:hover { background: #B71C1C; }
-    .avatar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin: 16px 0; }
-    .avatar-card { border: 2px solid #CFD8DC; border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: 0.2s; background: white; }
-    .avatar-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-    .avatar-card.selected { border-color: var(--primary); background: #E3F2FD; }
-    .avatar-icon { font-size: 40px; margin-bottom: 6px; }
-    /* Living Doll Companion */
-    .doll-stage { display: flex; align-items: center; gap: 24px; background: #ECEFF1; border-radius: 14px; padding: 18px; margin-bottom: 20px; }
-    .doll-body { width: 90px; height: 110px; border-radius: 20px; border: 3px solid #37474F; position: relative; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-    .skin-sponge { background: #FFF176; }
-    .skin-star { background: #FF8A80; }
-    .skin-octopus { background: #80DEEA; }
-    .skin-squirrel { background: #D7CCC8; }
-    .doll-slot { position: absolute; font-size: 22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
-    .slot-head { top: -20px; }
-    .slot-torso { top: 38px; }
-    .slot-hand-l { left: -18px; }
-    .slot-hand-r { right: -18px; }
-    .wardrobe-tag { display: inline-block; background: #CFD8DC; padding: 4px 10px; border-radius: 16px; font-size: 12px; margin: 3px; font-weight: 600; }
-    /* Topics */
-    .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-    .topic-card { border: 1px solid #E0E0E0; border-radius: 12px; padding: 18px; background: white; transition: 0.2s; }
-    .topic-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    /* Quiz */
-    .q-box { font-size: 19px; font-weight: 600; margin: 18px 0; color: #1A237E; line-height: 1.4; }
-    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
-    .option-btn { background: #FFFFFF; border: 2px solid #90CAF9; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: left; transition: 0.2s; }
-    .option-btn:hover { background: #E3F2FD; border-color: var(--primary); }
-    /* Review Key */
-    .review-list { margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px; }
-    .review-item { padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
-    .review-item.correct { background: #E8F5E9; border-left: 4px solid var(--success); }
-    .review-item.wrong { background: #FFEBEE; border-left: 4px solid var(--danger); }
-    /* Tables */
-    table { width: 100%; border-collapse: collapse; margin-top: 14px; }
-    th, td { padding: 10px 14px; border-bottom: 1px solid #ECEFF1; text-align: left; font-size: 14px; }
-    th { background: #F5F7FA; font-weight: 700; color: #455A64; }
-    /* Backdoor icon */
-    .teacher-fab { position: fixed; bottom: 16px; right: 16px; background: #37474F; color: #FFD54F; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background-color: var(--primary-dark); }
+
+    .btn-secondary {
+      background-color: #e2e8f0;
+      color: var(--text);
+    }
+    .btn-secondary:hover { background-color: #cbd5e1; }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+    .btn-danger:hover { background-color: #b91c1c; }
+
+    .btn-teacher {
+      background-color: #475569;
+      color: #f8fafc;
+      font-size: 0.8rem;
+    }
+    .btn-teacher:hover { background-color: #334155; }
+
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .view-panel {
+      display: none;
+    }
+    .view-panel.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Avatar Preview Box */
+    .avatar-showcase {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 2px dashed #93c5fd;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar-frame {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .avatar-gear-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #f59e0b;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wardrobe-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .accessory-chip {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Grid for Topics & Stages */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .topic-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .topic-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+      color: var(--primary-dark);
+    }
+
+    .stage-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-stage {
+      flex: 1;
+      min-width: 45px;
+      padding: 0.5rem 0.2rem;
+      font-size: 0.85rem;
+      text-align: center;
+      border-radius: 6px;
+      background-color: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-stage.unlocked {
+      background-color: #dbeafe;
+      color: var(--primary-dark);
+      border-color: #93c5fd;
+      cursor: pointer;
+    }
+
+    .btn-stage.cleared {
+      background-color: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+      cursor: pointer;
+    }
+
+    /* Question Screen */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .q-box {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #0f172a;
+      min-height: 50px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .options-grid { grid-template-columns: 1fr; }
+    }
+
+    .opt-btn {
+      padding: 1rem;
+      text-align: left;
+      font-size: 1rem;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      color: var(--text);
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background-color: #eff6ff;
+    }
+
+    .opt-btn.selected {
+      border-color: var(--primary);
+      background-color: #dbeafe;
+      font-weight: 700;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background-color: #e2e8f0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Review Table */
+    .table-container {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .badge-correct {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .badge-wrong {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 650px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Grammar Quest: F.6 Edition</h1>
-  <div id="user-status-bar" style="font-size:14px;">Welcome, Candidate</div>
-</header>
-
-<div class="container">
-
-  <!-- SCREEN 1: LOGIN & AVATAR PICKER -->
-  <div id="screen-login" class="screen active">
-    <div class="card" style="max-width: 540px; margin: 40px auto; text-align: center;">
-      <h2 style="color: var(--primary); margin-bottom: 8px;">Candidate Portal</h2>
-      <p style="color: #607D8B; font-size: 14px;">Enter your student name and select your companion avatar.</p>
-      <input type="text" id="student-name-input" placeholder="Candidate Name / Student ID" style="width: 100%; padding: 12px; margin: 18px 0; border: 2px solid #CFD8DC; border-radius: 8px; font-size: 15px;" />
-      
-      <h4 style="text-align: left; margin: 10px 0; color: #455A64;">Select Companion Avatar:</h4>
-      <div class="avatar-grid">
-        <div class="avatar-card selected" onclick="selectAvatar('Sponge-Lad', 'skin-sponge', '👀', this)">
-          <div class="avatar-icon">🧽</div>
-          <div style="font-weight:600; font-size:13px;">Sponge-Lad</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Star-Buddy', 'skin-star', '🌟', this)">
-          <div class="avatar-icon">⭐</div>
-          <div style="font-weight:600; font-size:13px;">Star-Buddy</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Tentacle-Prof', 'skin-octopus', '🧐', this)">
-          <div class="avatar-icon">🐙</div>
-          <div style="font-weight:600; font-size:13px;">Tentacle-Prof</div>
-        </div>
-        <div class="avatar-card" onclick="selectAvatar('Sandy-Squirrel', 'skin-squirrel', '🐿️', this)">
-          <div class="avatar-icon">🐿️</div>
-          <div style="font-weight:600; font-size:13px;">Sandy-Squirrel</div>
-        </div>
-      </div>
-      <button class="primary-btn" style="width: 100%; padding: 12px; margin-top: 10px; font-size: 16px;" onclick="registerUser()">Start Grammar Quest</button>
+  <header>
+    <h1>🎓 F.6 English Mastery</h1>
+    <div class="header-actions">
+      <button class="btn-secondary" onclick="showDashboard()">Dashboard</button>
+      <button class="btn-secondary" onclick="showLeaderboard()">Leaderboard</button>
+      <button class="btn-teacher" onclick="openTeacherModal()">🔒 Teacher Backdoor</button>
     </div>
-  </div>
+  </header>
 
-  <!-- SCREEN 2: MAIN DASHBOARD -->
-  <div id="screen-dash" class="screen">
-    <!-- Living Companion Wardrobe Card -->
-    <div class="card doll-stage">
-      <div id="companion-doll" class="doll-body skin-sponge">
-        <span id="slot-head" class="doll-slot slot-head"></span>
-        <span id="char-face">👀</span>
-        <span id="slot-torso" class="doll-slot slot-torso"></span>
-        <span id="slot-hand-left" class="doll-slot slot-hand-l"></span>
-        <span id="slot-hand-right" class="doll-slot slot-hand-r"></span>
-      </div>
-      <div style="flex:1;">
-        <h3 id="display-companion-name" style="color: var(--primary);">Sponge-Lad</h3>
-        <p style="font-size:13px; color:#546E7A; margin: 4px 0;" id="display-wardrobe-summary">Standard Academy Gear — Clear Stage 1 (16+/20) to equip gear!</p>
-        <div id="wardrobe-tag-container" style="margin-top: 6px;"></div>
-      </div>
-      <div style="text-
+  <main>
+    <!-- USER LOGIN / SETUP VIEW -->
+    <section id="login-view" class="view-panel active">
+      <div class="card" style="max-width: 480px; margin: 2rem auto; text-align: center;">
+        <h2 style="margin-bottom: 1rem;">Candidate Registration</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Enter your name and pick your companion avatar to begin.</p>
+        <div style="margin-bottom: 1rem; text-align: left;">
+          <label style="font-weight: 600; font-size: 0.9rem;">Student Full Name</label>
+          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem;">
+        </div>
+        <div style="margin-bottom: 1.5rem; text-al

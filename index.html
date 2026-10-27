@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>F.6 DSE English Grammar Mastery Academy</title>
+  <title>F.6 English Grammar Academy (Easy & Fun)</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -11,12 +11,11 @@
       --secondary: #0ea5e9;
       --success: #16a34a;
       --danger: #dc2626;
-      --warning: #f59e0b;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #1e293b;
       --text-muted: #64748b;
-      --border: #e2e8f0;
+      --border: #cbd5e1;
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
@@ -24,13 +23,13 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -39,7 +38,7 @@
     header {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: white;
-      padding: 1.25rem 2rem;
+      padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -47,13 +46,13 @@
     }
 
     header h1 {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 700;
     }
 
     .header-actions {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       align-items: center;
     }
 
@@ -61,51 +60,29 @@
       cursor: pointer;
       border: none;
       border-radius: 8px;
-      padding: 0.6rem 1.2rem;
+      padding: 0.55rem 1.1rem;
       font-weight: 600;
       font-size: 0.9rem;
       transition: all 0.2s ease;
     }
 
-    .btn-primary {
-      background-color: var(--primary);
-      color: white;
-    }
+    .btn-primary { background-color: var(--primary); color: white; }
     .btn-primary:hover { background-color: var(--primary-dark); }
-
-    .btn-secondary {
-      background-color: #e2e8f0;
-      color: var(--text);
-    }
+    .btn-secondary { background-color: #e2e8f0; color: var(--text); }
     .btn-secondary:hover { background-color: #cbd5e1; }
-
-    .btn-danger {
-      background-color: var(--danger);
-      color: white;
-    }
-    .btn-danger:hover { background-color: #b91c1c; }
-
-    .btn-teacher {
-      background-color: #475569;
-      color: #f8fafc;
-      font-size: 0.8rem;
-    }
-    .btn-teacher:hover { background-color: #334155; }
+    .btn-danger { background-color: var(--danger); color: white; }
+    .btn-teacher { background-color: #475569; color: #f8fafc; font-size: 0.8rem; }
 
     main {
       flex: 1;
-      max-width: 1100px;
+      max-width: 950px;
       width: 100%;
       margin: 1.5rem auto;
       padding: 0 1rem;
     }
 
-    .view-panel {
-      display: none;
-    }
-    .view-panel.active {
-      display: block !important;
-    }
+    .view-panel { display: none; }
+    .view-panel.active { display: block !important; }
 
     .card {
       background: var(--card-bg);
@@ -121,21 +98,18 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.75rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1.25rem;
+      margin: 0.75rem 0 1rem 0;
     }
 
     @media (max-width: 600px) {
-      .avatar-selection-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .avatar-selection-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     .avatar-card {
       background: #f8fafc;
       border: 2px solid #cbd5e1;
       border-radius: 10px;
-      padding: 1rem 0.5rem;
+      padding: 0.8rem 0.5rem;
       text-align: center;
       cursor: pointer;
       position: relative;
@@ -155,8 +129,8 @@
     .avatar-card.active::after {
       content: "✔";
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 5px;
+      right: 5px;
       background: var(--primary);
       color: white;
       border-radius: 50%;
@@ -169,96 +143,69 @@
       font-weight: 700;
     }
 
-    .avatar-card-icon {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    .avatar-card-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    .avatar-card-tag {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .avatar-live-preview {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 0.75rem;
-      margin-bottom: 1.25rem;
-      font-size: 0.9rem;
-      text-align: center;
-    }
+    .avatar-card-icon { font-size: 2.3rem; display: block; margin-bottom: 0.2rem; }
+    .avatar-card-name { font-size: 0.85rem; font-weight: 700; }
 
     /* Dashboard Avatar Showcase */
     .avatar-showcase {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
       background: linear-gradient(135deg, #eff6ff, #dbeafe);
       border: 2px dashed #93c5fd;
       border-radius: 12px;
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.25rem;
       margin-bottom: 1.5rem;
     }
 
     .avatar-frame {
-      width: 80px;
-      height: 80px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: relative;
+      flex-shrink: 0;
     }
 
     .avatar-gear-badge {
       position: absolute;
-      bottom: -4px;
-      right: -4px;
+      bottom: -3px;
+      right: -3px;
       background: #f59e0b;
       color: white;
       border-radius: 50%;
-      width: 26px;
-      height: 26px;
-      font-size: 0.8rem;
+      width: 24px;
+      height: 24px;
+      font-size: 0.75rem;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-    }
-
-    .wardrobe-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
     }
 
     .accessory-chip {
       background: white;
       border: 1px solid #cbd5e1;
       border-radius: 20px;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.85rem;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.8rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
+      margin-right: 0.4rem;
+      margin-top: 0.4rem;
     }
 
     /* Topics Grid */
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.25rem;
     }
 
@@ -271,22 +218,23 @@
     }
 
     .topic-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
       color: var(--primary-dark);
     }
 
     .stage-buttons {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
+      margin-top: 0.5rem;
     }
 
     .btn-stage {
       flex: 1;
-      min-width: 48px;
-      padding: 0.6rem 0.3rem;
-      font-size: 0.85rem;
+      min-width: 42px;
+      padding: 0.5rem 0.2rem;
+      font-size: 0.8rem;
       text-align: center;
       border-radius: 6px;
       background-color: #f1f5f9;
@@ -321,17 +269,17 @@
     }
 
     .q-box {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 600;
       margin-bottom: 1.5rem;
       color: #0f172a;
-      min-height: 50px;
+      min-height: 40px;
     }
 
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 0.8rem;
       margin-bottom: 1.5rem;
     }
 
@@ -340,9 +288,9 @@
     }
 
     .opt-btn {
-      padding: 1rem;
+      padding: 0.9rem;
       text-align: left;
-      font-size: 1rem;
+      font-size: 1.05rem;
       border-radius: 8px;
       background: #f8fafc;
       border: 2px solid #cbd5e1;
@@ -362,9 +310,9 @@
 
     .progress-bar-container {
       width: 100%;
-      height: 10px;
+      height: 8px;
       background-color: #e2e8f0;
-      border-radius: 5px;
+      border-radius: 4px;
       overflow: hidden;
       margin-top: 1rem;
     }
@@ -373,10 +321,10 @@
       height: 100%;
       background-color: var(--primary);
       width: 0%;
-      transition: width 0.3s ease;
+      transition: width 0.2s ease;
     }
 
-    /* Tables */
+    /* Table */
     .table-container {
       overflow-x: auto;
       margin: 1rem 0;
@@ -385,11 +333,11 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     th, td {
-      padding: 0.75rem 1rem;
+      padding: 0.65rem 0.85rem;
       border: 1px solid var(--border);
       text-align: left;
     }
@@ -399,15 +347,8 @@
       font-weight: 600;
     }
 
-    .badge-correct {
-      color: var(--success);
-      font-weight: 700;
-    }
-
-    .badge-wrong {
-      color: var(--danger);
-      font-weight: 700;
-    }
+    .badge-correct { color: var(--success); font-weight: 700; }
+    .badge-wrong { color: var(--danger); font-weight: 700; }
 
     /* Modal */
     .modal-overlay {
@@ -420,13 +361,11 @@
       z-index: 1000;
     }
 
-    .modal-overlay.active {
-      display: flex !important;
-    }
+    .modal-overlay.active { display: flex !important; }
 
     .modal-content {
       background: white;
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 12px;
       max-width: 650px;
       width: 90%;
@@ -449,15 +388,15 @@
   <main>
     <!-- LOGIN VIEW -->
     <section id="login-view" class="view-panel active">
-      <div class="card" style="max-width: 520px; margin: 1.5rem auto;">
-        <h2 style="margin-bottom: 0.5rem; text-align: center;">Candidate Registration</h2>
-        <p style="color: var(--text-muted); margin-bottom: 1.25rem; text-align: center; font-size: 0.9rem;">
-          Enter your name and pick your companion avatar below.
+      <div class="card" style="max-width: 500px; margin: 2rem auto;">
+        <h2 style="text-align: center; margin-bottom: 0.4rem;">Student Registration</h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+          Enter your name and pick your companion avatar to get started.
         </p>
 
-        <div style="margin-bottom: 1.25rem;">
-          <label style="font-weight: 600; font-size: 0.9rem;">Student Full Name</label>
-          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" value="Candidate 1" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem; font-size: 1rem;">
+        <div style="margin-bottom: 1rem;">
+          <label style="font-weight: 600; font-size: 0.9rem;">Your Name</label>
+          <input type="text" id="student-name-input" placeholder="e.g. Alex Wong (6A)" value="Alex Wong" style="width: 100%; padding: 0.7rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.3rem; font-size: 1rem;">
         </div>
 
         <div>
@@ -466,53 +405,49 @@
             <div class="avatar-card active" onclick="pickAvatar('🦁 Leo the Lion', '🦁', this)">
               <span class="avatar-card-icon">🦁</span>
               <div class="avatar-card-name">Leo</div>
-              <div class="avatar-card-tag">Brave Lion</div>
             </div>
             <div class="avatar-card" onclick="pickAvatar('🦉 Athena Owl', '🦉', this)">
               <span class="avatar-card-icon">🦉</span>
               <div class="avatar-card-name">Athena</div>
-              <div class="avatar-card-tag">Wise Owl</div>
             </div>
             <div class="avatar-card" onclick="pickAvatar('🐬 Echo Dolphin', '🐬', this)">
               <span class="avatar-card-icon">🐬</span>
               <div class="avatar-card-name">Echo</div>
-              <div class="avatar-card-tag">Swift Dolphin</div>
             </div>
             <div class="avatar-card" onclick="pickAvatar('🦊 Felix Fox', '🦊', this)">
               <span class="avatar-card-icon">🦊</span>
               <div class="avatar-card-name">Felix</div>
-              <div class="avatar-card-tag">Clever Fox</div>
             </div>
           </div>
         </div>
 
-        <div class="avatar-live-preview" id="login-companion-preview">
-          Selected Companion: <strong>🦁 Leo the Lion</strong>
+        <div style="background: #f1f5f9; padding: 0.6rem; border-radius: 8px; text-align: center; margin-bottom: 1.25rem; font-size: 0.9rem;" id="login-companion-preview">
+          Selected: <strong>🦁 Leo the Lion</strong>
         </div>
 
-        <button class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;" onclick="handleLogin()">Start Learning &rarr;</button>
+        <button class="btn-primary" style="width: 100%; padding: 0.8rem; font-size: 1rem;" onclick="handleLogin()">Start Practising &rarr;</button>
       </div>
     </section>
 
     <!-- DASHBOARD VIEW -->
     <section id="dashboard-view" class="view-panel">
-      <!-- Companion Showcase -->
+      <!-- Companion Box -->
       <div class="avatar-showcase">
         <div class="avatar-frame">
           <span id="avatar-icon">🦁</span>
           <span class="avatar-gear-badge" id="avatar-badge-count">0</span>
         </div>
         <div style="flex: 1;">
-          <h3 id="avatar-name-display" style="font-size: 1.15rem; color: #1e3a8a;">Companion: Leo the Lion</h3>
-          <p id="student-welcome-msg" style="color: var(--text-muted); font-size: 0.9rem;">Pass mark required: 16 / 20 to clear a stage and unlock gear!</p>
-          <div class="wardrobe-grid" id="wardrobe-items">
-            <!-- Equipped accessories render here -->
+          <h3 id="avatar-name-display" style="font-size: 1.1rem; color: #1e3a8a;">Companion: Leo the Lion</h3>
+          <p id="student-welcome-msg" style="color: var(--text-muted); font-size: 0.85rem;">Pass requirement: 16 / 20 to clear a stage and unlock avatar gear!</p>
+          <div id="wardrobe-items" style="margin-top: 0.2rem;">
+            <!-- Accessories -->
           </div>
         </div>
       </div>
 
       <div class="grid-2" id="topics-container">
-        <!-- Topics & 5 Stages render here -->
+        <!-- Topic cards inserted here -->
       </div>
     </section>
 
@@ -521,8 +456,8 @@
       <div class="card">
         <div class="quiz-header">
           <div>
-            <h2 id="quiz-topic-title">Grammar Item</h2>
-            <span id="quiz-stage-subtitle" style="color: var(--text-muted); font-weight: 600;">Stage 1 &bull; Question 1 of 20</span>
+            <h2 id="quiz-topic-title" style="font-size: 1.2rem;">Grammar Practice</h2>
+            <span id="quiz-stage-subtitle" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Stage 1 &bull; Question 1 of 20</span>
           </div>
           <div>
             <span style="font-weight: 700; color: var(--primary);" id="live-score-display">Score: 0 / 20</span>
@@ -538,7 +473,7 @@
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-          <button class="btn-secondary" onclick="abortQuiz()">Quit to Dashboard</button>
+          <button class="btn-secondary" onclick="abortQuiz()">Back to Menu</button>
           <button class="btn-primary" id="btn-next-question" onclick="submitCurrentQuestion()" disabled>Next Question &rarr;</button>
         </div>
 
@@ -548,16 +483,16 @@
       </div>
     </section>
 
-    <!-- RESULT & REVIEW VIEW -->
+    <!-- RESULT VIEW (ANSWERS SHOWN UPON STAGE CLEAR/FINISH) -->
     <section id="result-view" class="view-panel">
       <div class="card">
         <div style="text-align: center; margin-bottom: 1.5rem;" id="result-banner">
-          <!-- Result banner -->
+          <!-- Banner -->
         </div>
 
-        <h3 style="margin-bottom: 0.75rem;">Stage Answer Key & Detailed Review</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Review all 20 questions below. Explanations and correct options are highlighted for exam preparation.
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Answers & Review</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Here are the answers for all 20 questions in this stage:
         </p>
 
         <div class="table-container">
@@ -572,13 +507,13 @@
               </tr>
             </thead>
             <tbody id="review-table-body">
-              <!-- Questions and answers -->
+              <!-- Reviews -->
             </tbody>
           </table>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;" id="result-action-buttons">
-          <!-- Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;" id="result-action-buttons">
+          <!-- Buttons -->
         </div>
       </div>
     </section>
@@ -588,24 +523,24 @@
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
           <h2>🏆 Academy Leaderboard</h2>
-          <button class="btn-secondary" onclick="showDashboard()">Back to Dashboard</button>
+          <button class="btn-secondary" onclick="showDashboard()">Dashboard</button>
         </div>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-          Rankings are calculated by total stages cleared (≥16/20) and overall cumulative scores.
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+          Rankings are based on stages cleared (16/20 or above) and total points.
         </p>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th style="width: 10%;">Rank</th>
-                <th style="width: 35%;">Student Name</th>
-                <th style="width: 25%;">Companion Avatar</th>
-                <th style="width: 15%;">Stages Cleared</th>
-                <th style="width: 15%;">Total Points</th>
+                <th>Rank</th>
+                <th>Student Name</th>
+                <th>Companion</th>
+                <th>Stages Cleared</th>
+                <th>Total Score</th>
               </tr>
             </thead>
             <tbody id="leaderboard-tbody">
-              <!-- Leaderboard rows -->
+              <!-- Records -->
             </tbody>
           </table>
         </div>
@@ -616,24 +551,24 @@
   <!-- TEACHER BACKDOOR MODAL -->
   <div class="modal-overlay" id="teacher-modal">
     <div class="modal-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h3>🔒 Teacher Administration Backdoor</h3>
-        <button class="btn-secondary" style="padding: 0.3rem 0.6rem;" onclick="closeTeacherModal()">&times;</button>
+        <button class="btn-secondary" style="padding: 0.2rem 0.6rem;" onclick="closeTeacherModal()">&times;</button>
       </div>
 
       <div id="teacher-auth-box">
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">Enter the administrative PIN to access student records:</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Enter Teacher Master PIN:</p>
         <div style="display: flex; gap: 0.5rem;">
-          <input type="password" id="teacher-pin-input" placeholder="Enter Teacher PIN" style="flex: 1; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+          <input type="password" id="teacher-pin-input" placeholder="Enter PIN" style="flex: 1; padding: 0.55rem; border: 1px solid #cbd5e1; border-radius: 6px;">
           <button class="btn-primary" onclick="verifyTeacherPin()">Unlock</button>
         </div>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">Master Teacher PIN: <strong>F6ENG2026</strong></p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Default Master PIN: <strong>F6ENG2026</strong></p>
       </div>
 
       <div id="teacher-portal-body" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h4>Student Progress Reports</h4>
-          <button class="btn-danger" onclick="clearLeaderboardData()">⚠️ Clear Leaderboard & Reset Data</button>
+          <h4>Student Progress Records</h4>
+          <button class="btn-danger" onclick="clearLeaderboardData()">⚠️ Clear Leaderboard & Reset</button>
         </div>
 
         <div class="table-container">
@@ -642,12 +577,12 @@
               <tr>
                 <th>Student</th>
                 <th>Stages Cleared</th>
-                <th>Avg. Score</th>
-                <th>Accessories Unlocked</th>
+                <th>Avg Score</th>
+                <th>Accessories</th>
               </tr>
             </thead>
             <tbody id="teacher-student-progress-tbody">
-              <!-- Reports -->
+              <!-- Student diagnostic data -->
             </tbody>
           </table>
         </div>
@@ -656,32 +591,25 @@
   </div>
 
   <script>
-    /* Safe Storage Memory Fallback */
-    let inMemoryStore = {};
-    const safeStorage = {
-      getItem: function(key) {
-        try {
-          return localStorage.getItem(key) || inMemoryStore[key] || null;
-        } catch(e) {
-          return inMemoryStore[key] || null;
-        }
+    /* Safe In-Memory Storage */
+    let memoryStore = {};
+    const safeStore = {
+      get: function(k) {
+        try { return localStorage.getItem(k) || memoryStore[k] || null; }
+        catch(e) { return memoryStore[k] || null; }
       },
-      setItem: function(key, val) {
-        try {
-          localStorage.setItem(key, val);
-        } catch(e) {}
-        inMemoryStore[key] = val;
+      set: function(k, v) {
+        try { localStorage.setItem(k, v); } catch(e) {}
+        memoryStore[k] = v;
       },
-      removeItem: function(key) {
-        try {
-          localStorage.removeItem(key);
-        } catch(e) {}
-        delete inMemoryStore[key];
+      del: function(k) {
+        try { localStorage.removeItem(k); } catch(e) {}
+        delete memoryStore[k];
       }
     };
 
     const PASSING_THRESHOLD = 16;
-    const TEACHER_MASTER_PIN = "F6ENG2026";
+    const TEACHER_PIN = "F6ENG2026";
     const TOPICS = ["Prepositions", "Word Formation", "Tenses", "Articles", "Plurals"];
 
     let state = {
@@ -697,559 +625,344 @@
       stageAnswerLog: []
     };
 
+    // Accessories awarded upon clearing Stage 1 to Stage 5
     const stageAccessories = {
       1: { name: "Cadet Cap", icon: "🧢" },
-      2: { name: "Scholar Monocle", icon: "🧐" },
-      3: { name: "Guild Medallion", icon: "🎖️" },
-      4: { name: "Sovereign Mantle", icon: "🥋" },
-      5: { name: "Grand Laureate Crown", icon: "👑" }
+      2: { name: "Study Glasses", icon: "👓" },
+      3: { name: "Star Badge", icon: "⭐" },
+      4: { name: "Hero Cape", icon: "🧣" },
+      5: { name: "Champion Crown", icon: "👑" }
     };
 
-    function pickAvatar(avatarFullName, icon, cardElement) {
-      state.selectedAvatar = avatarFullName;
+    function pickAvatar(name, icon, el) {
+      state.selectedAvatar = name;
       state.avatarIcon = icon;
       document.querySelectorAll(".avatar-card").forEach(c => c.classList.remove("active"));
-      if (cardElement) cardElement.classList.add("active");
+      if (el) el.classList.add("active");
       const preview = document.getElementById("login-companion-preview");
-      if (preview) {
-        preview.innerHTML = `Selected Companion: <strong>${avatarFullName}</strong>`;
-      }
+      if (preview) preview.innerHTML = `Selected: <strong>${name}</strong>`;
     }
 
-    /* 5 Topics x 5 Stages x 20 Questions */
-    const questionRepository = {};
+    /* ----------------------------------------------------------------
+       EASY & FRIENDLY QUESTION BANK (100% Core Secondary English)
+       5 Topics x 5 Stages x 20 Questions (Every question is unique!)
+       ---------------------------------------------------------------- */
+    const questionRepo = {};
 
-    function initRepository() {
-      const qData = {
-        "Prepositions": [
-          { q: "Far from being detrimental, the measure is conducive _____ sustainable growth.", a: "to", dist: ["for", "with", "towards"] },
-          { q: "He refused to acquiesce _____ the committee's controversial verdict.", a: "in", dist: ["to", "with", "on"] },
-          { q: "The ambassador spoke at the behest _____ the regional educational council.", a: "of", dist: ["to", "with", "for"] },
-          { q: "The school's history is inextricably bound up _____ the territory's evolution.", a: "with", dist: ["to", "in", "by"] },
-          { q: "The survey evidence does not corroborate _____ the journalist's claim.", a: "with", dist: ["to", "on", "at"] },
-          { q: "The politician's evasive statement bordered _____ blatant deception.", a: "on", dist: ["to", "with", "at"] },
-          { q: "Such arbitrary decisions run counter _____ fundamental fairness.", a: "to", dist: ["against", "with", "for"] },
-          { q: "He held fast to his beliefs at variance _____ orthodox doctrine.", a: "with", dist: ["to", "against", "from"] },
-          { q: "Her academic thesis is predicated _____ extensive longitudinal data.", a: "on", dist: ["to", "in", "with"] },
-          { q: "The administration acted in collusion _____ private developers.", a: "with", dist: ["by", "under", "to"] },
-          { q: "The candidate was exonerated _____ all allegations of misconduct.", a: "from", dist: ["of", "off", "with"] },
-          { q: "The initiative was launched with an eye _____ bridging the digital divide.", a: "to", dist: ["for", "at", "on"] },
-          { q: "The treaty was declared null and void by virtue _____ clause twelve.", a: "of", dist: ["with", "for", "in"] },
-          { q: "They remained steadfast _____ adversity, ensuring complete syllabus mastery.", a: "amid", dist: ["between", "within", "towards"] },
-          { q: "The newly instituted sanctions are aimed _____ deterring malpractice.", a: "at", dist: ["for", "to", "on"] },
-          { q: "Her personal statement was framed in terms _____ community empowerment.", a: "of", dist: ["with", "for", "by"] },
-          { q: "The researcher took umbrage _____ the reviewer's condescending tone.", a: "at", dist: ["with", "to", "for"] },
-          { q: "He resigned in protest _____ the curtailment of student rights.", a: "against", dist: ["to", "with", "at"] },
-          { q: "The candidate's demeanor was fraught _____ profound apprehension.", a: "with", dist: ["by", "of", "in"] },
-          { q: "His conclusions are tantamount _____ an admission of analytical error.", a: "to", dist: ["with", "as", "against"] }
-        ],
-        "Word Formation": [
-          { q: "Her explanation was completely _____ (logic).", a: "logical", dist: ["logically", "logician", "logicize"] },
-          { q: "Our school values academic honesty and student _____ (honest).", a: "honesty", dist: ["honestly", "dishonest", "dishonesty"] },
-          { q: "Regular physical activity is _____ (benefit) to adolescents.", a: "beneficial", dist: ["beneficiary", "beneficially", "benefit"] },
-          { q: "The children participated _____ (happy) in the activity.", a: "happily", dist: ["happiness", "happy", "unhappy"] },
-          { q: "Making an informed _____ (decide) about JUPAS requires research.", a: "decision", dist: ["decisive", "decisiveness", "deciding"] },
-          { q: "Global warming is a critical _____ (environment) challenge.", a: "environmental", dist: ["environmentally", "environmentalist", "environments"] },
-          { q: "The class representative took full _____ (responsible) for the event.", a: "responsibility", dist: ["responsible", "responsibly", "irresponsible"] },
-          { q: "The drama club gave an _____ (amaze) performance.", a: "amazing", dist: ["amazingly", "amazed", "amazement"] },
-          { q: "We must brainstorm a viable _____ (solve) to reduce waste.", a: "solution", dist: ["solvable", "solver", "solving"] },
-          { q: "She answered the interviewers with poise and _____ (confident).", a: "confidence", dist: ["confident", "confidently", "confiding"] },
-          { q: "Getting adequate sleep is _____ (necessity) for exam performance.", a: "necessary", dist: ["necessarily", "necessitate", "necessities"] },
-          { q: "The volunteer displayed immense _____ (kind) towards elderly residents.", a: "kindness", dist: ["kindly", "unkind", "kinder"] },
-          { q: "Tropical weather in July is often _____ (predict).", a: "predictable", dist: ["prediction", "predictably", "predictor"] },
-          { q: "The basketball team celebrated their thrilling championship _____ (victor).", a: "victory", dist: ["victorious", "victoriously", "victim"] },
-          { q: "He is seeking advice from a _____ (profession) career counsellor.", a: "professional", dist: ["profession", "professionally", "profess"] },
-          { q: "Please handle the laboratory glassware with extreme _____ (careful).", a: "care", dist: ["careless", "carefully", "caringly"] },
-          { q: "His unexpected _____ (appear) at the alumni dinner delighted everyone.", a: "appearance", dist: ["appearing", "apparent", "apparently"] },
-          { q: "The teacher provided a list of highly _____ (use) exam tips.", a: "useful", dist: ["useless", "usefully", "usability"] },
-          { q: "The game has surged in _____ (popular) among local teenagers.", a: "popularity", dist: ["popularly", "popularize", "popular"] },
-          { q: "The museum trip was a memorable _____ (educate) experience.", a: "educational", dist: ["education", "educationally", "educator"] }
-        ],
-        "Tenses": [
-          { q: "By the time the bell rang, all candidates _____ writing.", a: "had finished", dist: ["finish", "have finished", "will finish"] },
-          { q: "Listen! The guest speaker _____ in the school hall right now.", a: "is speaking", dist: ["speaks", "spoke", "has spoken"] },
-          { q: "They _____ in Kowloon Tong since they moved to Hong Kong.", a: "have lived", dist: ["live", "lived", "are living"] },
-          { q: "Pure water _____ at 100 degrees Celsius at sea level.", a: "boils", dist: ["is boiling", "boiled", "will boil"] },
-          { q: "Yesterday after school, she _____ her vocabulary notebook on the train.", a: "lost", dist: ["loses", "has lost", "was losing"] },
-          { q: "If the typhoon signal is raised tomorrow morning, classes _____ cancelled.", a: "will be", dist: ["were", "would be", "are being"] },
-          { q: "While he _____ home, he ran into his primary school classmate.", a: "was walking", dist: ["walks", "has walked", "walked"] },
-          { q: "I _____ the past paper analysis twice already.", a: "have completed", dist: ["complete", "completed", "had completed"] },
-          { q: "Next Thursday, our school _____ its annual athletics meet.", a: "will hold", dist: ["held", "has held", "holds"] },
-          { q: "He usually _____ up at 6:30 a.m. to review vocabulary.", a: "wakes", dist: ["is waking", "woke", "has woken"] },
-          { q: "When we reached the auditorium, the ceremony _____ already.", a: "had started", dist: ["starts", "has started", "will start"] },
-          { q: "At the moment, the candidates _____ for the mock interview.", a: "are preparing", dist: ["prepare", "prepared", "have prepared"] },
-          { q: "She _____ lunch before she rushed to the tutorial centre.", a: "had eaten", dist: ["eats", "is eating", "has eaten"] },
-          { q: "The sun _____ in the east every morning without fail.", a: "rises", dist: ["is rising", "rose", "has risen"] },
-          { q: "Last night, the debate team _____ past midnight on their speech.", a: "worked", dist: ["work", "are working", "have worked"] },
-          { q: "I promise I _____ you as soon as the results are announced.", a: "will call", dist: ["call", "called", "have called"] },
-          { q: "Look! The school bus _____ around the bend.", a: "is coming", dist: ["comes", "came", "has come"] },
-          { q: "She _____ in several speech competitions so far.", a: "has participated", dist: ["participates", "participated", "was participating"] },
-          { q: "When the announcement came over the PA system, we _____ our quiz.", a: "were taking", dist: ["took", "take", "are taking"] },
-          { q: "Every weekend, he _____ badminton with his siblings.", a: "plays", dist: ["is playing", "played", "has played"] }
-        ],
-        "Articles": [
-          { q: "Honesty is widely recognized as _____ noble quality.", a: "a", dist: ["an", "the", "no article"] },
-          { q: "She has learned to play _____ piano since childhood.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "His dream is to become _____ aerospace engineer.", a: "an", dist: ["a", "the", "no article"] },
-          { q: "We visited _____ Hong Kong Palace Museum during our study trip.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "Consistent sleep is _____ most effective remedy for exam stress.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "She took _____ umbrella in case of an afternoon thunderstorm.", a: "an", dist: ["a", "the", "no article"] },
-          { q: "Could you spare _____ extra ballpoint pen for the exam?", a: "an", dist: ["a", "the", "no article"] },
-          { q: "Mount Everest is _____ highest peak on Earth.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "Many doctors recommend drinking _____ fresh water upon waking.", a: "no article", dist: ["a", "an", "the"] },
-          { q: "They spent three weeks touring _____ United Kingdom.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "She was awarded a scholarship for being _____ honest and diligent student.", a: "an", dist: ["a", "the", "no article"] },
-          { q: "We listened to _____ inspiring lecture on environmental conservation.", a: "an", dist: ["a", "the", "no article"] },
-          { q: "Please turn off _____ projector before leaving the classroom.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "He enjoys playing _____ volleyball with teammates after school.", a: "no article", dist: ["the", "a", "an"] },
-          { q: "Our class attended a talk by _____ European diplomat.", a: "a", dist: ["an", "the", "no article"] },
-          { q: "The Earth revolves around _____ Sun.", a: "the", dist: ["a", "an", "no article"] },
-          { q: "It took almost _____ hour to proofread the entire passage.", a: "an", dist: ["a", "the", "no article"] },
-          { q: "They adopted _____ stray kitten rescued near the school playground.", a: "a", dist: ["an", "the", "no article"] },
-          { q: "Many believers go to _____ church every Sunday morning.", a: "no article", dist: ["the", "a", "an"] },
-          { q: "He demonstrated _____ unique approach to tackling synthesis tasks.", a: "a", dist: ["an", "the", "no article"] }
-        ],
-        "Plurals": [
-          { q: "The region successfully navigated multiple financial _____ (crisis).", a: "crises", dist: ["crisises", "crisi", "crisis"] },
-          { q: "Scientists have documented various atmospheric _____ (phenomenon).", a: "phenomena", dist: ["phenomenas", "phenomenons", "phenomeni"] },
-          { q: "The dentist recommended brushing all your _____ (tooth) twice daily.", a: "teeth", dist: ["tooths", "toothes", "teethes"] },
-          { q: "Several young _____ (child) took part in the community clean-up.", a: "children", dist: ["childs", "childrens", "childes"] },
-          { q: "The chef purchased five kilograms of fresh _____ (potato).", a: "potatoes", dist: ["potatos", "potatoies", "potato"] },
-          { q: "All the kitchen _____ (knife) must be stored safely in the drawer.", a: "knives", dist: ["knifes", "knifees", "knife"] },
-          { q: "A formation of wild _____ (goose) migrated across the coastline.", a: "geese", dist: ["gooses", "geeses", "goosies"] },
-          { q: "In autumn, dry _____ (leaf) flutter from the trees in the courtyard.", a: "leaves", dist: ["leafs", "leafes", "leavies"] },
-          { q: "The rural farm is home to fifty _____ (sheep).", a: "sheep", dist: ["sheeps", "sheepes", "sheepies"] },
-          { q: "The research thesis was supported by concrete empirical _____ (datum).", a: "data", dist: ["datums", "datas", "datae"] },
-          { q: "Two courteous _____ (policeman) guided the crowd during the marathon.", a: "policemen", dist: ["policemans", "policemenes", "policeman"] },
-          { q: "Laboratory researchers observed nocturnal _____ (mouse) in trials.", a: "mice", dist: ["mouses", "mices", "mouse"] },
-          { q: "Delegates from both _____ (country) signed the cross-border pact.", a: "countries", dist: ["countrys", "countries'", "countryes"] },
-          { q: "The bakery sold thirty fresh _____ (loaf) of sourdough bread.", a: "loaves", dist: ["loafs", "loafes", "loave"] },
-          { q: "Hundreds of rare marine _____ (species) reside in deep trenches.", a: "species", dist: ["specieses", "specie", "specis"] },
-          { q: "Both _____ (half) of the student body supported the recycling campaign.", a: "halves", dist: ["halfs", "halfes", "halve"] },
-          { q: "A pack of wild _____ (wolf) was tracked across the snowy forest.", a: "wolves", dist: ["wolfs", "wolfes", "wolve"] },
-          { q: "The library assistant restocked all the reference _____ (shelf).", a: "shelves", dist: ["shelfs", "shelfes", "shelve"] },
-          { q: "After the long cross-country hike, both his _____ (foot) were sore.", a: "feet", dist: ["foots", "feets", "foot"] },
-          { q: "Many accomplished _____ (woman) hold leadership roles in the school.", a: "women", dist: ["womans", "womens", "woman"] }
-        ]
-      };
+    function buildEasyRepository() {
+      // 20 distinct easy questions per stage for each topic
+      const data = {
+        "Prepositions": {
+          1: [
+            { q: "She is very good _____ English.", a: "at", d: ["in", "on", "for"] },
+            { q: "I am interested _____ sports.", a: "in", d: ["at", "on", "to"] },
+            { q: "Listen _____ your teacher.", a: "to", d: ["at", "for", "with"] },
+            { q: "He arrived _____ school early today.", a: "at", d: ["in", "to", "on"] },
+            { q: "The meeting will be held _____ Friday.", a: "on", d: ["in", "at", "by"] },
+            { q: "Are you afraid _____ dogs?", a: "of", d: ["with", "to", "about"] },
+            { q: "I completely agree _____ you.", a: "with", d: ["to", "at", "on"] },
+            { q: "Please wait _____ me outside the gate.", a: "for", d: ["to", "with", "at"] },
+            { q: "He was born _____ May.", a: "in", d: ["on", "at", "for"] },
+            { q: "The book is _____ the desk.", a: "on", d: ["in", "at", "to"] },
+            { q: "She smiled _____ him kindly.", a: "at", d: ["to", "on", "with"] },
+            { q: "Thank you _____ your help.", a: "for", d: ["to", "of", "with"] },
+            { q: "He is proud _____ his daughter.", a: "of", d: ["with", "at", "for"] },
+            { q: "I am tired _____ doing homework.", a: "of", d: ["with", "from", "at"] },
+            { q: "Pay attention _____ the whiteboard.", a: "to", d: ["at", "on", "in"] },
+            { q: "He borrowed a pen _____ his classmate.", a: "from", d: ["to", "at", "with"] },
+            { q: "Look _____ the blackboard, please.", a: "at", d: ["to", "on", "in"] },
+            { q: "We walked _____ the park together.", a: "in", d: ["at", "on", "to"] },
+            { q: "She apologized _____ being late.", a: "for", d: ["to", "about", "at"] },
+            { q: "They arrived in Hong Kong _____ 8 o'clock.", a: "at", d: ["in", "on", "for"] }
+          ],
+          2: [
+            { q: "He is responsible _____ cleaning the classroom.", a: "for", d: ["to", "with", "about"] },
+            { q: "She complained _____ the cold weather.", a: "about", d: ["for", "with", "to"] },
+            { q: "According _____ the news, it will rain tomorrow.", a: "to", d: ["with", "by", "at"] },
+            { q: "He applied _____ a student helper job.", a: "for", d: ["to", "in", "with"] },
+            { q: "Smoking is bad _____ your health.", a: "for", d: ["to", "at", "with"] },
+            { q: "She prefers tea _____ coffee.", a: "to", d: ["than", "over", "against"] },
+            { q: "Don't worry _____ the exam results.", a: "about", d: ["for", "to", "with"] },
+            { q: "He is capable _____ getting an A grade.", a: "of", d: ["to", "for", "in"] },
+            { q: "We rely _____ our parents for guidance.", a: "on", d: ["in", "at", "to"] },
+            { q: "She is famous _____ her beautiful voice.", a: "for", d: ["of", "with", "at"] },
+            { q: "The teacher was pleased _____ our project.", a: "with", d: ["for", "at", "on"] },
+            { q: "Please remind me _____ call Peter.", a: "to", d: ["of", "for", "on"] },
+            { q: "He shared his snacks _____ his friends.", a: "with", d: ["to", "for", "at"] },
+            { q: "What happened _____ your smartphone?", a: "to", d: ["at", "with", "for"] },
+            { q: "She succeeded _____ passing the driving test.", a: "in", d: ["at", "to", "on"] },
+            { q: "The movie is based _____ a true story.", a: "on", d: ["in", "at", "from"] },
+            { q: "He is crazy _____ playing video games.", a: "about", d: ["for", "with", "in"] },
+            { q: "She invited me _____ her birthday party.", a: "to", d: ["for", "at", "in"] },
+            { q: "The room was crowded _____ students.", a: "with", d: ["of", "by", "for"] },
+            { q: "We must protect the earth _____ pollution.", a: "from", d: ["against", "of", "to"] }
+          ],
+          3: [
+            { q: "She is accustomed _____ waking up early.", a: "to", d: ["with", "for", "in"] },
+            { q: "He takes pride _____ his school work.", a: "in", d: ["of", "for", "at"] },
+            { q: "All students must comply _____ school rules.", a: "with", d: ["to", "by", "for"] },
+            { q: "The charity provides the poor _____ warm meals.", a: "with", d: ["to", "for", "by"] },
+            { q: "The coach praised him _____ his teamwork.", a: "for", d: ["to", "with", "about"] },
+            { q: "Regular exercise results _____ good health.", a: "in", d: ["to", "from", "for"] },
+            { q: "Many diseases result _____ poor hygiene.", a: "from", d: ["in", "to", "with"] },
+            { q: "She is completely dedicated _____ her studies.", a: "to", d: ["for", "with", "in"] },
+            { q: "We must adapt _____ the new school timetable.", a: "to", d: ["with", "for", "in"] },
+            { q: "He warned his sister _____ talking to strangers.", a: "against", d: ["to", "for", "from"] },
+            { q: "Are you familiar _____ this grammar rule?", a: "with", d: ["to", "at", "in"] },
+            { q: "The prefect acted _____ behalf of the class.", a: "on", d: ["in", "at", "by"] },
+            { q: "She was absent _____ school yesterday.", a: "from", d: ["to", "at", "in"] },
+            { q: "He was punished _____ cheating on the test.", a: "for", d: ["with", "about", "to"] },
+            { q: "We are confident _____ winning the match.", a: "of", d: ["to", "for", "in"] },
+            { q: "He spent five hundred dollars _____ that jacket.", a: "on", d: ["for", "in", "to"] },
+            { q: "She graduated _____ the University of Hong Kong.", a: "from", d: ["at", "in", "to"] },
+            { q: "He is jealous _____ his brother's new toy.", a: "of", d: ["to", "with", "at"] },
+            { q: "The boy insisted _____ finishing his essay first.", a: "on", d: ["in", "to", "for"] },
+            { q: "I am doubtful _____ his true intentions.", a: "about", d: ["for", "with", "to"] }
+          ],
+          4: [
+            { q: "A quiet room is conducive _____ good revision.", a: "to", d: ["for", "with", "towards"] },
+            { q: "Her story is at variance _____ the police report.", a: "with", d: ["to", "against", "from"] },
+            { q: "His rude joke bordered _____ open insult.", a: "on", d: ["to", "with", "at"] },
+            { q: "Cheating runs counter _____ fair competition.", a: "to", d: ["against", "with", "for"] },
+            { q: "He revised with an eye _____ getting into university.", a: "to", d: ["for", "at", "on"] },
+            { q: "She stayed calm _____ all the noise.", a: "amid", d: ["between", "within", "towards"] },
+            { q: "The student was cleared _____ all wrongdoing.", a: "of", d: ["from", "off", "with"] },
+            { q: "Her essay was framed in terms _____ youth happiness.", a: "of", d: ["with", "for", "by"] },
+            { q: "The plan was accepted by virtue _____ its simplicity.", a: "of", d: ["with", "for", "in"] },
+            { q: "The project was launched at the behest _____ the principal.", a: "of", d: ["to", "with", "for"] },
+            { q: "Her theory is predicated _____ sound facts.", a: "on", d: ["to", "in", "with"] },
+            { q: "He acted in collusion _____ his dishonest partner.", a: "with", d: ["by", "under", "to"] },
+            { q: "The writer took umbrage _____ the harsh review.", a: "at", d: ["with", "to", "for"] },
+            { q: "They held a strike in protest _____ unfair cuts.", a: "against", d: ["to", "with", "at"] },
+            { q: "The journey was fraught _____ great dangers.", a: "with", d: ["by", "of", "in"] },
+            { q: "Giving up now is tantamount _____ admitting defeat.", a: "to", d: ["with", "as", "against"] },
+            { q: "The facts do not corroborate _____ his claims.", a: "with", d: ["to", "on", "at"] },
+            { q: "The campaign is aimed _____ helping the elderly.", a: "at", d: ["for", "to", "on"] },
+            { q: "He is oblivious _____ what is happening.", a: "to", d: ["of", "with", "from"] },
+            { q: "This gift is in appreciation _____ your hard work.", a: "of", d: ["for", "to", "with"] }
+          ],
+          5: [
+            { q: "He shows true loyalty _____ his school and friends.", a: "to", d: ["with", "for", "at"] },
+            { q: "Please desist _____ making unnecessary noise.", a: "from", d: ["of", "to", "against"] },
+            { q: "We must work in concert _____ other charity groups.", a: "with", d: ["to", "by", "along"] },
+            { q: "She has a strong aversion _____ greasy food.", a: "to", d: ["against", "for", "towards"] },
+            { q: "Only local residents are eligible _____ this grant.", a: "for", d: ["to", "with", "in"] },
+            { q: "The library abounds _____ useful revision guides.", a: "in", d: ["with", "of", "for"] },
+            { q: "His harsh comment was derogatory _____ his classmates.", a: "to", d: ["towards", "against", "with"] },
+            { q: "The teacher is conversant _____ online teaching tools.", a: "with", d: ["about", "in", "to"] },
+            { q: "Babies are immune _____ certain minor bugs at birth.", a: "to", d: ["against", "from", "with"] },
+            { q: "His plan is incompatible _____ our limited budget.", a: "with", d: ["to", "against", "for"] },
+            { q: "She took strong exception _____ being called lazy.", a: "to", d: ["at", "with", "for"] },
+            { q: "That question has no relevance _____ today's lesson.", a: "to", d: ["with", "for", "against"] },
+            { q: "She chose reading in preference _____ playing video games.", a: "to", d: ["over", "than", "against"] },
+            { q: "The new rule comes into effect _____ Monday morning.", a: "on", d: ["at", "in", "by"] },
+            { q: "He won the race at the expense _____ a sore knee.", a: "of", d: ["in", "with", "by"] },
+            { q: "His silence was interpreted _____ agreement.", a: "as", d: ["for", "to", "like"] },
+            { q: "All actions were in conformity _____ school guidelines.", a: "with", d: ["to", "by", "for"] },
+            { q: "Our trip is contingent _____ good weather.", a: "on", d: ["to", "with", "in"] },
+            { q: "He was praised in recognition _____ his honesty.", a: "of", d: ["for", "to", "with"] },
+            { q: "She succeeded by means _____ continuous practice.", a: "of", d: ["to", "with", "in"] }
+          ]
+        },
 
-      TOPICS.forEach(topic => {
-        questionRepository[topic] = {};
-        const baseSet = qData[topic];
-        for (let s = 1; s <= 5; s++) {
-          questionRepository[topic][s] = [];
-          for (let i = 0; i < 20; i++) {
-            const item = baseSet[i];
-            const opts = [item.a, ...item.dist];
-            // Shuffle
-            for (let k = opts.length - 1; k > 0; k--) {
-              const j = Math.floor(Math.random() * (k + 1));
-              [opts[k], opts[j]] = [opts[j], opts[k]];
-            }
-            questionRepository[topic][s].push({
-              prompt: `[Stage ${s} • Q${i + 1}] ${item.q}`,
-              correct: item.a,
-              options: opts
-            });
-          }
-        }
-      });
-    }
+        "Word Formation": {
+          1: [
+            { q: "Hard work brings academic _____ (succeed).", a: "success", d: ["successful", "successfully", "succeeding"] },
+            { q: "He is a very _____ (help) student.", a: "helpful", d: ["helpfully", "helpless", "helping"] },
+            { q: "She smiled _____ (happy) when she heard the news.", a: "happily", d: ["happiness", "happy", "unhappy"] },
+            { q: "We made an important _____ (decide) yesterday.", a: "decision", d: ["decisive", "decisively", "deciding"] },
+            { q: "Eating vegetables is _____ (health) for your body.", a: "healthy", d: ["health", "healthily", "healthiness"] },
+            { q: "He has great _____ (confident) in speaking English.", a: "confidence", d: ["confident", "confidently", "confiding"] },
+            { q: "Thank you for your warm _____ (kind).", a: "kindness", d: ["kindly", "kinder", "unkind"] },
+            { q: "The magician gave an _____ (amaze) show.", a: "amazing", d: ["amazingly", "amazed", "amazement"] },
+            { q: "We need a good _____ (solve) to this problem.", a: "solution", d: ["solve", "solvable", "solving"] },
+            { q: "Drinking water is a basic _____ (necessary).", a: "necessity", d: ["necessary", "necessarily", "necessitate"] },
+            { q: "The football team celebrated their _____ (victor).", a: "victory", d: ["victorious", "victoriously", "victim"] },
+            { q: "He is a _____ (care) driver; he never speeds.", a: "careful", d: ["careless", "carefully", "caring"] },
+            { q: "Her sudden _____ (appear) surprised everyone.", a: "appearance", d: ["apparent", "apparently", "appearing"] },
+            { q: "The singer enjoys huge _____ (popular).", a: "popularity", d: ["popularly", "popularize", "popular"] },
+            { q: "The school trip was fun and _____ (educate).", a: "educational", d: ["education", "educationally", "educator"] },
+            { q: "His answer was completely _____ (correct).", a: "correct", d: ["correctly", "correction", "correctness"] },
+            { q: "The children played _____ (safe) in the park.", a: "safely", d: ["safety", "safe", "safeness"] },
+            { q: "She is a very _____ (talent) musician.", a: "talented", d: ["talent", "talently", "talenting"] },
+            { q: "Today is a sunny and _____ (beauty) day.", a: "beautiful", d: ["beauty", "beautifully", "beautify"] },
+            { q: "He showed great _____ (polite) to his elders.", a: "politeness", d: ["politely", "impolite", "polite"] }
+          ],
+          2: [
+            { q: "Cheating on an exam is _____ (legal).", a: "illegal", d: ["unlegal", "inlegal", "dislegal"] },
+            { q: "Rude words are totally _____ (appropriate) in class.", a: "inappropriate", d: ["unappropriate", "disappropriate", "misappropriate"] },
+            { q: "Nothing is _____ (possible) if you work hard.", a: "impossible", d: ["unpossible", "inpossible", "dispossible"] },
+            { q: "She looked at the ghost story in _____ (believe).", a: "disbelief", d: ["unbelief", "misbelief", "inbelief"] },
+            { q: "Poor eyesight can _____ (advantage) a student.", a: "disadvantage", d: ["unadvantage", "inadvantage", "misadvantage"] },
+            { q: "The heartbeat pattern was _____ (regular).", a: "irregular", d: ["unregular", "disregular", "inregular"] },
+            { q: "His visit was a pleasant and _____ (expect) surprise.", a: "unexpected", d: ["inexpected", "disexpected", "misexpected"] },
+            { q: "We encourage active _____ (participate) in discussions.", a: "participation", d: ["participating", "participant", "participative"] },
+            { q: "Messy handwriting can be totally _____ (legible).", a: "illegible", d: ["unlegible", "inlegible", "dislegible"] },
+            { q: "He felt severe _____ (anxious) before the interview.", a: "anxiety", d: ["anxious", "anxiously", "anxiousness"] },
+            { q: "The two stories were completely _____ (consist).", a: "inconsistent", d: ["unconsistent", "disconsistent", "misconsistent"] },
+            { q: "The headmaster's decision is _____ (reversible).", a: "irreversible", d: ["unreversible", "disreversible", "inreversible"] },
+            { q: "She answered all twenty questions _____ (accurate).", a: "accurately", d: ["accuracy", "inaccurate", "accurateness"] },
+            { q: "He felt shy and _____ (secure) among strangers.", a: "insecure", d: ["unsecure", "dissecure", "missecure"] },
+            { q: "The school values good club _____ (organize).", a: "organization", d: ["organized", "organizer", "organizational"] },
+            { q: "He handled the disagreement with great _____ (mature).", a: "maturity", d: ["matureness", "immature", "maturation"] },
+            { q: "That gossip turned out to be completely _____ (true).", a: "untrue", d: ["distrue", "intrue", "mistrue"] },
+            { q: "Too much sugar is _____ (health) for your teeth.", a: "unhealthy", d: ["inhealthy", "dishealthy", "healthless"] },
+            { q: "She spoke _____ (persuade) and won the debate.", a: "persuasively", d: ["persuasion", "persuasive", "persuaded"] },
+            { q: "We must clear up any _____ (understand) between us.", a: "misunderstandings", d: ["disunderstandings", "inunderstandings", "ununderstandings"] }
+          ],
+          3: [
+            { q: "Reading daily boosts your language _____ (competent).", a: "competence", d: ["competency", "competition", "competitor"] },
+            { q: "The prefect gave us helpful _____ (assist).", a: "assistance", d: ["assistant", "assisting", "assisted"] },
+            { q: "Good teamwork requires sincere _____ (collaborate).", a: "collaboration", d: ["collaborative", "collaborator", "collaboratively"] },
+            { q: "The teacher won the _____ (admire) of all pupils.", a: "admiration", d: ["admiring", "admirer", "admirative"] },
+            { q: "We must support the _____ (conserve) of forests.", a: "conservation", d: ["conservative", "conservancy", "conservator"] },
+            { q: "Can you provide clear _____ (prove) of your claim?", a: "proof", d: ["proven", "proving", "provable"] },
+            { q: "He listened to others with patient _____ (tolerant).", a: "tolerance", d: ["tolerant", "toleration", "tolerable"] },
+            { q: "Passing Form 6 is a wonderful _____ (achieve).", a: "achievement", d: ["achiever", "achieving", "achievable"] },
+            { q: "The charity aims to reduce urban _____ (poor).", a: "poverty", d: ["poorness", "pauper", "poorly"] },
+            { q: "The speech made a lasting _____ (impress) on us.", a: "impression", d: ["impressive", "impressiveness", "impressed"] },
+            { q: "The research considered the social _____ (imply) of AI.", a: "implications", d: ["implicitness", "impliers", "implying"] },
+            { q: "We need more public _____ (aware) of ocean health.", a: "awareness", d: ["awarement", "awaring", "wareness"] },
+            { q: "The officer checked the _____ (valid) of his passport.", a: "validity", d: ["validation", "validness", "validator"] },
+            { q: "He overcame financial _____ (hard) to finish school.", a: "hardship", d: ["hardness", "harding", "hardily"] },
+            { q: "This historical monument has national _____ (signify).", a: "significance", d: ["significant", "signification", "signifier"] },
+            { q: "The city showed great _____ (resilient) after the storm.", a: "resilience", d: ["resiliency", "resilient", "resiliently"] },
+            { q: "He received an award in _____ (acknowledge) of his work.", a: "acknowledgement", d: ["acknowledging", "acknowledged", "acknowledger"] },
+            { q: "Secondary school trains deep analytical _____ (think).", a: "thinking", d: ["thoughtfulness", "thinker", "thinks"] },
+            { q: "Water is an absolute life _____ (necessary).", a: "necessity", d: ["necessarily", "necessitate", "necessaries"] },
+            { q: "A gymnast requires extraordinary bodily _____ (flexible).", a: "flexibility", d: ["flexibleness", "flexible", "flexibly"] }
+          ],
+          4: [
+            { q: "Online shopping caused a _____ (diminish) in retail store sales.", a: "diminution", d: ["diminishment", "diminishing", "diminutive"] },
+            { q: "Fair laws help reduce economic _____ (equal).", a: "inequality", d: ["unequality", "disequality", "unequalness"] },
+            { q: "The essay offered a thoughtful, _____ (critique) review.", a: "critical", d: ["critique", "critic", "criticism"] },
+            { q: "He delivered the speech with impressive _____ (eloquent).", a: "eloquence", d: ["eloquency", "eloquent", "eloquently"] },
+            { q: "The lab findings provided _____ (refute) facts.", a: "irrefutable", d: ["unrefutable", "disrefutable", "inrefutable"] },
+            { q: "Citizens criticized the government's _____ (action).", a: "inaction", d: ["unaction", "disaction", "misaction"] },
+            { q: "The scientist showed that the old theory was _____ (fall).", a: "fallacious", d: ["fallible", "falling", "fallacy"] },
+            { q: "The student showed great artistic _____ (versatile).", a: "versatility", d: ["versatileness", "versatile", "versatilization"] },
+            { q: "Avoid making sweeping _____ (generalize) about teenagers.", a: "generalizations", d: ["generalities", "generals", "generalizers"] },
+            { q: "Her conduct as head prefect was truly _____ (exemplar).", a: "exemplary", d: ["exemplifying", "exemplarity", "exemplative"] },
+            { q: "There was noticeable _____ (reluctant) to accept the changes.", a: "reluctance", d: ["reluctancy", "reluctant", "reluctantly"] },
+            { q: "The company announced an _____ (organize) shake-up.", a: "organizational", d: ["organizing", "organizer", "organized"] },
+            { q: "Their arguments proved to be _____ (reconcile).", a: "irreconcilable", d: ["unreconcilable", "disreconcilable", "nonreconcilable"] },
+            { q: "Food security is an _____ (indispensable) for any nation.", a: "indispensability", d: ["indispensableness", "dispensation", "dispensability"] },
+            { q: "He showed reckless _____ (regard) for safety.", a: "disregard", d: ["unregard", "misregard", "inregard"] },
+            { q: "The course encourages _____ (discipline) study across arts and science.", a: "interdisciplinary", d: ["crossdisciplinary", "multidiscipline", "transdiscipline"] },
+            { q: "The leaders took steps to _____ (legitimate) the new council.", a: "legitimize", d: ["legitimify", "legitimatize", "legitimate"] },
+            { q: "The contract contains an explicit _____ (indemnify) clause.", a: "indemnity", d: ["indemnification", "indemnifying", "indemnitee"] },
+            { q: "His thesis lacked sufficient analytical _____ (rigour).", a: "rigour", d: ["rigidity", "rigorousness", "rigorism"] },
+            { q: "The biologist noted subtle cellular _____ (differ).", a: "differentiation", d: ["differentness", "difference", "differing"] }
+          ],
+          5: [
+            { q: "The article warned against the _____ (commodify) of friendship.", a: "commodification", d: ["commoditizing", "commodity", "commodifying"] },
+            { q: "She kept her _____ (perturb) throughout the tough cross-examination.", a: "imperturbability", d: ["unperturbation", "imperturbance", "nonperturbation"] },
+            { q: "The constitution defends the territorial _____ (violate) of our borders.", a: "inviolability", d: ["unviolability", "nonviolation", "inviolable"] },
+            { q: "His selfish actions were completely _____ (defend).", a: "indefensible", d: ["undefensible", "disdefensible", "nondefensible"] },
+            { q: "Deforestation leads to rapid land _____ (grade).", a: "degradation", d: ["degrading", "degradance", "gradualism"] },
+            { q: "The reporter exposed the _____ (hypocrite) of corrupt leaders.", a: "hypocrisy", d: ["hypocritical", "hypocritism", "hypocrite"] },
+            { q: "The announcement sent economic _____ (shock) across the city.", a: "shockwaves", d: ["shocking", "shocks", "shockers"] },
+            { q: "The movement is rooted in strict _____ (equal).", a: "egalitarianism", d: ["equality", "equalization", "egalitarian"] },
+            { q: "The movie critic disliked the total _____ (banal) of the jokes.", a: "banality", d: ["banalness", "banalization", "banal"] },
+            { q: "He has a great gift for theoretical _____ (synthesize).", a: "synthesis", d: ["synthesizer", "synthetic", "synthesizing"] },
+            { q: "The criminal showed zero _____ (repent) in court.", a: "repentance", d: ["repenting", "repentant", "repentment"] },
+            { q: "The firm aims to _____ (capital) on new green trends.", a: "capitalize", d: ["capitalify", "capitalism", "capitalist"] },
+            { q: "His poem was an _____ (evoke) memory of his childhood.", a: "evocative", d: ["evoking", "evocation", "evocatory"] },
+            { q: "All human beings share basic, _____ (alien) rights.", a: "inalienable", d: ["unalienable", "disalienable", "nonalienable"] },
+            { q: "The judge was respected for his strict _____ (partial).", a: "impartiality", d: ["unpartiality", "dispartiality", "partialness"] },
+            { q: "The book explores the philosophical _____ (dichotomy) of good and evil.", a: "dichotomy", d: ["dichotomic", "dichotomizing", "dichotomism"] },
+            { q: "Smartphones have a _____ (pervade) influence on youth life.", a: "pervasive", d: ["pervading", "pervasiveness", "pervasion"] },
+            { q: "The solemn memorial service was held with quiet _____ (solemn).", a: "solemnity", d: ["solemness", "solemn", "solemnize"] },
+            { q: "His math explanations are famous for their remarkable _____ (lucid).", a: "lucidity", d: ["lucidness", "lucid", "lucidly"] },
+            { q: "She has sharp psychological _____ (perceive) of people's moods.", a: "perception", d: ["perceptiveness", "perceptivity", "perceiving"] }
+          ]
+        },
 
-    initRepository();
-
-    /* User Profile Data Handler */
-    function getStoredUserData(name) {
-      let raw = safeStorage.getItem("f6_student_records");
-      let records = {};
-      try {
-        records = raw ? JSON.parse(raw) : {};
-      } catch(e) { records = {}; }
-
-      if (!records[name]) {
-        records[name] = {
-          name: name,
-          avatar: state.selectedAvatar,
-          unlockedStages: { "Prepositions": 1, "Word Formation": 1, "Tenses": 1, "Articles": 1, "Plurals": 1 },
-          stageScores: {},
-          clearedCount: 0,
-          totalScore: 0,
-          accessories: []
-        };
-        safeStorage.setItem("f6_student_records", JSON.stringify(records));
-      }
-      return records[name];
-    }
-
-    function saveUserData(userData) {
-      let raw = safeStorage.getItem("f6_student_records");
-      let records = {};
-      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
-      records[userData.name] = userData;
-      safeStorage.setItem("f6_student_records", JSON.stringify(records));
-    }
-
-    /* Screen Navigation */
-    function switchView(viewId) {
-      const views = ["login-view", "dashboard-view", "quiz-view", "result-view", "leaderboard-view"];
-      views.forEach(v => {
-        const el = document.getElementById(v);
-        if (el) el.classList.remove("active");
-      });
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add("active");
-    }
-
-    /* Auth & Login */
-    function handleLogin() {
-      const nameInput = document.getElementById("student-name-input");
-      const name = nameInput ? nameInput.value.trim() : "";
-      if (!name) {
-        alert("Please enter student name.");
-        return;
-      }
-      state.currentUser = name;
-      showDashboard();
-    }
-
-    function showDashboard() {
-      if (!state.currentUser) {
-        switchView("login-view");
-        return;
-      }
-
-      const data = getStoredUserData(state.currentUser);
-
-      // Render Avatar
-      const icon = (data.avatar || "🦁").split(" ")[0];
-      document.getElementById("avatar-icon").textContent = icon;
-      document.getElementById("avatar-name-display").textContent = `Companion: ${data.avatar}`;
-      document.getElementById("student-welcome-msg").textContent = `Student: ${data.name} | Cleared: ${data.clearedCount} stages (Passing: ${PASSING_THRESHOLD}/20)`;
-      document.getElementById("avatar-badge-count").textContent = data.accessories.length;
-
-      // Render Wardrobe
-      const wardrobeEl = document.getElementById("wardrobe-items");
-      wardrobeEl.innerHTML = "";
-      if (data.accessories.length === 0) {
-        wardrobeEl.innerHTML = "<span style='font-size: 0.85rem; color: #64748b;'>No accessories unlocked yet. Clear any stage with 16+ to earn gear!</span>";
-      } else {
-        data.accessories.forEach(acc => {
-          const chip = document.createElement("div");
-          chip.className = "accessory-chip";
-          chip.innerHTML = `${acc.icon} ${acc.name}`;
-          wardrobeEl.appendChild(chip);
-        });
-      }
-
-      // Render Topics & 5 Stages
-      const container = document.getElementById("topics-container");
-      container.innerHTML = "";
-
-      TOPICS.forEach(topic => {
-        const card = document.createElement("div");
-        card.className = "topic-card";
-        const highestUnlocked = data.unlockedStages[topic] || 1;
-
-        let stageBtnsHtml = "";
-        for (let s = 1; s <= 5; s++) {
-          const key = `${topic}-${s}`;
-          const score = data.stageScores[key];
-          const isCleared = score !== undefined && score >= PASSING_THRESHOLD;
-          const isUnlocked = s <= highestUnlocked;
-
-          let btnClass = "btn-stage";
-          let label = `Stage ${s}`;
-
-          if (isCleared) {
-            btnClass += " cleared";
-            label = `S${s} (✔ ${score}/20)`;
-          } else if (isUnlocked) {
-            btnClass += " unlocked";
-            label = score !== undefined ? `S${s} (${score}/20)` : `Stage ${s}`;
-          } else {
-            label = `🔒 S${s}`;
-          }
-
-          stageBtnsHtml += `
-            <button class="${btnClass}" ${isUnlocked ? `onclick="startStage('${topic}', ${s})"` : "disabled"}>
-              ${label}
-            </button>
-          `;
-        }
-
-        card.innerHTML = `
-          <h3>📘 ${topic}</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">5 Progressive Stages &bull; 20 Questions Each</p>
-          <div class="stage-buttons">${stageBtnsHtml}</div>
-        `;
-        container.appendChild(card);
-      });
-
-      switchView("dashboard-view");
-    }
-
-    /* Start Quiz */
-    function startStage(topic, stageNum) {
-      state.currentTopic = topic;
-      state.currentStage = stageNum;
-      state.currentQuestionIdx = 0;
-      state.currentScore = 0;
-      state.stageAnswerLog = [];
-      state.selectedOption = null;
-
-      state.activeQuestionSet = questionRepository[topic][stageNum];
-      switchView("quiz-view");
-      renderQuestion();
-    }
-
-    function renderQuestion() {
-      const qData = state.activeQuestionSet[state.currentQuestionIdx];
-      state.selectedOption = null;
-
-      document.getElementById("quiz-topic-title").textContent = `${state.currentTopic} - Stage ${state.currentStage}`;
-      document.getElementById("quiz-stage-subtitle").textContent = `Question ${state.currentQuestionIdx + 1} of 20`;
-      document.getElementById("live-score-display").textContent = `Score: ${state.currentScore} / 20`;
-      document.getElementById("question-text").textContent = qData.prompt;
-
-      const progressPercent = (state.currentQuestionIdx / 20) * 100;
-      document.getElementById("quiz-progress-fill").style.width = `${progressPercent}%`;
-
-      const optionsContainer = document.getElementById("options-container");
-      optionsContainer.innerHTML = "";
-
-      qData.options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.className = "opt-btn";
-        btn.textContent = opt;
-        btn.onclick = () => {
-          document.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
-          btn.classList.add("selected");
-          state.selectedOption = opt;
-          document.getElementById("btn-next-question").disabled = false;
-        };
-        optionsContainer.appendChild(btn);
-      });
-
-      document.getElementById("btn-next-question").disabled = true;
-      document.getElementById("btn-next-question").textContent =
-        (state.currentQuestionIdx === 19) ? "Finish Stage & Review Answers" : "Next Question →";
-    }
-
-    function submitCurrentQuestion() {
-      if (!state.selectedOption) return;
-
-      const qData = state.activeQuestionSet[state.currentQuestionIdx];
-      const isCorrect = (state.selectedOption === qData.correct);
-
-      if (isCorrect) state.currentScore++;
-
-      state.stageAnswerLog.push({
-        num: state.currentQuestionIdx + 1,
-        prompt: qData.prompt,
-        userAnswer: state.selectedOption,
-        correctAnswer: qData.correct,
-        isCorrect: isCorrect
-      });
-
-      state.currentQuestionIdx++;
-
-      if (state.currentQuestionIdx < 20) {
-        renderQuestion();
-      } else {
-        finalizeStageResults();
-      }
-    }
-
-    function abortQuiz() {
-      if (confirm("Return to Dashboard? Unsubmitted questions in this stage will not be recorded.")) {
-        showDashboard();
-      }
-    }
-
-    /* Finalize Stage */
-    function finalizeStageResults() {
-      const isCleared = state.currentScore >= PASSING_THRESHOLD;
-      const data = getStoredUserData(state.currentUser);
-      const stageKey = `${state.currentTopic}-${state.currentStage}`;
-
-      // Save high score
-      const prevScore = data.stageScores[stageKey] || 0;
-      if (state.currentScore > prevScore) {
-        data.stageScores[stageKey] = state.currentScore;
-      }
-
-      let unlockedAccessory = null;
-
-      if (isCleared) {
-        if (state.currentStage < 5 && (data.unlockedStages[state.currentTopic] || 1) <= state.currentStage) {
-          data.unlockedStages[state.currentTopic] = state.currentStage + 1;
-        }
-
-        const reward = stageAccessories[state.currentStage];
-        const alreadyHas = data.accessories.some(a => a.name === reward.name);
-        if (!alreadyHas) {
-          data.accessories.push(reward);
-          unlockedAccessory = reward;
-        }
-      }
-
-      let totalPts = 0;
-      let clearedStages = 0;
-      Object.keys(data.stageScores).forEach(k => {
-        totalPts += data.stageScores[k];
-        if (data.stageScores[k] >= PASSING_THRESHOLD) clearedStages++;
-      });
-      data.totalScore = totalPts;
-      data.clearedCount = clearedStages;
-
-      saveUserData(data);
-
-      const banner = document.getElementById("result-banner");
-      if (isCleared) {
-        banner.innerHTML = `
-          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
-          <h2 style="color: var(--success);">STAGE CLEARED! (${state.currentScore} / 20)</h2>
-          <p style="color: var(--text-muted); font-size: 1.05rem;">
-            Congratulations! You passed the 16/20 threshold. The next stage is unlocked!
-          </p>
-          ${unlockedAccessory ? `
-            <div style="background: #fef3c7; border: 2px dashed #f59e0b; padding: 0.75rem; border-radius: 8px; margin-top: 1rem; display: inline-block;">
-              <strong>New Avatar Gear Unlocked:</strong> ${unlockedAccessory.icon} ${unlockedAccessory.name} is now equipped!
-            </div>
-          ` : ''}
-        `;
-      } else {
-        banner.innerHTML = `
-          <div style="font-size: 3rem; margin-bottom: 0.5rem;">💪</div>
-          <h2 style="color: var(--danger);">TRY AGAIN (${state.currentScore} / 20)</h2>
-          <p style="color: var(--text-muted); font-size: 1.05rem;">
-            You scored ${state.currentScore}/20. You need at least <strong>16 / 20</strong> to clear this stage.
-          </p>
-        `;
-      }
-
-      const tbody = document.getElementById("review-table-body");
-      tbody.innerHTML = "";
-      state.stageAnswerLog.forEach(log => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${log.num}</td>
-          <td>${log.prompt}</td>
-          <td class="${log.isCorrect ? 'badge-correct' : 'badge-wrong'}">${log.userAnswer}</td>
-          <td style="font-weight: 600; color: #1e3a8a;">${log.correctAnswer}</td>
-          <td>${log.isCorrect ? '<span class="badge-correct">✔ Correct</span>' : '<span class="badge-wrong">✘ Incorrect</span>'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      const actionBtns = document.getElementById("result-action-buttons");
-      actionBtns.innerHTML = `
-        <button class="btn-secondary" onclick="showDashboard()">Back to Dashboard</button>
-        <button class="btn-primary" onclick="startStage('${state.currentTopic}', ${state.currentStage})">Retry Stage</button>
-        ${(isCleared && state.currentStage < 5) ? `
-          <button class="btn-primary" style="background-color: var(--success);" onclick="startStage('${state.currentTopic}', ${state.currentStage + 1})">Next Stage &rarr;</button>
-        ` : ''}
-      `;
-
-      switchView("result-view");
-    }
-
-    /* Leaderboard */
-    function showLeaderboard() {
-      let raw = safeStorage.getItem("f6_student_records");
-      let records = {};
-      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
-      const list = Object.values(records);
-
-      list.sort((a, b) => (b.clearedCount - a.clearedCount) || (b.totalScore - a.totalScore));
-
-      const tbody = document.getElementById("leaderboard-tbody");
-      tbody.innerHTML = "";
-
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No student records found.</td></tr>`;
-      } else {
-        list.forEach((st, idx) => {
-          const rankDisplay = idx === 0 ? "🥇 1st" : (idx === 1 ? "🥈 2nd" : (idx === 2 ? "🥉 3rd" : `#${idx + 1}`));
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td style="font-weight: 700;">${rankDisplay}</td>
-            <td style="font-weight: 600;">${st.name}</td>
-            <td>${st.avatar}</td>
-            <td style="color: var(--success); font-weight: 700;">${st.clearedCount} / 25</td>
-            <td style="font-weight: 700;">${st.totalScore} pts</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-
-      switchView("leaderboard-view");
-    }
-
-    /* Teacher Backdoor */
-    function openTeacherModal() {
-      document.getElementById("teacher-pin-input").value = "";
-      document.getElementById("teacher-auth-box").style.display = "block";
-      document.getElementById("teacher-portal-body").style.display = "none";
-      document.getElementById("teacher-modal").classList.add("active");
-    }
-
-    function closeTeacherModal() {
-      document.getElementById("teacher-modal").classList.remove("active");
-    }
-
-    function verifyTeacherPin() {
-      const pin = document.getElementById("teacher-pin-input").value.trim();
-      if (pin === TEACHER_MASTER_PIN) {
-        document.getElementById("teacher-auth-box").style.display = "none";
-        document.getElementById("teacher-portal-body").style.display = "block";
-        loadTeacherStudentReports();
-      } else {
-        alert("Incorrect Teacher PIN. Access denied.");
-      }
-    }
-
-    function loadTeacherStudentReports() {
-      let raw = safeStorage.getItem("f6_student_records");
-      let records = {};
-      try { records = raw ? JSON.parse(raw) : {}; } catch(e) {}
-      const list = Object.values(records);
-      const tbody = document.getElementById("teacher-student-progress-tbody");
-      tbody.innerHTML = "";
-
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No student data found.</td></tr>`;
-        return;
-      }
-
-      list.forEach(st => {
-        const attemptedStages = Object.keys(st.stageScores).length;
-        const avgScore = attemptedStages > 0 ? (st.totalScore / attemptedStages).toFixed(1) : "N/A";
-        const gearList = st.accessories.map(a => `${a.icon} ${a.name}`).join(", ") || "None";
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${st.name}</strong> (${(st.avatar || "").split(' ')[0]})</td>
-          <td>${st.clearedCount} stages cleared</td>
-          <td>${avgScore} / 20</td>
-          <td style="font-size: 0.85rem;">${gearList}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function clearLeaderboardData() {
-      if (confirm("DANGER: Are you sure you want to clear the entire leaderboard and all student records? This action cannot be undone.")) {
-        safeStorage.removeItem("f6_student_records");
-        alert("All student records and leaderboard entries have been wiped clean.");
-        loadTeacherStudentReports();
-        if (document.getElementById("leaderboard-view").classList.contains("active")) {
-          showLeaderboard();
-        } else if (document.getElementById("dashboard-view").classList.contains("active")) {
-          showDashboard();
-        }
-      }
-    }
-  </script>
-</body>
-</html>
+        "Tenses": {
+          1: [
+            { q: "Water _____ at 100 degrees Celsius.", a: "boils", d: ["is boiling", "boiled", "will boil"] },
+            { q: "Yesterday after school, she _____ her pencil case.", a: "lost", d: ["loses", "has lost", "was losing"] },
+            { q: "Listen! The baby _____ right now.", a: "is crying", d: ["cries", "cried", "has cried"] },
+            { q: "We _____ in Hong Kong since 2015.", a: "have lived", d: ["live", "lived", "are living"] },
+            { q: "If it rains tomorrow, we _____ at home.", a: "will stay", d: ["stayed", "would stay", "are staying"] },
+            { q: "While Tom was studying, his brother _____ TV.", a: "was watching", d: ["watches", "has watched", "watched"] },
+            { q: "I _____ my breakfast already.", a: "have finished", d: ["finish", "finished", "had finished"] },
+            { q: "Next Monday, our school _____ Sports Day.", a: "will hold", d: ["held", "has held", "holds"] },
+            { q: "Peter usually _____ up at 7:00 a.m.", a: "wakes", d: ["is waking", "woke", "has woken"] },
+            { q: "The sun _____ in the east every morning.", a: "rises", d: ["is rising", "rose", "has risen"] },
+            { q: "When we reached the cinema, the movie _____ already.", a: "had started", d: ["starts", "has started", "will start"] },
+            { q: "Look! The school bus _____ now.", a: "is coming", d: ["comes", "came", "has come"] },
+            { q: "She _____ to Japan three times so far.", a: "has been", d: ["went", "goes", "is going"] },
+            { q: "Last night, I _____ my English vocabulary.", a: "reviewed", d: ["review", "am reviewing", "have reviewed"] },
+            { q: "I promise I _____ you tonight.", a: "will call", d: ["call", "called", "have called"] },
+            { q: "They _____ basketball every Saturday afternoon.", a: "play", d: ["are playing", "played", "have played"] },
+            { q: "When the phone rang, Mary _____ dinner.", a: "was cooking", d: ["cooks", "cooked", "has cooked"] },
+            { q: "She _____ her lunch before she went to the library.", a: "had eaten", d: ["eats", "is eating", "has eaten"] },
+            { q: "At the moment, the boys _____ football in the playground.", a: "are playing", d: ["play", "played", "have played"] },
+            { q: "My father _____ coffee every morning.", a: "drinks", d: ["is drinking", "drank", "has drunk"] }
+          ],
+          2: [
+            { q: "Our teacher _____ at this school for ten years.", a: "has taught", d: ["teaches", "is teaching", "taught"] },
+            { q: "Two days ago, our class _____ an English test.", a: "took", d: ["has taken", "takes", "had taken"] },
+            { q: "While the students were writing, the bell _____.", a: "rang", d: ["rings", "was ringing", "had rung"] },
+            { q: "He _____ any food since early this morning.", a: "has not eaten", d: ["did not eat", "had not eaten", "does not eat"] },
+            { q: "As soon as he arrives tomorrow, we _____ lunch.", a: "will have", d: ["have", "had", "have had"] },
+            { q: "By 10:00 tonight, she _____ for four hours.", a: "will have studied", d: ["studies", "will study", "studied"] },
+            { q: "When I opened my bag, I noticed someone _____ my pen.", a: "had taken", d: ["took", "has taken", "takes"] },
+            { q: "Over the past five years, phone technology _____ quickly.", a: "has improved", d: ["improved", "improves", "had improved"] },
+            { q: "They _____ in London for two years before moving here.", a: "had lived", d: ["have lived", "lived", "were living"] },
+            { q: "Listen! Somebody _____ at the door.", a: "is knocking", d: ["knocks", "knocked", "has knocked"] },
+            { q: "In 2021, my sister _____ from university.", a: "graduated", d: ["has graduated", "had graduated", "graduates"] },
+            { q: "I suddenly realized that I _____ my key at home.", a: "had left", d: ["left", "has left", "leave"] },
+            { q: "At this exact time tomorrow, we _____ on the plane.", a: "will be flying", d: ["will fly", "are flying", "flew"] },
+            { q: "He _____ his arm while playing soccer yesterday.", a: "hurt", d: ["has hurt", "hurts", "had hurt"] },
+            { q: "The students _____ the science project all morning.", a: "have been doing", d: ["did", "do", "are doing"] },
+            { q: "Before the teacher came in, the room _____ silent.", a: "had become", d: ["became", "has become", "becomes"] },
+            { q: "I have never _____ such an exciting match before.", a: "seen", d: ["seeing", "saw", "see"] },
+            { q: "Tomorrow evening, the band _____ at the concert.", a: "will perform", d: ["performed", "has performed", "performs"] },
+            { q: "She smiled happily after she _____ her final paper.", a: "had submitted", d: ["submits", "has submitted", "will submit"] },
+            { q: "He _____ three books this month already.", a: "has read", d: ["reads", "read", "was reading"] }
+          ],
+          3: [
+            { q: "If he _____ harder, he would have passed the exam.", a: "had studied", d: ["studied", "studies", "would study"] },
+            { q: "Unless she _____ now, she will be late for class.", a: "leaves", d: ["will leave", "left", "had left"] },
+            { q: "If I _____ you, I would take a rest.", a: "were", d: ["am", "was", "would be"] },
+            { q: "By the end of this week, we _____ the whole chapter.", a: "will have finished", d: ["finish", "will finish", "finished"] },
+            { q: "Had we known the news, we _____ you immediately.", a: "would have told", d: ["will tell", "told", "would tell"] },
+            { q: "If green cars become cheaper, more people _____ them.", a: "will buy", d: ["bought", "buys", "had bought"] },
+            { q: "Supposing it _____ tomorrow, where would we go?", a: "rained", d: ["rains", "will rain", "had rained"] },
+            { q: "If you had asked me earlier, I _____ you.", a: "could have helped", d: ["can help", "helped", "will help"] },
+            { q: "By next summer, he _____ in Japan for a whole year.", a: "will have lived", d: ["lives", "will live", "lived"] },
+            { q: "Were she _____ the contest, her parents would be thrilled.", a: "to win", d: ["wins", "won", "winning"] },
+            { q: "Provided that you _____ your best, you will do fine.", a: "do", d: ["will do", "did", "had done"] },
+            { q: "If sea temperatures rose higher, coral reefs _____.", a: "would die", d: ["will die", "died", "had died"] },
+            { q: "By 2030, electric buses _____ common in our city.", a: "will have become", d: ["become", "will become", "became"] },
+            { q: "Had they caught the 8 a.m. train, they _____ on time.", a: "would have arrived", d: ["will arrive", "arrived", "arrive"] },
+            { q: "If he _____ his cool yesterday, he wouldn't be in trouble now.", a: "had kept", d: ["kept", "keeps", "would keep"] },
+            { q: "In case a fire _____, please use the stairs.", a: "occurs", d: ["will occur", "occurred", "has occurred"] },
+            { q: "If she had revised yesterday, she _____ relaxed now.", a: "would feel", d: ["felt", "will feel", "had felt"] },
+            { q: "By midnight, the rescue team _____ the mountain for 6 hours.", a: "will have searched", d: ["searches", "will search", "searched"] },
+            { q: "Should you _____ any question, please ask the teacher.", a: "have", d: ["had", "will have", "has"] },
+            { q: "If the government _____ subsidies, those shops would have survived.", a: "had provided", d: ["provides", "provided", "would provide"] }
+          ],
+          4: [
+            { q: "Hardly _____ entered the hall when the bell rang.", a: "had he", d: ["he had", "did he", "has he"] },
+            { q: "The teacher demanded that everyone _____ their homework.", a: "submit", d: ["submits", "submitted", "will submit"] },
+            { q: "Seldom _____ such a wonderful student project.", a: "have we seen", d: ["we have seen", "did we see", "we saw"] },
+            { q: "It is important that he _____ present at tomorrow's meeting.", a: "be", d: ["is", "was", "will be"] },
+            { q: "No sooner _____ seated than the test papers were given out.", a: "had we been", d: ["we were", "were we", "we had been"] },
+            { q: "If he were more punctual, he _____ the train this morning.", a: "would not have missed", d: ["did not miss", "will not miss", "had not missed"] },
+            { q: "Little _____ that he would become famous one day.", a: "did he know", d: ["he knew", "he had known", "does he know"] },
+            { q: "It is high time that we _____ action on waste.", a: "took", d: ["take", "will take", "had taken"] },
+            { q: "Under no circumstances _____ allowed to look at your mobile.", a: "are you", d: ["you are", "were you", "will you"] },
+            { q: "She recommended that the club president _____ the rule.", a: "change", d: ["changes", "changed", "changing"] },
+            { q: "Not only _____ first prize, but she also won the medal.", a: "did she win", d: ["she won", "she had won", "does she win"] },
+            { q: "If I _____ an umbrella this morning, I would not be wet now.", a: "had taken", d: ["took", "take", "would take"] },
+            { q: "Scarcely _____ the speech when the audience stood up.", a: "had he finished", d: ["he finished", "he had finished", "did he finish"] },
+            { q: "The principal suggested that the event _____ postponed.", a: "be", d: ["is", "was", "will be"] },
+            { q: "Only after checking thrice _____ realize her mistake.", a: "did she", d: ["she did", "she could", "was she"] },
+            { q: "I would rather you _____ alone at night.", a: "did not walk", d: ["do not walk", "will not walk", "not walked"] },
+            { q: "Never before _____ such a beautiful sunset.", a: "had I seen", d: ["I had seen", "I saw", "did I saw"] },
+            { q: "It is vital that each student _____ their barcode carefully.", a: "check", d: ["checks", "checked", "will check"] },
+            { q: "Rarely _____ such courage in the face of difficulties.", a: "have we witnessed", d: ["we have witnessed", "did we witnessed", "we saw"] },
+            { q: "If she had passed the test last

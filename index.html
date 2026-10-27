@@ -47,7 +47,7 @@
     }
 
     header h1 {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
     }
 
@@ -116,7 +116,93 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Avatar Preview Box */
+    /* Avatar Grid Selection on First Page */
+    .avatar-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .avatar-selection-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .avatar-card {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .avatar-card:hover {
+      border-color: var(--secondary);
+      background: #f0f9ff;
+      transform: translateY(-2px);
+    }
+
+    .avatar-card.active {
+      border-color: var(--primary);
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .avatar-card-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .avatar-card-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .avatar-card-tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .avatar-card.active::after {
+      content: "✔";
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* Live Preview Banner on Login Page */
+    .avatar-live-preview {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* Dashboard Companion Box */
     .avatar-showcase {
       display: flex;
       align-items: center;
@@ -129,14 +215,14 @@
     }
 
     .avatar-frame {
-      width: 90px;
-      height: 90px;
+      width: 85px;
+      height: 85px;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      font-size: 2.8rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
     }
@@ -148,12 +234,13 @@
       background: #f59e0b;
       color: white;
       border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-size: 0.85rem;
+      width: 26px;
+      height: 26px;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 700;
     }
 
     .wardrobe-grid {
@@ -204,7 +291,7 @@
 
     .btn-stage {
       flex: 1;
-      min-width: 45px;
+      min-width: 48px;
       padding: 0.5rem 0.2rem;
       font-size: 0.85rem;
       text-align: center;
@@ -228,7 +315,7 @@
       cursor: pointer;
     }
 
-    /* Question Screen */
+    /* Quiz Screen */
     .quiz-header {
       display: flex;
       justify-content: space-between;
@@ -239,7 +326,7 @@
     }
 
     .q-box {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 600;
       margin-bottom: 1.5rem;
       color: #0f172a;
@@ -365,13 +452,30 @@
   </header>
 
   <main>
-    <!-- USER LOGIN / SETUP VIEW -->
+    <!-- USER LOGIN / FIRST PAGE VIEW -->
     <section id="login-view" class="view-panel active">
-      <div class="card" style="max-width: 480px; margin: 2rem auto; text-align: center;">
-        <h2 style="margin-bottom: 1rem;">Candidate Registration</h2>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Enter your name and pick your companion avatar to begin.</p>
-        <div style="margin-bottom: 1rem; text-align: left;">
+      <div class="card" style="max-width: 520px; margin: 1.5rem auto;">
+        <h2 style="margin-bottom: 0.5rem; text-align: center;">Candidate Registration</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem; text-align: center; font-size: 0.9rem;">
+          Enter your name and pick your companion avatar below.
+        </p>
+
+        <div style="margin-bottom: 1.25rem;">
           <label style="font-weight: 600; font-size: 0.9rem;">Student Full Name</label>
-          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem;">
+          <input type="text" id="student-name-input" placeholder="e.g. Kelvin Cheung (6A)" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 0.4rem; font-size: 1rem;">
         </div>
-        <div style="margin-bottom: 1.5rem; text-al
+
+        <div>
+          <label style="font-weight: 600; font-size: 0.9rem;">Choose Your Companion Avatar</label>
+          <div class="avatar-selection-grid">
+            <div class="avatar-card active" onclick="pickAvatar('🦁 Leo the Lion', '🦁', this)">
+              <span class="avatar-card-icon">🦁</span>
+              <div class="avatar-card-name">Leo</div>
+              <div class="avatar-card-tag">Brave Lion</div>
+            </div>
+            <div class="avatar-card" onclick="pickAvatar('🦉 Athena Owl', '🦉', this)">
+              <span class="avatar-card-icon">🦉</span>
+              <div class="avatar-card-name">Athena</div>
+              <div class="avatar-card-tag">Wise Owl</div>
+            </div>
+            <div class="avatar-card" onclick="pickAvatar('🐬 Echo Dolphin
